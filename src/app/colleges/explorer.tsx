@@ -2,13 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Headset, Search, SlidersHorizontal, X } from "lucide-react";
+import { Check as CheckIcon, Headset, Search, SlidersHorizontal, X } from "lucide-react";
 import { CITIES, STREAMS, type CollegeType, type Level, type Stream } from "@/lib/data";
 import { BUDGETS, filterColleges, type CollegeFilters, type SortKey } from "@/lib/filter";
 import { CollegeRow } from "@/components/college-row";
 import { Container } from "@/components/ui";
 import { PageHero } from "@/components/page-hero";
 import { Select } from "@/components/select";
+import { StreamIcon } from "@/components/stream-icon";
 import { useLead } from "@/components/providers";
 
 const TYPES: CollegeType[] = ["Private", "Government", "Deemed"];
@@ -75,9 +76,9 @@ export function CollegeExplorer() {
   const title = [f.stream ? `${f.stream} colleges` : "Colleges", f.city ? `in ${f.city}` : "in India"].join(" ");
 
   const filters = (
-    <div className="grid gap-7">
+    <div className="divide-y divide-line">
       <FilterGroup title="Admission for">
-        <div className="grid grid-cols-3 gap-1 rounded-xl bg-paper p-1">
+        <div className="grid grid-cols-3 gap-1 rounded-xl bg-paper p-1 ring-1 ring-line">
           {[
             ["", "All"],
             ["UG", "After 12th"],
@@ -88,8 +89,8 @@ export function CollegeExplorer() {
               type="button"
               onClick={() => update({ level: v })}
               aria-pressed={(f.level ?? "") === v}
-              className={`rounded-lg px-2 py-2 text-[13px] font-semibold transition ${
-                (f.level ?? "") === v ? "bg-white text-ink shadow-lift" : "text-muted hover:text-ink"
+              className={`rounded-lg px-1 py-2 text-[13px] font-semibold whitespace-nowrap transition ${
+                (f.level ?? "") === v ? "bg-white text-royal shadow-lift" : "text-muted hover:text-ink"
               }`}
             >
               {l}
@@ -99,17 +100,16 @@ export function CollegeExplorer() {
       </FilterGroup>
 
       <FilterGroup title="Field of study">
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {STREAMS.map((s) => (
             <button
               key={s}
               type="button"
               aria-pressed={f.stream === s}
               onClick={() => update({ stream: f.stream === s ? "" : s })}
-              className={`rounded-full px-3 py-1.5 text-[13px] font-semibold transition ${
-                f.stream === s ? "bg-royal text-white" : "bg-paper text-ink-80 hover:bg-royal-50 hover:text-royal"
-              }`}
+              className={`${pill} gap-1.5 ${f.stream === s ? pillOn : pillOff}`}
             >
+              <StreamIcon stream={s} className="size-3.5" />
               {s}
             </button>
           ))}
@@ -126,16 +126,14 @@ export function CollegeExplorer() {
       </FilterGroup>
 
       <FilterGroup title="Yearly fees up to">
-        <div className="grid grid-cols-3 gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {BUDGETS.map((b) => (
             <button
               key={b.value}
               type="button"
               aria-pressed={f.budget === b.value}
               onClick={() => update({ budget: b.value })}
-              className={`rounded-lg border px-2 py-2 text-[13px] font-semibold transition ${
-                f.budget === b.value ? "border-royal bg-royal-50 text-royal" : "border-line text-ink-80 hover:border-ink"
-              }`}
+              className={`${pill} ${f.budget === b.value ? pillOn : pillOff}`}
             >
               {b.value === 0 ? "Any" : b.label}
             </button>
@@ -144,9 +142,9 @@ export function CollegeExplorer() {
       </FilterGroup>
 
       <FilterGroup title="College type">
-        <div className="grid gap-2">
+        <div className="grid gap-3">
           {TYPES.map((t) => (
-            <Check
+            <CheckOption
               key={t}
               label={t}
               checked={!!f.types?.includes(t)}
@@ -157,9 +155,9 @@ export function CollegeExplorer() {
       </FilterGroup>
 
       <FilterGroup title="More">
-        <div className="grid gap-2">
-          <Check label="Hostel available" checked={!!f.hostel} onChange={(on) => update({ hostel: on })} />
-          <Check label="Offers scholarships" checked={!!f.scholarship} onChange={(on) => update({ scholarship: on })} />
+        <div className="grid gap-3">
+          <CheckOption label="Hostel available" checked={!!f.hostel} onChange={(on) => update({ hostel: on })} />
+          <CheckOption label="Offers scholarships" checked={!!f.scholarship} onChange={(on) => update({ scholarship: on })} />
         </div>
       </FilterGroup>
     </div>
@@ -199,18 +197,25 @@ export function CollegeExplorer() {
           </form>
       </PageHero>
 
-      <Container className="grid gap-8 py-8 lg:grid-cols-[280px_1fr] lg:py-10">
+      <Container className="grid gap-8 py-8 lg:grid-cols-[300px_1fr] lg:py-10">
         <aside className="hidden lg:block" aria-label="Filters">
-          <div className="sticky top-28 max-h-[calc(100vh-8rem)] thin-scroll overflow-y-auto rounded-[var(--radius-card)] bg-white p-5 ring-1 ring-line">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="font-sans text-base font-bold tracking-normal">Filters</h2>
-              {chips.length > 0 && (
-                <button onClick={() => router.replace(pathname, { scroll: false })} className="text-sm font-semibold text-royal">
-                  Clear all
-                </button>
-              )}
+          <div className="sticky top-28">
+            <div className="max-h-[calc(100vh-8rem)] thin-scroll overflow-y-auto rounded-[var(--radius-card)] bg-white p-5 ring-1 ring-line">
+              <div className="mb-4 flex items-center justify-between">
+                <h2 className="flex items-center gap-2 font-sans text-base font-bold tracking-normal">
+                  <SlidersHorizontal className="size-4 text-royal" aria-hidden /> Filters
+                  {chips.length > 0 && (
+                    <span className="grid size-5 place-items-center rounded-full bg-royal text-[11px] font-semibold text-white">{chips.length}</span>
+                  )}
+                </h2>
+                {chips.length > 0 && (
+                  <button onClick={() => router.replace(pathname, { scroll: false })} className="text-sm font-semibold text-royal hover:underline">
+                    Clear all
+                  </button>
+                )}
+              </div>
+              {filters}
             </div>
-            {filters}
           </div>
         </aside>
 
@@ -336,20 +341,29 @@ export function CollegeExplorer() {
   );
 }
 
+const pill = "inline-flex items-center rounded-full px-3 py-1.5 text-[13px] font-semibold whitespace-nowrap ring-1 transition";
+const pillOn = "bg-royal text-white ring-royal";
+const pillOff = "bg-white text-ink-80 ring-line hover:bg-royal-50 hover:text-royal hover:ring-royal-100";
+
 function FilterGroup({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <fieldset>
-      <legend className="mb-3 text-sm font-semibold text-ink">{title}</legend>
-      {children}
-    </fieldset>
+    <div className="py-5 first:pt-0 last:pb-0">
+      <fieldset>
+        <legend className="mb-3 text-[13px] font-semibold tracking-wide text-muted uppercase">{title}</legend>
+        {children}
+      </fieldset>
+    </div>
   );
 }
 
-function Check({ label, checked, onChange }: { label: string; checked: boolean; onChange: (on: boolean) => void }) {
+function CheckOption({ label, checked, onChange }: { label: string; checked: boolean; onChange: (on: boolean) => void }) {
   return (
-    <label className="flex cursor-pointer items-center gap-2.5 text-[15px] text-ink-80">
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="size-4.5 accent-royal" />
-      {label}
+    <label className="group flex cursor-pointer items-center gap-3 text-[15px] text-ink-80">
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="peer sr-only" />
+      <span className="grid size-5 shrink-0 place-items-center rounded-md border border-ink/25 bg-white text-white transition group-hover:border-royal peer-checked:border-royal peer-checked:bg-royal peer-focus-visible:ring-2 peer-focus-visible:ring-marigold peer-focus-visible:ring-offset-2 peer-checked:[&_svg]:opacity-100">
+        <CheckIcon className="size-3.5 opacity-0 transition-opacity" strokeWidth={3} aria-hidden />
+      </span>
+      <span className="transition-colors peer-checked:font-semibold peer-checked:text-ink">{label}</span>
     </label>
   );
 }

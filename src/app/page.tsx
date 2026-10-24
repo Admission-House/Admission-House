@@ -11,10 +11,18 @@ import { TopColleges } from "@/components/home/top-colleges";
 import { Faq } from "@/components/faq";
 import { LeadButton } from "@/components/lead-button";
 import { LeadPopup } from "@/components/home/lead-popup";
+import { JsonLd } from "@/components/json-ld";
 
 export default function Home() {
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+        }}
+      />
       <LeadPopup />
       <Hero />
       <Streams />

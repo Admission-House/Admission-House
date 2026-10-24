@@ -6,6 +6,8 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { WhatsAppButton } from "@/components/whatsapp";
 import { RevealObserver } from "@/components/reveal-observer";
+import { JsonLd } from "@/components/json-ld";
+import { SITE } from "@/lib/site";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -20,9 +22,19 @@ const figtree = Figtree({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE.url),
+  alternates: { canonical: "./" },
+  applicationName: SITE.name,
+  openGraph: {
+    type: "website",
+    siteName: SITE.name,
+    locale: "en_IN",
+    url: "./",
+  },
+  twitter: { card: "summary_large_image" },
   title: {
-    default: "Admission House | Find the right college, with a counsellor by your side",
-    template: "%s | Admission House",
+    default: "Admissions House | Find the right college, with a counsellor by your side",
+    template: "%s | Admissions House",
   },
   description:
     "Search colleges after 12th and after graduation, compare fees and placements, track entrance exams and get free one-to-one admission counselling.",
@@ -32,10 +44,54 @@ export const viewport: Viewport = {
   themeColor: "#0B2B33",
 };
 
+const ORGANIZATION = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": ["EducationalOrganization", "ProfessionalService"],
+      "@id": `${SITE.url}/#organization`,
+      name: SITE.name,
+      url: SITE.url,
+      logo: `${SITE.url}/brand/logo-original.png`,
+      description:
+        "College admission counselling and college search for students after 12th and after graduation in India.",
+      telephone: SITE.phoneTel,
+      email: SITE.email,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "B-1207, Tower 4, NX One",
+        addressLocality: "Greater Noida West",
+        addressRegion: "Uttar Pradesh",
+        addressCountry: "IN",
+      },
+      areaServed: { "@type": "Country", name: "India" },
+      knowsLanguage: ["en", "hi"],
+      openingHours: "Mo-Su 10:00-20:00",
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "customer support",
+        telephone: SITE.phoneTel,
+        email: SITE.email,
+        areaServed: "IN",
+        availableLanguage: ["English", "Hindi"],
+      },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE.url}/#website`,
+      url: SITE.url,
+      name: SITE.name,
+      inLanguage: "en-IN",
+      publisher: { "@id": `${SITE.url}/#organization` },
+    },
+  ],
+};
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${bricolage.variable} ${figtree.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col">
+        <JsonLd data={ORGANIZATION} />
         <Providers>
           <a
             href="#main"

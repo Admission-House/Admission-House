@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ArrowRight, ChevronDown, Phone, Search } from "lucide-react";
 import { LogoMark } from "@/components/ui";
 
@@ -25,7 +26,7 @@ const NAV = [
 function Wordmark({ tone }: { tone: "dark" | "light" }) {
   return (
     <span className="font-display text-[21px] leading-none font-extrabold tracking-tight" style={{ color: tone === "dark" ? D : "#fff" }}>
-      Admission<span style={{ color: tone === "dark" ? D : T, fontWeight: tone === "dark" ? 500 : 800 }}>House</span>
+      Admissions{" "}<span style={{ color: tone === "dark" ? D : T, fontWeight: tone === "dark" ? 500 : 800 }}>House</span>
     </span>
   );
 }
@@ -66,6 +67,8 @@ function Frame({ n, title, note, children }: { n: number; title: string; note: s
 }
 
 export default function NavbarPreview() {
+  // Design scratch pages: visible while developing, 404 on the live site.
+  if (process.env.NODE_ENV === "production") notFound();
   return (
     <div className="mx-auto max-w-[1280px] bg-white px-4 py-10 sm:px-8">
       <h1 className="font-display text-3xl font-extrabold" style={{ color: D }}>

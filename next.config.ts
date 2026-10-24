@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   images: {
     // 90 is used for large photo tiles where compression artefacts would show.
-    qualities: [75, 90],
+    qualities: [75, 82, 85, 90],
   },
   turbopack: {
     rules: {

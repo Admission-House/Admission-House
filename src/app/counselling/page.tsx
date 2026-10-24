@@ -5,6 +5,7 @@ import { COUNSELLORS, FAQS, TESTIMONIALS } from "@/lib/data";
 import { Container, SectionHeading } from "@/components/ui";
 import { LeadForm } from "@/components/lead-form";
 import { Faq } from "@/components/faq";
+import { JsonLd } from "@/components/json-ld";
 import { CounsellorGrid } from "./counsellor-grid";
 
 export const metadata: Metadata = {
@@ -86,6 +87,13 @@ export default function CounsellingPage() {
       <section className="py-20 sm:py-24">
         <Container className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
           <h2 className="text-[30px] font-semibold sm:text-[40px]">Before you book</h2>
+          <JsonLd
+            data={{
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+            }}
+          />
           <Faq items={FAQS} />
         </Container>
       </section>

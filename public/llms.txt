@@ -1,0 +1,19 @@
+# Admissions House
+
+> Admissions House (https://admissionshouse.com) is an Indian college admission platform. Students after 12th and after graduation can search colleges, compare fees and placements, track entrance exams, and get free one-to-one admission counselling in Hindi, English and 8 regional languages.
+
+## Key facts
+- Counselling is free for students and parents. Partner colleges support the platform; recommendations are based on marks, budget and goals.
+- Office: B-1207, Tower 4, NX One, Greater Noida West, Uttar Pradesh, India
+- Counsellors are available 10 am to 8 pm, all days. Phone and WhatsApp: +91 87966 48777. Email: hello@admissionshouse.com
+- We do not guarantee admission. We build a balanced list of dream, target and safe colleges.
+- College details are collected from public sources and may change; students should confirm with the college.
+
+## Pages
+- [Colleges](https://admissionshouse.com/colleges): fees, courses, placements and admission details for colleges across India
+- [Courses](https://admissionshouse.com/courses): courses after 12th (UG) and after graduation (PG)
+- [Entrance exams](https://admissionshouse.com/exams): exam dates and application status
+- [Free counselling](https://admissionshouse.com/counselling): how counselling works, counsellors and FAQs
+- [Compare colleges](https://admissionshouse.com/compare)
+- [About](https://admissionshouse.com/about)
+- [Contact](https://admissionshouse.com/contact)

@@ -6,6 +6,7 @@ import { COLLEGES, EXAMS, feeRange, formatLakh, getCollege } from "@/lib/data";
 import { CollegeCover, Monogram } from "@/components/college-cover";
 import { CollegeCard, CompareToggle } from "@/components/college-card";
 import { LeadButton } from "@/components/lead-button";
+import { JsonLd } from "@/components/json-ld";
 import { Container, Pill } from "@/components/ui";
 import { SectionNav } from "./section-nav";
 import { SITE, telHref } from "@/lib/site";
@@ -19,6 +20,7 @@ export async function generateMetadata({ params }: PageProps<"/colleges/[slug]">
   const c = getCollege(slug);
   if (!c) return {};
   return {
+    alternates: { canonical: `/colleges/${c.slug}` },
     title: `${c.name}, ${c.city}: courses, fees and placements 2027`,
     description: `${c.name}: ${c.programs.length} courses, fees from ${formatLakh(feeRange(c)[0])} a year. ${c.tagline}.`,
   };
@@ -51,6 +53,29 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
 
   return (
     <>
+      <JsonLd
+        data={[
+          {
+            "@context": "https://schema.org",
+            "@type": "CollegeOrUniversity",
+            name: c.name,
+            url: `${SITE.url}/colleges/${c.slug}`,
+            description: c.about,
+            foundingDate: String(c.established),
+            image: `${SITE.url}${c.image}`,
+            address: { "@type": "PostalAddress", addressLocality: c.city, addressRegion: c.state, addressCountry: "IN" },
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              { "@type": "ListItem", position: 1, name: "Home", item: SITE.url },
+              { "@type": "ListItem", position: 2, name: "Colleges", item: `${SITE.url}/colleges` },
+              { "@type": "ListItem", position: 3, name: c.name, item: `${SITE.url}/colleges/${c.slug}` },
+            ],
+          },
+        ]}
+      />
       {/* Header: campus photo with title over it */}
       <section className="bg-white">
         <div className="relative">
@@ -120,8 +145,8 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
         <SectionNav sections={SECTIONS} />
       </section>
 
-      <Container className="grid gap-8 py-8 lg:grid-cols-[1fr_340px] lg:py-10">
-        <div className="grid min-w-0 gap-6">
+      <Container className="grid grid-cols-1 gap-8 py-8 lg:grid-cols-[1fr_340px] lg:py-10">
+        <div className="grid min-w-0 grid-cols-1 gap-6">
           {/* Overview */}
           <Panel id="overview" title={`About ${c.short}`}>
             <p className="text-[17px] text-ink-80">{c.about}</p>
@@ -142,7 +167,7 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
 
           {/* Courses */}
           <Panel id="courses" title="Courses and fees" intro="Fees are shown as published for each course. Hostel and exam fees may be extra.">
-            <div className="-mx-5 overflow-x-auto sm:mx-0">
+            <div className="relative -mx-5 overflow-x-auto sm:mx-0">
               <table className="w-full min-w-[560px] text-left text-[15px]">
                 <thead>
                   <tr className="border-b border-line text-sm text-muted">

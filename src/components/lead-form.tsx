@@ -29,6 +29,7 @@ export function LeadForm({
   const [mode, setMode] = useState<"" | "Online" | "Regular">("");
   const [errors, setErrors] = useState<Errors>({});
   const [state, setState] = useState<"idle" | "sending" | "done">("idle");
+  const [submitError, setSubmitError] = useState("");
   const [firstName, setFirstName] = useState("");
   const [stream, setStream] = useState("");
   const [city, setCity] = useState("");
@@ -55,8 +56,38 @@ export function LeadForm({
 
     setFirstName(name.split(" ")[0]);
     setState("sending");
-    // TODO: connect to CRM / API route. For now we simulate the request.
-    setTimeout(() => setState("done"), 900);
+    setSubmitError("");
+    const params = new URLSearchParams(window.location.search);
+    const utm = Object.fromEntries(
+      (["source", "medium", "campaign", "term", "content"] as const).map((k) => [k, params.get(`utm_${k}`) ?? undefined]),
+    );
+    fetch("/api/leads", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        name,
+        phone,
+        email,
+        level: data.get("level"),
+        mode: data.get("mode"),
+        stream: data.get("stream"),
+        city: data.get("city"),
+        interest: data.get("interest"),
+        source: data.get("source"),
+        website: data.get("website"),
+        consent: !!data.get("consent"),
+        page: window.location.pathname,
+        utm,
+      }),
+    })
+      .then(async (res) => {
+        if (!res.ok) throw new Error((await res.json().catch(() => null))?.error ?? "Request failed");
+        setState("done");
+      })
+      .catch((err: Error) => {
+        setSubmitError(err.message || "Something went wrong. Please call or WhatsApp us.");
+        setState("idle");
+      });
   }
 
   const dark = tone === "dark";
@@ -245,6 +276,8 @@ export function LeadForm({
         <input type="hidden" name="interest" value={[context.course, context.college].filter(Boolean).join(" at ")} />
       )}
       <input type="hidden" name="source" value={context?.source ?? "inline"} />
+      {/* Honeypot for bots; hidden from people and screen readers. */}
+      <input name="website" tabIndex={-1} autoComplete="off" aria-hidden className="hidden" />
 
       <label className={`flex items-start gap-2.5 text-sm ${dark ? "text-white/75" : "text-muted"}`}>
         <input
@@ -260,6 +293,10 @@ export function LeadForm({
           {errors.consent && <span className="block text-rose">{errors.consent}</span>}
         </span>
       </label>
+
+      {submitError && (
+        <p role="alert" className="text-sm text-rose">{submitError}</p>
+      )}
 
       <button
         type="submit"

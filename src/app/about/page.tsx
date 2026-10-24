@@ -5,7 +5,7 @@ import { Container, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
   title: "About us",
-  description: "Admission House helps students after 12th and after graduation choose and get into the right college.",
+  description: "Admissions House helps students after 12th and after graduation choose and get into the right college.",
 };
 
 const VALUES = [
@@ -29,7 +29,7 @@ export default function AboutPage() {
               graduates and working professionals planning a master&apos;s are hit the hardest.
             </p>
             <p>
-              Admission House brings verified college information and trained counsellors together in one
+              Admissions House brings verified college information and trained counsellors together in one
               place. Students search and compare for themselves, and when they need a human, one is a call away, for free.
             </p>
           </div>

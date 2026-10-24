@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { COURSES, STREAM_IMAGES, type Course } from "@/lib/data";
@@ -80,6 +81,8 @@ function Label({ n, title, note }: { n: number; title: string; note: string }) {
 }
 
 export default function CoursesPreview() {
+  // Design scratch pages: visible while developing, 404 on the live site.
+  if (process.env.NODE_ENV === "production") notFound();
   const u = ug[5];
   const p = pg[8];
 

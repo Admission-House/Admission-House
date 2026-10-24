@@ -747,7 +747,7 @@ export const TESTIMONIALS: Testimonial[] = [
 ];
 
 export const FAQS = [
-  { q: "Is counselling on Admission House really free?", a: "Yes. Students and parents never pay us. Our partner colleges support the platform, but our counsellors recommend colleges based on your marks, budget and goals, not on who partners with us." },
+  { q: "Is counselling on Admissions House really free?", a: "Yes. Students and parents never pay us. Our partner colleges support the platform, but our counsellors recommend colleges based on your marks, budget and goals, not on who partners with us." },
   { q: "I'm in Class 12. When should I start?", a: "Ideally right after your pre-boards (Dec–Jan). That gives time to plan entrance exams, application deadlines and scholarship forms. But it's never too late, many admissions run until August." },
   { q: "Can you help with PG admissions after a gap year or job?", a: "Yes. We have counsellors who specialise in MBA, M.Tech, MCA and MA admissions for working professionals and students with study gaps." },
   { q: "Will you help with the application form and documents?", a: "Your counsellor will walk you through each form, the documents needed, and scholarship applications over a call, WhatsApp or video." },

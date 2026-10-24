@@ -91,7 +91,7 @@ export function Pill({
   );
 }
 
-/** The Admission House mark, from the client's own logo artwork. */
+/** The Admissions House mark, from the client's own logo artwork. */
 export function LogoMark({ tone = "dark", className = "h-10 w-auto" }: { tone?: "dark" | "light"; className?: string }) {
   return (
     <Image
@@ -109,8 +109,8 @@ export function Logo({ tone = "dark" }: { tone?: "dark" | "light" }) {
   return (
     <span className="inline-flex items-center gap-2.5">
       <LogoMark tone={tone} />
-      <span className={`font-display text-[21px] leading-none font-extrabold tracking-tight ${tone === "dark" ? "text-brand" : "text-white"}`}>
-        Admission<span className={tone === "dark" ? "font-medium" : "text-teal"}>House</span>
+      <span className={`font-display text-[19px] leading-none min-[360px]:text-[21px] font-extrabold tracking-tight ${tone === "dark" ? "text-brand" : "text-white"}`}>
+        Admissions{" "}<span className={tone === "dark" ? "font-medium" : "text-teal"}>House</span>
       </span>
     </span>
   );

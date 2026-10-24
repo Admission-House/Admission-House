@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import Image from "next/image";
 import { ArrowRight, Check, ChevronDown, Search } from "lucide-react";
 import { COLLEGES, STREAMS, STREAM_IMAGES, getCollege } from "@/lib/data";
@@ -77,6 +78,8 @@ function CollegeChip({ slug, className = "" }: { slug: string; className?: strin
 }
 
 export default function HeroPreview() {
+  // Design scratch pages: visible while developing, 404 on the live site.
+  if (process.env.NODE_ENV === "production") notFound();
   return (
     <div className="bg-white pb-24">
       <div className="mx-auto max-w-[1240px] px-4 pt-10 sm:px-6 lg:px-8">

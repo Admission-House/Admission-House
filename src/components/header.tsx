@@ -106,7 +106,7 @@ export function Header() {
         }`}
       >
         <div className="mx-auto flex h-[78px] max-w-[1320px] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-          <Link href="/" aria-label="Admission House home" className="shrink-0 rounded-lg">
+          <Link href="/" aria-label="Admissions House home" className="shrink-0 rounded-lg">
             <Logo />
           </Link>
 
@@ -124,7 +124,7 @@ export function Header() {
                       aria-expanded={item.menu ? expanded : undefined}
                       onMouseEnter={() => openMega(item.menu)}
                       onFocus={() => openMega(item.menu)}
-                      className={`group relative flex h-full items-center gap-1 px-3 text-[15px] transition-colors xl:px-4 ${
+                      className={`group relative flex h-full items-center gap-1 px-2 text-[15px] transition-colors xl:px-4 ${
                         active ? "font-semibold text-brand" : "font-medium text-ink-80 hover:text-brand"
                       } ${expanded ? "text-brand" : ""}`}
                     >
@@ -134,7 +134,7 @@ export function Header() {
                       )}
                       <span
                         aria-hidden
-                        className={`absolute inset-x-3 bottom-0 h-[3px] origin-center rounded-t-full bg-teal transition-transform duration-300 xl:inset-x-4 ${
+                        className={`absolute inset-x-2 bottom-0 h-[3px] origin-center rounded-t-full bg-teal transition-transform duration-300 xl:inset-x-4 ${
                           active || expanded ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
                         }`}
                       />

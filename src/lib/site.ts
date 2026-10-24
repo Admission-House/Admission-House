@@ -2,14 +2,23 @@
 // client's real numbers; every page, the footer and the WhatsApp button read from here.
 
 export const SITE = {
-  name: "Admission House",
+  name: "Admissions House",
+  url: "https://admissionshouse.com",
+  tagline: "Find the right college, with a counsellor by your side",
   phoneDisplay: "+91 87966 48777",
   phoneTel: "+918796648777",
   whatsapp: "918796648777",
-  email: "hello@admissionhouse.in",
-  address: "",
+  email: "hello@admissionshouse.com",
+  address: "B-1207, Tower 4, NX One, Greater Noida West, Uttar Pradesh",
   hours: "10 am to 8 pm, all days",
 } as const;
+
+/** Profile URLs for the footer icons. Paste a link to make its icon clickable; empty ones render as plain icons. */
+export const SOCIAL: Record<"instagram" | "facebook" | "youtube", string> = {
+  instagram: "",
+  facebook: "",
+  youtube: "",
+};
 
 export const telHref = `tel:${SITE.phoneTel}`;
 

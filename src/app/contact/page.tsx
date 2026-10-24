@@ -6,7 +6,7 @@ import { SITE, telHref, whatsappHref } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Contact us",
-  description: "Call, WhatsApp or email Admission House. Counsellors are available 10 am to 8 pm, all days.",
+  description: "Call, WhatsApp or email Admissions House. Counsellors are available 10 am to 8 pm, all days.",
 };
 
 const CHANNELS = [
