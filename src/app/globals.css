@@ -1,26 +1,183 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/*
+  Admission House, design tokens
+  Peacock teal + saffron + sunflower on a warm paper background.
+  ink       #0B2B33  deep peacock, text + dark sections
+  royal     #0D7377  primary (peacock teal), buttons, links
+  marigold  #FF8A1F  saffron, highlights, secondary CTAs
+  sun       #FFC93C  sunflower, stars, underlines, stickers
+  mint      #12A150  success / "admitted"
+  paper     #FFFAF3  warm page background
+*/
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@theme {
+  /* Logo colours, sampled from the client's logo file */
+  --color-brand: #063b39; /* dark teal, the A */
+  --color-teal: #00dfc2; /* bright teal, cap and windows */
+  --color-logo-mint: #c2fdf0; /* the logo's own mint */
+  --color-mint-soft: #e6fef9; /* logo mint mixed with white */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --color-ink: #0b2b33;
+  --color-ink-80: #24464e;
+  --color-muted: #586a6f;
+  --color-subtle: #8c9a9e;
+
+  --color-royal: #0d7377;
+  --color-royal-600: #095b5e;
+  --color-royal-100: #cbebe8;
+  --color-royal-50: #e9f6f4;
+
+  --color-marigold: #ff8a1f;
+  --color-marigold-600: #ea7300;
+  --color-marigold-100: #ffddba;
+  --color-marigold-50: #fff2e4;
+
+  --color-sun: #ffc93c;
+  --color-sun-100: #fff0c2;
+
+  --color-mint: #12a150;
+  --color-mint-100: #cff1dc;
+  --color-mint-50: #eaf9f0;
+
+  --color-rose: #e5484d;
+  --color-rose-50: #fdecec;
+
+  --color-paper: #fffaf3;
+  --color-sand: #fbf1e3;
+  --color-line: #efe5d8;
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-panel: 32px;
+  --radius-card: 22px;
+
+  --shadow-lift: 0 1px 2px rgb(11 43 51 / 0.05), 0 10px 30px -12px rgb(11 43 51 / 0.18);
+  --shadow-float: 0 2px 6px rgb(11 43 51 / 0.06), 0 30px 60px -20px rgb(11 43 51 / 0.35);
+  --shadow-pop: 6px 6px 0 0 var(--color-ink);
+
+  --animate-spin-slow: spin 22s linear infinite;
+  --animate-float: float 5s ease-in-out infinite;
+  --animate-float-late: float 6s ease-in-out 1.2s infinite;
+  --animate-rise: rise 800ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-pop-in: pop-in 600ms cubic-bezier(0.3, 1.5, 0.5, 1) both;
+  --animate-draw: draw 1.4s ease-out 0.6s both;
+  --animate-wiggle: wiggle 2.8s ease-in-out infinite;
+  --animate-menu-in: menu-in 160ms ease-out both;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+    50% { transform: translateY(-10px) rotate(var(--r, 0deg)); }
+  }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: scale(0.6) rotate(var(--r, 0deg)); }
+    to { opacity: 1; transform: scale(1) rotate(var(--r, 0deg)); }
+  }
+  @keyframes draw {
+    from { stroke-dashoffset: 400; }
+    to { stroke-dashoffset: 0; }
+  }
+  @keyframes menu-in {
+    from { opacity: 0; transform: translateY(-4px) scale(0.98); }
+    to { opacity: 1; transform: none; }
+  }
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  html, body { overflow-x: clip; }
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.025em;
+    line-height: 1.08;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  :focus-visible {
+    outline: 2.5px solid var(--color-marigold);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  /* Form fields: on focus only the border colour changes, no outline or glow */
+  input:focus, input:focus-visible,
+  textarea:focus, textarea:focus-visible,
+  select:focus, select:focus-visible,
+  [role="combobox"]:focus, [role="combobox"]:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+  ::selection { background: var(--color-sun); color: var(--color-ink); }
+  [id] { scroll-margin-top: 140px; }
+}
+
+/* ---------- Utilities ---------- */
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+/* Arch frame, the shape of a college gate / jharokha window */
+.arch { border-radius: 999px 999px 28px 28px; }
+.arch-sm { border-radius: 999px 999px 18px 18px; }
+
+/* Sunflower highlighter stroke for the hero sentence blanks */
+.blank {
+  background-image: linear-gradient(var(--color-sun), var(--color-sun));
+  background-size: 100% 0.32em;
+  background-position: 0 88%;
+  background-repeat: no-repeat;
+}
+
+.paper-grain {
+  background-image: radial-gradient(rgb(11 43 51 / 0.07) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Scroll reveal, elements start hidden only once JS has marked the page */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 800ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 800ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition-delay: var(--d, 0ms);
+}
+.js [data-reveal].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Photo zoom on hover */
+.zoom img { transition: transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.zoom:hover img { transform: scale(1.06); }
+
+/* Thin, rounded scrollbar for dropdown lists and small scrolling panels */
+.thin-scroll::-webkit-scrollbar { width: 10px; height: 10px; }
+.thin-scroll::-webkit-scrollbar-track { background: transparent; margin: 10px 0; }
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: rgb(11 43 51 / 0.18);
+  border: 3px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+}
+.thin-scroll::-webkit-scrollbar-thumb:hover { background-color: rgb(11 43 51 / 0.35); }
+.thin-scroll::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+/* Firefox has no ::-webkit-scrollbar; Chrome would let these override the styles above */
+@supports not selector(::-webkit-scrollbar) {
+  .thin-scroll { scrollbar-width: thin; scrollbar-color: rgb(11 43 51 / 0.25) transparent; }
 }
