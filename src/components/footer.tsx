@@ -3,18 +3,25 @@ import { ArrowUpRight, Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-
 import { CITIES, COURSES } from "@/lib/data";
 import { Container, Logo } from "./ui";
 import { LeadButton } from "./lead-button";
-import { FacebookIcon, InstagramIcon, YouTubeIcon } from "./social-icons";
+import { FacebookIcon, InstagramIcon, LinkedInIcon, YouTubeIcon } from "./social-icons";
 import { SITE, SOCIAL, telHref, whatsappHref } from "@/lib/site";
 
+// Each icon switches to its brand colours on hover.
 const SOCIALS = [
-  { key: "instagram", label: "Instagram", Icon: InstagramIcon },
-  { key: "facebook", label: "Facebook", Icon: FacebookIcon },
-  { key: "youtube", label: "YouTube", Icon: YouTubeIcon },
+  {
+    key: "instagram",
+    label: "Instagram",
+    Icon: InstagramIcon,
+    hover: "hover:bg-[linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)] hover:ring-transparent",
+  },
+  { key: "facebook", label: "Facebook", Icon: FacebookIcon, hover: "hover:bg-[#1877F2] hover:ring-[#1877F2]" },
+  { key: "linkedin", label: "LinkedIn", Icon: LinkedInIcon, hover: "hover:bg-[#0A66C2] hover:ring-[#0A66C2]" },
+  { key: "youtube", label: "YouTube", Icon: YouTubeIcon, hover: "hover:bg-[#FF0000] hover:ring-[#FF0000]" },
 ] as const;
 
 const iconChip = "grid size-9 shrink-0 place-items-center rounded-full bg-white/10 text-teal";
 const socialBtn =
-  "grid size-11 place-items-center rounded-full text-white/80 ring-1 ring-white/20 transition hover:bg-teal hover:text-brand hover:ring-teal";
+  "grid size-11 place-items-center rounded-full text-white/80 ring-1 ring-white/20 transition hover:text-white";
 
 export function Footer() {
   const columns = [
@@ -22,8 +29,8 @@ export function Footer() {
       title: "Explore",
       links: [
         ["All colleges", "/colleges"],
-        ["Courses after 12th", "/courses?level=UG"],
-        ["Courses after graduation", "/courses?level=PG"],
+        ["UG courses", "/courses?level=UG"],
+        ["PG courses", "/courses?level=PG"],
         ["Entrance exams", "/exams"],
         ["Compare colleges", "/compare"],
       ],
@@ -36,8 +43,8 @@ export function Footer() {
       ]),
     },
     {
-      title: "Colleges by city",
-      links: CITIES.slice(0, 6).map((c) => [`Colleges in ${c}`, `/colleges?city=${encodeURIComponent(c)}`]),
+      title: "Top cities",
+      links: CITIES.slice(0, 6).map((c) => [c, `/colleges?city=${encodeURIComponent(c)}`]),
     },
     {
       title: "Admissions House",
@@ -55,12 +62,12 @@ export function Footer() {
       <div aria-hidden className="pointer-events-none absolute -top-44 -right-40 size-[560px] rounded-full bg-teal/10 blur-3xl" />
       <div aria-hidden className="pointer-events-none absolute -bottom-52 -left-40 size-[520px] rounded-full bg-royal/25 blur-3xl" />
 
-      <Container className="relative pt-14 pb-8 sm:pt-20">
+      <Container className="relative pt-10 pb-6 sm:pt-12">
         {/* Call to action */}
-        <div className="flex flex-col items-start justify-between gap-6 rounded-[var(--radius-panel)] bg-gradient-to-br from-royal to-brand p-7 ring-1 ring-white/10 sm:p-10 lg:flex-row lg:items-center">
+        <div className="flex flex-col items-start justify-between gap-5 border-b border-white/10 pb-8 lg:flex-row lg:items-center">
           <div className="max-w-xl">
-            <h2 className="text-[26px] font-extrabold text-white sm:text-[34px]">Not sure which college is right for you?</h2>
-            <p className="mt-2 text-white/75">
+            <h2 className="text-[22px] font-extrabold text-white sm:text-[26px]">Not sure which college is right for you?</h2>
+            <p className="mt-1.5 text-white/70">
               Share your marks and budget. A counsellor will call you within 30 minutes. It&apos;s free.
             </p>
           </div>
@@ -82,7 +89,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 grid gap-12 lg:grid-cols-[1.2fr_2fr]">
+        <div className="mt-10 grid gap-10 lg:grid-cols-[1.2fr_2fr]">
           <div className="max-w-sm">
             <Logo tone="light" />
             <p className="mt-4 text-white/65">
@@ -113,7 +120,7 @@ export function Footer() {
 
             <p className="mt-8 text-sm font-semibold text-white">Follow us</p>
             <ul className="mt-3 flex gap-3">
-              {SOCIALS.map(({ key, label, Icon }) => (
+              {SOCIALS.map(({ key, label, Icon, hover }) => (
                 <li key={key}>
                   {SOCIAL[key] ? (
                     <a
@@ -121,12 +128,12 @@ export function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`${SITE.name} on ${label}`}
-                      className={socialBtn}
+                      className={`${socialBtn} ${hover}`}
                     >
                       <Icon className="size-5" />
                     </a>
                   ) : (
-                    <span aria-hidden className={`${socialBtn} cursor-default`}>
+                    <span aria-hidden className={`${socialBtn} ${hover} cursor-default`}>
                       <Icon className="size-5" />
                     </span>
                   )}
@@ -153,7 +160,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-6 text-[13px] text-white/50 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-10 flex flex-col gap-3 border-t border-white/10 pt-6 text-[13px] text-white/50 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Admissions House. College details are collected from public sources and may change; please confirm with the college.</p>
           <div className="flex gap-5">
             <Link href="/contact" className="hover:text-white">Privacy policy</Link>

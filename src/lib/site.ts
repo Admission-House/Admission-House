@@ -8,15 +8,16 @@ export const SITE = {
   phoneDisplay: "+91 87966 48777",
   phoneTel: "+918796648777",
   whatsapp: "918796648777",
-  email: "hello@admissionshouse.com",
+  email: "info@admissionshouse.com",
   address: "B-1207, Tower 4, NX One, Greater Noida West, Uttar Pradesh",
-  hours: "10 am to 8 pm, all days",
+  hours: "Open daily, 10 am to 8 pm",
 } as const;
 
 /** Profile URLs for the footer icons. Paste a link to make its icon clickable; empty ones render as plain icons. */
-export const SOCIAL: Record<"instagram" | "facebook" | "youtube", string> = {
+export const SOCIAL: Record<"instagram" | "facebook" | "linkedin" | "youtube", string> = {
   instagram: "",
   facebook: "",
+  linkedin: "",
   youtube: "",
 };
 
