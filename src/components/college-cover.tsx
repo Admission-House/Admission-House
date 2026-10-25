@@ -40,9 +40,9 @@ export function Monogram({ college, size = "md" }: { college: College; size?: "s
           .join("")
           .slice(0, 3);
   const dims = {
-    sm: "size-7 text-[10px] rounded-full",
-    md: "size-12 text-sm rounded-2xl",
-    lg: "size-18 text-lg rounded-[22px]",
+    sm: "size-7 text-[0.625rem] rounded-full",
+    md: "size-12 text-sm rounded-xl",
+    lg: "size-18 text-lg rounded-xl",
   }[size];
   return (
     <span

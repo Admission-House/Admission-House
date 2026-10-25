@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { MapPin } from "lucide-react";
 import { feeRange, formatLakh, packageStat, type College } from "@/lib/data";
-import { CollegeCover } from "./college-cover";
 import { CompareToggle } from "./college-card";
 import { useLead } from "./providers";
 
@@ -20,12 +19,8 @@ export function CollegeRow({ college }: { college: College }) {
   ].filter((f): f is { label: string; value: string } => !!f);
 
   return (
-    <article className="grid gap-5 rounded-[24px] bg-white p-3 ring-1 ring-line transition hover:ring-ink/25 sm:grid-cols-[240px_1fr] sm:p-4">
-      <Link href={`/colleges/${college.slug}`} tabIndex={-1} aria-hidden className="zoom relative block overflow-hidden rounded-[18px]">
-        <CollegeCover college={college} className="aspect-[4/3] sm:aspect-auto sm:h-full sm:min-h-[200px]" sizes="240px" />
-      </Link>
-
-      <div className="flex min-w-0 flex-col px-1 pb-1 sm:px-0 sm:py-1">
+    <article className="rounded-xl bg-white p-5 ring-1 ring-line transition hover:ring-ink/25 sm:p-6">
+      <div className="flex min-w-0 flex-col">
         <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
           <h2 className="font-sans text-xl leading-snug font-bold tracking-normal">
             <Link href={`/colleges/${college.slug}`} className="hover:text-royal">
@@ -33,12 +28,12 @@ export function CollegeRow({ college }: { college: College }) {
             </Link>
           </h2>
           {college.rankNote && (
-            <span className="rounded-md bg-royal-50 px-2.5 py-1 text-[13px] font-bold text-royal">
+            <span className="rounded-md bg-royal-50 px-2.5 py-1 text-[0.8125rem] font-bold text-royal">
               {college.nirf ? `#${college.nirf} ${college.rankNote}` : college.rankNote}
             </span>
           )}
         </div>
-        <p className="mt-1 flex flex-wrap items-center gap-x-3 text-[15px] text-muted">
+        <p className="mt-1 flex flex-wrap items-center gap-x-3 text-[0.9375rem] text-muted">
           <span className="inline-flex items-center gap-1">
             <MapPin className="size-3.5" /> {college.city}, {college.state}
           </span>
@@ -48,13 +43,13 @@ export function CollegeRow({ college }: { college: College }) {
         <dl className="mt-4 grid grid-cols-2 gap-y-3 border-y border-line py-3.5 lg:grid-cols-4 lg:divide-x lg:divide-line">
           {facts.map((f) => (
             <div key={f.label} className="lg:px-4 lg:first:pl-0">
-              <dt className="text-[13px] text-muted">{f.label}</dt>
+              <dt className="text-[0.8125rem] text-muted">{f.label}</dt>
               <dd className="font-semibold">{f.value}</dd>
             </div>
           ))}
         </dl>
 
-        <p className="mt-3 text-[15px] text-muted">
+        <p className="mt-3 text-[0.9375rem] text-muted">
           {[college.accreditation, ...college.approvals.map((a) => `${a} approved`)].join(", ")}
           {college.scholarship && ". Scholarships available"}
         </p>

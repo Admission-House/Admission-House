@@ -91,9 +91,9 @@ export function LeadForm({
   }
 
   const dark = tone === "dark";
-  const label = dark ? "text-white/80" : "text-ink-80";
+  const label = dark ? "text-white/80" : "text-ink";
   const field =
-    "w-full rounded-xl border bg-white px-3.5 py-3 text-[15px] text-ink placeholder:text-subtle outline-none transition focus:border-royal";
+    "h-12 w-full rounded-xl border bg-white px-4 text-[0.9375rem] text-ink placeholder:text-subtle outline-none transition hover:border-ink/30 focus:border-royal focus:ring-4 focus:ring-royal/10";
 
   if (state === "done") {
     return (
@@ -122,7 +122,7 @@ export function LeadForm({
     <form noValidate onSubmit={onSubmit} className="grid gap-4">
       <fieldset>
         <legend className={`mb-2 text-sm font-medium ${label}`}>I&apos;m looking for admission in</legend>
-        <div className={`grid grid-cols-2 gap-1 rounded-xl p-1 ${dark ? "bg-white/10" : "bg-paper"}`}>
+        <div className={`grid grid-cols-2 gap-1 rounded-xl p-1 ${dark ? "bg-white/10" : "bg-royal-50"}`}>
           {(
             [
               ["UG", "UG"],
@@ -133,10 +133,10 @@ export function LeadForm({
               key={value}
               className={`cursor-pointer rounded-lg px-3 py-2.5 text-center text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-royal ${
                 level === value
-                  ? "bg-white text-ink shadow-lift"
+                  ? "bg-royal text-white shadow-sm"
                   : dark
                     ? "text-white/70 hover:text-white"
-                    : "text-muted hover:text-ink"
+                    : "text-ink-80 hover:text-royal"
               }`}
             >
               <input
@@ -159,14 +159,14 @@ export function LeadForm({
           {(["Online", "Regular"] as const).map((value) => (
             <label
               key={value}
-              className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-3.5 py-3 text-[15px] font-medium transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-brand ${
+              className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-4 py-3 text-[0.9375rem] font-medium transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-royal ${
                 mode === value
-                  ? "border-brand bg-mint-soft text-brand"
+                  ? "border-royal bg-royal-50 text-royal"
                   : errors.mode
                     ? "border-rose bg-white text-ink-80"
                     : dark
                       ? "border-white/20 bg-white/10 text-white/80"
-                      : "border-line bg-white text-ink-80 hover:border-ink/30"
+                      : "border-ink/15 bg-white text-ink-80 hover:border-ink/30"
               }`}
             >
               <input
@@ -175,7 +175,7 @@ export function LeadForm({
                 value={value}
                 checked={mode === value}
                 onChange={() => setMode(value)}
-                className="size-4 shrink-0 accent-brand"
+                className="size-4 shrink-0 accent-royal"
               />
               {value}
             </label>
@@ -196,7 +196,7 @@ export function LeadForm({
             placeholder="Enter your name"
             aria-invalid={!!errors.name}
             aria-describedby={errors.name ? `${id}-name-err` : undefined}
-            className={`${field} ${errors.name ? "border-rose" : "border-line"}`}
+            className={`${field} ${errors.name ? "border-rose" : "border-ink/15"}`}
           />
           {errors.name && (
             <p id={`${id}-name-err`} className="mt-1 text-sm text-rose">{errors.name}</p>
@@ -207,7 +207,7 @@ export function LeadForm({
             Mobile number
           </label>
           <div className="relative">
-            <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-[15px] text-muted">
+            <span className="pointer-events-none absolute inset-y-0 left-3.5 flex items-center text-[0.9375rem] text-muted">
               +91
             </span>
             <input
@@ -220,7 +220,7 @@ export function LeadForm({
               placeholder="Enter mobile number"
               aria-invalid={!!errors.phone}
               aria-describedby={errors.phone ? `${id}-phone-err` : undefined}
-              className={`${field} pl-12 ${errors.phone ? "border-rose" : "border-line"}`}
+              className={`${field} pl-12 ${errors.phone ? "border-rose" : "border-ink/15"}`}
             />
           </div>
           {errors.phone && (
@@ -240,7 +240,7 @@ export function LeadForm({
           autoComplete="email"
           placeholder="Enter your email"
           aria-invalid={!!errors.email}
-          className={`${field} ${errors.email ? "border-rose" : "border-line"}`}
+          className={`${field} ${errors.email ? "border-rose" : "border-ink/15"}`}
         />
         {errors.email && <p className="mt-1 text-sm text-rose">{errors.email}</p>}
       </div>
@@ -301,7 +301,7 @@ export function LeadForm({
       <button
         type="submit"
         disabled={state === "sending"}
-        className="inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-royal px-6 text-base font-semibold text-white transition hover:bg-royal-600 disabled:opacity-70"
+        className="inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-brand px-6 text-base font-semibold text-white transition hover:bg-royal disabled:opacity-70"
       >
         {state === "sending" ? (
           <>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Briefcase, Clock, FileText, GraduationCap, IndianRupee } from "lucide-react";
+import { ArrowRight, Briefcase, Clock, FileText, GraduationCap, IndianRupee } from "lucide-react";
 import { COLLEGES, COURSES, STREAMS, formatLakh, type Level, type Stream } from "@/lib/data";
 import { Container } from "@/components/ui";
 import { PageHero } from "@/components/page-hero";
@@ -39,8 +39,8 @@ export function CourseExplorer() {
           <div role="tablist" aria-label="Level" className="mt-7 inline-grid grid-cols-2 gap-1 rounded-full border border-line bg-white p-1">
             {(
               [
-                ["UG", "After 12th"],
-                ["PG", "After graduation"],
+                ["UG", "Under Graduation"],
+                ["PG", "Post Graduation"],
               ] as const
             ).map(([v, l]) => (
               <button
@@ -85,40 +85,60 @@ export function CourseExplorer() {
           {list.map((c) => {
             const count = COLLEGES.filter((col) => col.streams.includes(c.stream) && col.programs.some((p) => p.level === c.level)).length;
             return (
-              <li key={c.slug} className="flex flex-col rounded-[var(--radius-card)] bg-white p-5 ring-1 ring-line sm:p-6">
+              <li
+                key={c.slug}
+                className="group flex flex-col rounded-xl bg-white p-6 shadow-lift ring-1 ring-line transition duration-300 hover:-translate-y-1 hover:shadow-float sm:p-7"
+              >
                 <div className="flex items-start gap-4">
-                  <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-royal-50 text-royal">
-                    <StreamIcon stream={c.stream} className="size-6" />
+                  <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-royal to-brand text-white shadow-lift transition duration-300 group-hover:scale-105 group-hover:-rotate-3">
+                    <StreamIcon stream={c.stream} className="size-7" />
                   </span>
-                  <div className="min-w-0">
-                    <h2 className="text-2xl font-semibold">{c.name}</h2>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="rounded-full bg-royal-50 px-3 py-1 text-xs font-bold tracking-wide text-royal uppercase">
+                        {c.level === "UG" ? "Under Graduation" : "Post Graduation"}
+                      </span>
+                      <span className="text-xs font-semibold text-muted">{c.stream}</span>
+                    </div>
+                    <h2 className="mt-1.5 text-2xl font-bold">{c.name}</h2>
                     <p className="text-muted">{c.full}</p>
                   </div>
                 </div>
-                <dl className="mt-5 grid grid-cols-2 gap-3 text-sm">
+
+                <dl className="mt-6 grid grid-cols-2 gap-3 text-sm">
                   <Info icon={Clock} label="Duration" value={c.duration} />
                   <Info icon={IndianRupee} label="Fees per year" value={`${formatLakh(c.feeFrom)} to ${formatLakh(c.feeTo)}`} />
                   <Info icon={GraduationCap} label="Eligibility" value={c.eligibility} />
                   <Info icon={Briefcase} label="Starting salary" value={c.avgSalary} />
                 </dl>
-                <p className="mt-4 flex items-start gap-2 text-sm">
-                  <FileText className="mt-0.5 size-4 shrink-0 text-muted" />
-                  <span>
-                    <span className="text-muted">Entrance exams: </span>
-                    <span className="font-semibold">{c.exams.join(", ")}</span>
-                  </span>
+
+                <div className="mt-5">
+                  <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-muted uppercase">
+                    <FileText className="size-4" aria-hidden /> Entrance exams
+                  </p>
+                  <ul className="mt-2 flex flex-wrap gap-2">
+                    {c.exams.map((e) => (
+                      <li key={e} className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-brand ring-1 ring-royal-100">
+                        {e}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <p className="mt-4 text-sm text-muted">
+                  <span className="font-semibold text-ink-80">Career options:</span> {c.careers.join(", ")}
                 </p>
-                <p className="mt-1.5 text-sm text-muted">Career options: {c.careers.join(", ")}</p>
-                <div className="mt-auto flex flex-wrap gap-2 pt-5">
+
+                <div className="mt-auto flex flex-wrap gap-2.5 pt-6">
                   <Link
                     href={`/colleges?level=${c.level}&stream=${encodeURIComponent(c.stream)}`}
-                    className="rounded-full bg-royal px-5 py-2.5 text-sm font-semibold text-white hover:bg-royal-600"
+                    className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-royal"
                   >
-                    {count > 0 ? `See ${count} colleges` : "Find colleges"}
+                    {count > 0 ? `See ${count} ${count === 1 ? "college" : "colleges"}` : "Find colleges"} <ArrowRight className="size-4" aria-hidden />
                   </Link>
                   <button
                     onClick={() => open({ source: "course-card", title: `Is ${c.name} right for you?`, course: c.name })}
-                    className="rounded-full px-5 py-2.5 text-sm font-semibold ring-1 ring-line hover:ring-ink"
+                    className="rounded-full px-5 py-2.5 text-sm font-semibold ring-1 ring-line transition hover:bg-royal-50 hover:text-royal hover:ring-royal-100"
                   >
                     Ask a counsellor
                   </button>
@@ -134,8 +154,10 @@ export function CourseExplorer() {
 
 function Info({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string }) {
   return (
-    <div className="flex gap-2.5 rounded-xl bg-paper p-3">
-      <Icon className="mt-0.5 size-4 shrink-0 text-royal" />
+    <div className="flex items-start gap-3 rounded-xl bg-royal-50/70 p-3.5">
+      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-royal shadow-sm">
+        <Icon className="size-4" />
+      </span>
       <div className="min-w-0">
         <dt className="text-xs text-muted">{label}</dt>
         <dd className="font-semibold">{value}</dd>

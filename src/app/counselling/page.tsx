@@ -31,7 +31,7 @@ export default function CounsellingPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/90 to-ink/60" aria-hidden />
         <Container className="relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1fr] lg:gap-16">
           <div>
-            <h1 className="text-[36px] font-extrabold sm:text-[54px]">Talk to an admission counsellor before you decide</h1>
+            <h1 className="text-[2.25rem] font-extrabold sm:text-[3.375rem]">Talk to an admission counsellor before you decide</h1>
             <p className="mt-5 max-w-lg text-lg text-white/70">
               One counsellor, assigned to you from your first call to your admission letter. Free for
               students and parents.
@@ -44,7 +44,7 @@ export default function CounsellingPage() {
               ))}
             </ul>
             {t && (
-              <figure className="mt-10 max-w-lg rounded-2xl bg-white/6 p-5 ring-1 ring-white/10">
+              <figure className="mt-10 max-w-lg rounded-xl bg-white/6 p-5 ring-1 ring-white/10">
                 <blockquote className="text-white/85">&ldquo;{t.text}&rdquo;</blockquote>
                 <figcaption className="mt-3 text-sm">
                   <span className="font-semibold">{t.name}</span>
@@ -84,9 +84,10 @@ export default function CounsellingPage() {
         </section>
       )}
 
-      <section className="py-20 sm:py-24">
-        <Container className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
-          <h2 className="text-[30px] font-semibold sm:text-[40px]">Before you book</h2>
+      <section className="py-10 sm:py-14">
+        <Container>
+          <div className="mx-auto max-w-[55rem]">
+          <h2 className="mb-8 text-center text-[1.875rem] font-semibold sm:text-[2.5rem]">Before you book</h2>
           <JsonLd
             data={{
               "@context": "https://schema.org",
@@ -95,6 +96,7 @@ export default function CounsellingPage() {
             }}
           />
           <Faq items={FAQS} />
+          </div>
         </Container>
       </section>
     </>

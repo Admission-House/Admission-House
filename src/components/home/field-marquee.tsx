@@ -133,7 +133,7 @@ export function FieldMarquee() {
                     <Link
                       href={`/colleges?stream=${encodeURIComponent(s)}`}
                       tabIndex={copy ? -1 : undefined}
-                      className="group block overflow-hidden rounded-[6px] bg-brand ring-1 ring-brand/80 transition duration-300 hover:-translate-y-1 hover:shadow-float"
+                      className="group block overflow-hidden rounded-[0.375rem] bg-brand ring-1 ring-brand/80 transition duration-300 hover:-translate-y-1 hover:shadow-float"
                     >
                       <span className="relative block aspect-[4/3] overflow-hidden">
                         <Image
@@ -146,8 +146,8 @@ export function FieldMarquee() {
                         />
                       </span>
                       <span className="block px-4 pt-4 pb-5">
-                        <span className="block font-sans text-[17px] leading-snug font-bold text-white">{s}</span>
-                        <span className="mt-1 block truncate text-[13.5px] text-white/70">
+                        <span className="block font-sans text-[1.0625rem] leading-snug font-bold text-white">{s}</span>
+                        <span className="mt-1 block truncate text-[0.8438rem] text-white/70">
                           {count} {count === 1 ? "college" : "colleges"}
                           {courses && ` · ${courses}`}
                         </span>

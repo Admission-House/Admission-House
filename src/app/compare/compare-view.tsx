@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   ArrowUpRight,
@@ -16,7 +16,6 @@ import {
   MapPin,
   Plus,
   Sparkles,
-  Trophy,
   X,
   type LucideIcon,
 } from "lucide-react";
@@ -42,7 +41,7 @@ function Chips({ items }: { items: string[] }) {
   return (
     <ul className="flex flex-wrap gap-1.5">
       {items.map((i) => (
-        <li key={i} className="rounded-full bg-paper px-2.5 py-1 text-[13px] leading-none font-medium text-ink-80 ring-1 ring-line">
+        <li key={i} className="rounded-full bg-paper px-2.5 py-1 text-[0.8125rem] leading-none font-medium text-ink-80 ring-1 ring-line">
           {i}
         </li>
       ))}
@@ -121,7 +120,7 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
             {c.programs.map((p) => (
               <li key={p.name} className="leading-snug">
                 <span className="block font-semibold">{p.name}</span>
-                <span className="text-[13px] text-muted">
+                <span className="text-[0.8125rem] text-muted">
                   {p.duration} · {p.feeText}
                 </span>
               </li>
@@ -140,7 +139,7 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
         value: (c) => (
           <ul className="grid gap-2.5">
             {c.highlights.map((h) => (
-              <li key={h} className="flex gap-2 text-[14px] leading-snug text-ink-80">
+              <li key={h} className="flex gap-2 text-[0.875rem] leading-snug text-ink-80">
                 <BadgeCheck className="mt-px size-4 shrink-0 text-royal" aria-hidden /> {h}
               </li>
             ))}
@@ -151,11 +150,9 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
   },
 ];
 
-// One label column, then three equal college columns. The cards, the sticky bar and every row share it
-// (via --cmp-cols), so each college's details line up directly under its own card. On a phone the
-// columns are narrow enough that two colleges fit on screen at once.
-const COLS_VAR = "[--cmp-cols:84px_repeat(3,minmax(128px,1fr))] lg:[--cmp-cols:minmax(128px,172px)_repeat(3,minmax(200px,1fr))]";
-const labelCell = "max-lg:sticky max-lg:left-0 z-[1] bg-white px-3 py-4 text-[13px] font-medium text-muted lg:px-5 lg:text-sm";
+// Three equal college columns, shared by the cards and every row, so each college's details sit
+// directly under its own card. Row labels go above their values.
+const COLS_VAR = "[--cmp-cols:repeat(3,minmax(150px,1fr))] lg:[--cmp-cols:repeat(3,minmax(0,1fr))]";
 
 export function CompareView() {
   const sp = useSearchParams();
@@ -176,26 +173,18 @@ export function CompareView() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sp]);
 
-  // Show the compact college bar once the full cards have scrolled out of view.
-  const cardsRef = useRef<HTMLDivElement>(null);
-  const [barVisible, setBarVisible] = useState(false);
-  useEffect(() => {
-    const el = cardsRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => setBarVisible(!entry.isIntersecting && entry.boundingClientRect.bottom < 120),
-      { rootMargin: "-80px 0px 0px 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
   function setSlugs(next: string[]) {
     router.replace(next.length ? `${pathname}?c=${next.join(",")}` : pathname, { scroll: false });
     compare.set(next);
   }
 
   const slots = [0, 1, 2];
+  const QUICK_PAIRS = [
+    ["iim-ahmedabad", "iim-bangalore"],
+    ["iit-bombay", "iit-delhi"],
+    ["nlsiu-bangalore", "nalsar-hyderabad"],
+  ] as const;
+  const shortName = (slug: string) => COLLEGES.find((c) => c.slug === slug)?.short ?? slug;
   const options = COLLEGES.filter((c) => !slugs.includes(c.slug));
   const gridStyle = { gridTemplateColumns: "var(--cmp-cols)" };
 
@@ -203,29 +192,15 @@ export function CompareView() {
     <>
       <PageHero
         title="Compare colleges"
-        intro="Pick up to three colleges. The best value in each row is highlighted in green so you can see trade-offs at a glance."
-        image="/images/colleges/iim-ahmedabad.jpg"
-      >
-        <ol className="mt-6 flex flex-wrap gap-2 text-sm font-semibold text-ink-80">
-          {["Pick up to 3 colleges", "Compare row by row", "Talk to a counsellor"].map((t, i) => (
-            <li key={t} className="inline-flex items-center gap-2 rounded-full bg-white py-1.5 pr-3.5 pl-2 ring-1 ring-line">
-              <span className="grid size-6 place-items-center rounded-full bg-royal text-xs text-white">{i + 1}</span>
-              {t}
-            </li>
-          ))}
-        </ol>
-      </PageHero>
+        intro="Pick up to three colleges. The best value in each row is shown in bold green so you can see trade-offs at a glance."
+      />
 
       <Container className="py-8 sm:py-10">
+        {colleges.length > 1 && <p className="mb-2 text-sm text-muted sm:hidden">Swipe sideways to see all colleges.</p>}
         <div className="-mx-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:px-0 lg:overflow-visible">
-          <div className={`min-w-[600px] lg:min-w-[780px] ${COLS_VAR}`}>
+          <div className={`min-w-[32.5rem] lg:min-w-0 ${COLS_VAR}`}>
             {/* College cards */}
-            <div ref={cardsRef} className="grid gap-2 lg:gap-4" style={gridStyle}>
-              <div className="flex items-end pb-2">
-                <p className="text-sm text-muted">
-                  {colleges.length} of 3 colleges added
-                </p>
-              </div>
+            <div className="grid gap-2 lg:gap-4" style={gridStyle}>
               {slots.map((i) => {
                 const c = colleges[i];
                 if (!c)
@@ -255,7 +230,7 @@ export function CompareView() {
                     >
                       <X className="size-4" />
                     </button>
-                    <div className="relative h-32 overflow-hidden rounded-2xl">
+                    <div className="relative h-32 overflow-hidden rounded-xl">
                       <Image src={c.image} alt="" fill sizes="300px" className="object-cover" style={{ objectPosition: c.imagePosition }} />
                       {c.nirf && (
                         <span className="absolute bottom-2 left-2 rounded-full bg-ink/85 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
@@ -264,7 +239,7 @@ export function CompareView() {
                       )}
                     </div>
                     <div className="flex flex-1 flex-col px-2 pt-3 pb-1">
-                      <Link href={`/colleges/${c.slug}`} className="font-display text-[17px] leading-snug font-semibold hover:text-royal">
+                      <Link href={`/colleges/${c.slug}`} className="font-display text-[1.0625rem] leading-snug font-semibold hover:text-royal">
                         {c.name}
                       </Link>
                       <p className="mt-1 inline-flex items-center gap-1 text-sm text-muted">
@@ -285,107 +260,69 @@ export function CompareView() {
             {colleges.length < 2 ? (
               <div className="mt-6 rounded-[var(--radius-card)] bg-white p-8 text-center ring-1 ring-line">
                 <p className="text-lg font-semibold">Add at least two colleges to compare</p>
-                <p className="mt-1 text-muted">
-                  Use the boxes above, or tap Compare on any college in the{" "}
-                  <Link href="/colleges" className="font-semibold text-royal hover:underline">
-                    college list
-                  </Link>
-                  .
-                </p>
+                <p className="mt-2 text-sm text-muted">Or start with one of these:</p>
+                <ul className="mt-2 flex flex-wrap justify-center gap-2">
+                  {QUICK_PAIRS.map(([x, y]) => (
+                    <li key={x + y}>
+                      <button
+                        type="button"
+                        onClick={() => setSlugs([x, y])}
+                        className="rounded-full px-4 py-2 text-sm font-semibold text-ink-80 ring-1 ring-line transition hover:text-royal hover:ring-royal"
+                      >
+                        {shortName(x)} and {shortName(y)}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
               </div>
             ) : (
-              <>
-                {/* Compact bar that follows you down the page (desktop). Zero height so it never shifts the layout. */}
-                <div className="sticky top-[84px] z-30 hidden h-0 lg:block">
-                  <div
-                    aria-hidden={!barVisible}
-                    className={`absolute inset-x-0 top-0 grid gap-2 rounded-2xl lg:gap-4 bg-white/95 py-2.5 shadow-float ring-1 ring-line backdrop-blur transition duration-200 ${
-                      barVisible ? "translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
-                    }`}
-                    style={gridStyle}
-                  >
-                    <div />
-                    {slots.map((i) => {
-                      const c = colleges[i];
-                      return (
-                        <div key={i} className="flex min-w-0 items-center gap-2.5 px-5">
-                          {c && (
-                            <>
-                              <span className="relative size-9 shrink-0 overflow-hidden rounded-lg">
-                                <Image src={c.image} alt="" fill sizes="36px" className="object-cover" />
-                              </span>
-                              <span className="truncate text-sm font-semibold">{c.short}</span>
-                            </>
-                          )}
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-
-                <p className="mt-6 inline-flex items-center gap-2 text-sm text-muted">
-                  <span className="grid size-6 place-items-center rounded-full bg-mint-50 text-mint">
-                    <Trophy className="size-3.5" aria-hidden />
-                  </span>
-                  Best value in each row
-                </p>
-
-                {ROWS.map((g) => (
-                  <section key={g.group} aria-labelledby={`cmp-${g.group}`} className="mt-4 overflow-hidden rounded-[var(--radius-card)] bg-white ring-1 ring-line">
-                    <h2 id={`cmp-${g.group}`} className="flex items-center gap-2.5 border-b border-line bg-paper px-5 py-3.5 font-sans text-[15px] font-bold tracking-normal">
-                      <g.icon className="size-[18px] text-royal" aria-hidden /> {g.group}
+              <div className="mt-6 rounded-[var(--radius-card)] bg-white ring-1 ring-line">
+                {ROWS.map((g, gi) => (
+                  <section key={g.group} aria-labelledby={`cmp-${g.group}`} className={gi > 0 ? "border-t border-line" : ""}>
+                    <h2 id={`cmp-${g.group}`} className="px-4 pt-5 pb-1 font-sans text-[1.0625rem] font-bold tracking-normal text-ink lg:px-5">
+                      {g.group}
                     </h2>
                     {g.rows.map((row) => {
                       const scores = row.score ? colleges.map(row.score) : [];
                       const best = scores.length ? Math.max(...scores) : null;
                       const unique = best !== null && scores.filter((s) => s === best).length === 1;
                       return (
-                        <div key={row.label} className="grid items-start gap-2 border-b border-line last:border-0 lg:gap-4" style={gridStyle}>
-                          <div className={labelCell}>{row.label}</div>
-                          {slots.map((i) => {
-                            const c = colleges[i];
-                            if (!c) return <div key={i} />;
-                            const isBest = unique && row.score && row.score(c) === best;
-                            return (
-                              <div key={i} className={`px-3 py-4 text-[14px] lg:px-5 lg:text-[15px] ${isBest ? "bg-mint-50 font-semibold text-ink" : "text-ink"}`}>
-                                <span className="flex items-start gap-1.5">
-                                  {isBest && <Trophy className="mt-0.5 size-4 shrink-0 text-mint" aria-label="Best in this row" />}
-                                  <span className="min-w-0">{row.value(c)}</span>
-                                </span>
-                              </div>
-                            );
-                          })}
+                        <div key={row.label} className="border-t border-line first:border-t-0">
+                          <p className="px-4 pt-3 text-[0.8125rem] text-muted lg:px-5">{row.label}</p>
+                          <div className="grid items-start gap-2 pb-3 lg:gap-4" style={gridStyle}>
+                            {slots.map((i) => {
+                              const c = colleges[i];
+                              if (!c) return <div key={i} />;
+                              const isBest = unique && row.score && row.score(c) === best;
+                              return (
+                                <div key={i} className={`px-4 py-2 text-[0.875rem] lg:px-5 lg:text-[0.9375rem] ${isBest ? "font-bold text-[#0a7a3d]" : "text-ink"}`}>
+                                  {row.value(c)}
+                                </div>
+                              );
+                            })}
+                          </div>
                         </div>
                       );
                     })}
                   </section>
                 ))}
-
-                {/* Next step, under each college */}
-                <div className="mt-4 grid items-center gap-2 rounded-[var(--radius-card)] bg-white ring-1 ring-line lg:gap-4" style={gridStyle}>
-                  <div className={`${labelCell} font-semibold text-ink`}>Next step</div>
-                  {slots.map((i) => {
-                    const c = colleges[i];
-                    if (!c) return <div key={i} />;
-                    return (
-                      <div key={i} className="grid gap-2 px-2 py-5 lg:px-5">
-                        <button
-                          onClick={() => open({ source: "compare-apply-bottom", title: "Apply with a counsellor's help", college: c.name })}
-                          className="rounded-full bg-royal py-2.5 text-sm font-semibold text-white transition hover:bg-royal-600"
-                        >
-                          Apply now
-                        </button>
-                        <Link
-                          href={`/colleges/${c.slug}`}
-                          className="inline-flex items-center justify-center gap-1 rounded-full py-2.5 text-sm font-semibold text-royal ring-1 ring-royal-100 transition hover:bg-royal-50"
-                        >
-                          Full details <ArrowUpRight className="size-4" aria-hidden />
-                        </Link>
-                      </div>
-                    );
-                  })}
+                <div className="border-t border-line">
+                  <p className="px-4 pt-3 text-[0.8125rem] text-muted lg:px-5">More details</p>
+                  <div className="grid items-start gap-2 pb-4 lg:gap-4" style={gridStyle}>
+                    {slots.map((i) => {
+                      const c = colleges[i];
+                      if (!c) return <div key={i} />;
+                      return (
+                        <div key={i} className="px-4 py-1.5 lg:px-5">
+                          <Link href={`/colleges/${c.slug}`} className="inline-flex items-center gap-1 text-sm font-semibold text-royal underline underline-offset-4">
+                            Full details <ArrowUpRight className="size-4" aria-hidden />
+                          </Link>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </>
+              </div>
             )}
           </div>
         </div>

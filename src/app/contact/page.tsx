@@ -19,7 +19,7 @@ export default function ContactPage() {
   return (
     <Container className="grid gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
       <div>
-        <h1 className="text-[36px] font-extrabold sm:text-[56px]">We pick up the phone.</h1>
+        <h1 className="text-[2.25rem] font-extrabold sm:text-[3.5rem]">We pick up the phone.</h1>
         <p className="mt-4 max-w-md text-lg text-muted">
           Questions about a college, an exam or your options? Reach us any way you like and a counsellor
           will reply within 30 minutes during working hours.

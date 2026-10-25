@@ -50,8 +50,8 @@
   --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
 
-  --radius-panel: 32px;
-  --radius-card: 22px;
+  --radius-panel: 16px;
+  --radius-card: 12px;
 
   --shadow-lift: 0 1px 2px rgb(11 43 51 / 0.05), 0 10px 30px -12px rgb(11 43 51 / 0.18);
   --shadow-float: 0 2px 6px rgb(11 43 51 / 0.06), 0 30px 60px -20px rgb(11 43 51 / 0.35);
@@ -98,11 +98,18 @@
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
   }
+  /* Everything is sized in rem, so raising the root size on big monitors scales the whole layout
+     (text, cards, spacing and the content width) instead of leaving a small page in a large empty screen. */
+  @media (min-width: 1700px) { html { font-size: 17px; } }
+  @media (min-width: 1920px) { html { font-size: 18px; } }
+  @media (min-width: 2300px) { html { font-size: 20px; } }
+  @media (min-width: 2700px) { html { font-size: 23px; } }
+  @media (min-width: 3300px) { html { font-size: 28px; } }
   body {
     background: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.6;
   }
   h1, h2, h3, h4 {
@@ -134,8 +141,8 @@
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
 /* Arch frame, the shape of a college gate / jharokha window */
-.arch { border-radius: 999px 999px 28px 28px; }
-.arch-sm { border-radius: 999px 999px 18px 18px; }
+.arch { border-radius: 999px 999px 12px 12px; }
+.arch-sm { border-radius: 999px 999px 10px 10px; }
 
 /* Sunflower highlighter stroke for the hero sentence blanks */
 .blank {
@@ -181,3 +188,4 @@
 @supports not selector(::-webkit-scrollbar) {
   .thin-scroll { scrollbar-width: thin; scrollbar-color: rgb(11 43 51 / 0.25) transparent; }
 }
+

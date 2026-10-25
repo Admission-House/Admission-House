@@ -78,7 +78,7 @@ export function CollegeExplorer() {
   const filters = (
     <div className="divide-y divide-line">
       <FilterGroup title="Admission for">
-        <div className="grid grid-cols-3 gap-1 rounded-xl bg-paper p-1 ring-1 ring-line">
+        <div className="grid grid-cols-[auto_1fr_1fr] gap-1 rounded-full bg-white p-1 shadow-lift ring-1 ring-line">
           {[
             ["", "All"],
             ["UG", "After 12th"],
@@ -89,8 +89,8 @@ export function CollegeExplorer() {
               type="button"
               onClick={() => update({ level: v })}
               aria-pressed={(f.level ?? "") === v}
-              className={`rounded-lg px-1 py-2 text-[13px] font-semibold whitespace-nowrap transition ${
-                (f.level ?? "") === v ? "bg-white text-royal shadow-lift" : "text-muted hover:text-ink"
+              className={`rounded-full px-3.5 py-2 text-center text-[0.8125rem] font-semibold whitespace-nowrap transition duration-200 ${
+                (f.level ?? "") === v ? "bg-royal text-white shadow-sm" : "text-ink-80 hover:bg-royal-50 hover:text-royal"
               }`}
             >
               {l}
@@ -166,6 +166,7 @@ export function CollegeExplorer() {
   return (
     <>
       <PageHero
+        wide
         title={title}
         image="/images/hero-walk.jpg"
         intro={
@@ -191,21 +192,21 @@ export function CollegeExplorer() {
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search by college, course, city or exam"
               aria-label="Search colleges"
-              className="min-w-0 flex-1 bg-transparent py-2 text-[15px] outline-none placeholder:text-subtle"
+              className="min-w-0 flex-1 bg-transparent py-2 text-[0.9375rem] outline-none placeholder:text-subtle"
             />
             <button className="rounded-full bg-royal px-5 py-2.5 text-sm font-semibold text-white hover:bg-royal-600">Search</button>
           </form>
       </PageHero>
 
-      <Container className="grid gap-8 py-8 lg:grid-cols-[300px_1fr] lg:py-10">
+      <Container wide className="grid gap-8 py-8 lg:grid-cols-[18.75rem_1fr] lg:py-10">
         <aside className="hidden lg:block" aria-label="Filters">
           <div className="sticky top-28">
-            <div className="max-h-[calc(100vh-8rem)] thin-scroll overflow-y-auto rounded-[var(--radius-card)] bg-white p-5 ring-1 ring-line">
-              <div className="mb-4 flex items-center justify-between">
+            <div className="max-h-[calc(100vh-8rem)] thin-scroll overflow-y-auto rounded-[var(--radius-card)] bg-white p-6 shadow-lift ring-1 ring-line">
+              <div className="mb-5 flex items-center justify-between">
                 <h2 className="flex items-center gap-2 font-sans text-base font-bold tracking-normal">
                   <SlidersHorizontal className="size-4 text-royal" aria-hidden /> Filters
                   {chips.length > 0 && (
-                    <span className="grid size-5 place-items-center rounded-full bg-royal text-[11px] font-semibold text-white">{chips.length}</span>
+                    <span className="grid size-5 place-items-center rounded-full bg-royal text-[0.6875rem] font-semibold text-white">{chips.length}</span>
                   )}
                 </h2>
                 {chips.length > 0 && (
@@ -221,7 +222,7 @@ export function CollegeExplorer() {
 
         <div className="min-w-0">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-[15px]" aria-live="polite">
+            <p className="text-[0.9375rem]" aria-live="polite">
               <span className="font-bold">{results.length}</span> {results.length === 1 ? "college" : "colleges"} found
             </p>
             <div className="flex items-center gap-2">
@@ -231,7 +232,7 @@ export function CollegeExplorer() {
               >
                 <SlidersHorizontal className="size-4" /> Filters
                 {chips.length > 0 && (
-                  <span className="grid size-5 place-items-center rounded-full bg-royal text-[11px] text-white">{chips.length}</span>
+                  <span className="grid size-5 place-items-center rounded-full bg-royal text-[0.6875rem] text-white">{chips.length}</span>
                 )}
               </button>
               <div className="flex items-center gap-2 text-sm text-muted">
@@ -287,7 +288,7 @@ export function CollegeExplorer() {
                   <CollegeRow college={c} />
                   {i === 2 && (
                     <div className="mt-4 flex flex-col items-start gap-4 rounded-[var(--radius-card)] bg-ink p-5 text-white sm:flex-row sm:items-center sm:p-6">
-                      <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-marigold text-ink">
+                      <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-marigold text-ink">
                         <Headset className="size-6" />
                       </span>
                       <div className="flex-1">
@@ -316,7 +317,7 @@ export function CollegeExplorer() {
           role="dialog"
           aria-modal="true"
           aria-label="Filters"
-          className={`absolute inset-x-0 bottom-0 flex max-h-[88dvh] flex-col rounded-t-[28px] bg-white transition-transform duration-300 ${
+          className={`absolute inset-x-0 bottom-0 flex max-h-[88dvh] flex-col rounded-t-xl bg-white transition-transform duration-300 ${
             drawer ? "translate-y-0" : "translate-y-full"
           }`}
         >
@@ -341,15 +342,16 @@ export function CollegeExplorer() {
   );
 }
 
-const pill = "inline-flex items-center rounded-full px-3 py-1.5 text-[13px] font-semibold whitespace-nowrap ring-1 transition";
+const pill = "inline-flex items-center rounded-full px-3 py-1.5 text-[0.8125rem] font-semibold whitespace-nowrap ring-1 transition";
 const pillOn = "bg-royal text-white ring-royal";
 const pillOff = "bg-white text-ink-80 ring-line hover:bg-royal-50 hover:text-royal hover:ring-royal-100";
 
+
 function FilterGroup({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="py-5 first:pt-0 last:pb-0">
+    <div className="py-6 first:pt-0 last:pb-0">
       <fieldset>
-        <legend className="mb-3 text-[13px] font-semibold tracking-wide text-muted uppercase">{title}</legend>
+        <legend className="mb-3.5 text-[0.75rem] font-bold tracking-[0.12em] text-royal uppercase">{title}</legend>
         {children}
       </fieldset>
     </div>
@@ -358,7 +360,7 @@ function FilterGroup({ title, children }: { title: string; children: React.React
 
 function CheckOption({ label, checked, onChange }: { label: string; checked: boolean; onChange: (on: boolean) => void }) {
   return (
-    <label className="group flex cursor-pointer items-center gap-3 text-[15px] text-ink-80">
+    <label className="group flex cursor-pointer items-center gap-3 text-[0.9375rem] text-ink-80">
       <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} className="peer sr-only" />
       <span className="grid size-5 shrink-0 place-items-center rounded-md border border-ink/25 bg-white text-white transition group-hover:border-royal peer-checked:border-royal peer-checked:bg-royal peer-focus-visible:ring-2 peer-focus-visible:ring-marigold peer-focus-visible:ring-offset-2 peer-checked:[&_svg]:opacity-100">
         <CheckIcon className="size-3.5 opacity-0 transition-opacity" strokeWidth={3} aria-hidden />

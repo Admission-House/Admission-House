@@ -35,7 +35,7 @@ function Dots({ n, skin, active = 5 }: { n: number; skin: Skin; active?: number 
 
 function Card({ title, c, total, skin, extra, photo }: { title: string; c: Course; total: number; skin: Skin; extra?: React.ReactNode; photo?: boolean }) {
   return (
-    <article className={`relative isolate flex min-h-[410px] flex-col overflow-hidden rounded-2xl ${skin.card}`}>
+    <article className={`relative isolate flex min-h-[25.625rem] flex-col overflow-hidden rounded-xl ${skin.card}`}>
       {photo && (
         <>
           <Image src={STREAM_IMAGES[c.stream]} alt="" fill sizes="620px" className="-z-10 object-cover" />
@@ -43,7 +43,7 @@ function Card({ title, c, total, skin, extra, photo }: { title: string; c: Cours
         </>
       )}
       <div className="flex items-center justify-between px-8 pt-8 sm:px-10 sm:pt-10">
-        <p className={`text-[15px] font-semibold ${skin.label}`}>{title}</p>
+        <p className={`text-[0.9375rem] font-semibold ${skin.label}`}>{title}</p>
         {skin.arrow && (
           <span className="flex gap-1.5">
             {[ChevronLeft, ChevronRight].map((I, i) => (
@@ -55,16 +55,16 @@ function Card({ title, c, total, skin, extra, photo }: { title: string; c: Cours
         )}
       </div>
       <div className="px-8 pt-6 sm:px-10">
-        <p className="font-display text-[48px] leading-none font-extrabold tracking-tight sm:text-[60px]">{c.name}</p>
+        <p className="font-display text-[3rem] leading-none font-extrabold tracking-tight sm:text-[3.75rem]">{c.name}</p>
         <p className="mt-3 text-lg">{c.full}</p>
-        <p className={`mt-5 text-[15px] ${skin.soft}`}>
+        <p className={`mt-5 text-[0.9375rem] ${skin.soft}`}>
           {c.duration}. Entrance through {c.exams.slice(0, 2).join(" or ")}.
         </p>
         {extra}
       </div>
       <div className="mt-auto flex items-center justify-between gap-4 px-8 pt-10 pb-8 sm:px-10">
         <Dots n={total} skin={skin} />
-        <span className={`shrink-0 text-[15px] font-semibold underline decoration-2 underline-offset-[6px] ${skin.link}`}>Explore colleges</span>
+        <span className={`shrink-0 text-[0.9375rem] font-semibold underline decoration-2 underline-offset-[0.375rem] ${skin.link}`}>Explore colleges</span>
       </div>
     </article>
   );
@@ -72,7 +72,7 @@ function Card({ title, c, total, skin, extra, photo }: { title: string; c: Cours
 
 function Label({ n, title, note }: { n: number; title: string; note: string }) {
   return (
-    <div className="mx-auto flex max-w-[1240px] flex-wrap items-baseline gap-3 px-4 pt-12 pb-4 sm:px-6 lg:px-8">
+    <div className="mx-auto flex max-w-[77.5rem] flex-wrap items-baseline gap-3 px-4 pt-12 pb-4 sm:px-6 lg:px-8">
       <span className="grid size-8 place-items-center rounded-full bg-brand text-sm font-bold text-white">{n}</span>
       <h2 className="font-sans text-xl font-bold text-brand">{title}</h2>
       <p className="text-sm text-muted">{note}</p>
@@ -129,7 +129,7 @@ export default function CoursesPreview() {
 
   return (
     <div className="bg-white pb-24">
-      <div className="mx-auto max-w-[1240px] px-4 pt-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[77.5rem] px-4 pt-10 sm:px-6 lg:px-8">
         <h1 className="font-display text-3xl font-extrabold text-brand">Course card previews</h1>
         <p className="mt-2 max-w-2xl text-muted">
           The same two sliding cards as now (UG and PG, dots, Explore colleges). Only the colours change, and they no longer have to match

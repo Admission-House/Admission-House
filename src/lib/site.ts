@@ -23,6 +23,10 @@ export const SOCIAL: Record<"instagram" | "facebook" | "linkedin" | "youtube", s
 
 export const telHref = `tel:${SITE.phoneTel}`;
 
-export function whatsappHref(text = "Hi, I need help with college admission") {
+/** First message a visitor sends on WhatsApp. It reads as a complete request, so most people can send it as it is. */
+export const WHATSAPP_MESSAGE =
+  "Hello Admissions House, I need counselling for college admission. Please help me choose the right college and course, and tell me about fees, entrance exams and the admission process.";
+
+export function whatsappHref(text = WHATSAPP_MESSAGE) {
   return `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`;
 }
