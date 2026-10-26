@@ -39,24 +39,24 @@ export default function Home() {
       <Exams />
       <ComparePairs />
       {TESTIMONIALS.length > 0 && <Testimonials />}
-      <section className="py-10 sm:py-14">
-        <Container>
-          <div className="mx-auto max-w-[880px]">
+      <section className="relative overflow-hidden py-10 sm:py-14">
+        <Container className="relative">
+          <div className="mx-auto max-w-[55rem]">
           <div className="text-center">
-            <h2 className="text-[32px] font-bold sm:text-[44px]">Frequently asked questions</h2>
-            <p className="mx-auto mt-3 max-w-xl text-[17px] text-muted">
+            <h2 className="text-[2rem] font-bold sm:text-[2.75rem]">Frequently asked questions</h2>
+            <p className="mx-auto mt-3 max-w-xl text-[1.0625rem] text-muted">
               Answers to what students and parents ask us most before admissions.
             </p>
           </div>
           <div className="mt-12">
             <Faq items={FAQS} />
           </div>
-          <div className="mt-12 flex flex-col items-center justify-between gap-5 rounded-2xl bg-[#1B2A4A] px-6 py-6 text-white sm:flex-row sm:px-8">
+          <div className="mt-12 flex flex-col items-center justify-between gap-5 rounded-xl bg-ink px-6 py-6 shadow-lift text-white sm:flex-row sm:px-8">
             <div className="flex items-center gap-4">
               {COUNSELLORS.length > 0 && (
                 <div className="flex -space-x-3">
                   {COUNSELLORS.slice(0, 3).map((c) => (
-                    <span key={c.name} className="relative size-11 overflow-hidden rounded-full ring-2 ring-[#1B2A4A]">
+                    <span key={c.name} className="relative size-11 overflow-hidden rounded-full ring-2 ring-ink">
                       <Image src={c.photo} alt="" fill sizes="44px" className="object-cover" />
                     </span>
                   ))}
@@ -69,7 +69,7 @@ export default function Home() {
             </div>
             <LeadButton
               source="faq"
-              className="shrink-0 rounded-full bg-white px-6 py-3 text-[15px] font-semibold text-[#1B2A4A] transition hover:bg-sun"
+              className="shrink-0 rounded-full bg-marigold px-6 py-3 text-[0.9375rem] font-semibold text-ink transition hover:bg-sun"
             >
               Ask a counsellor
             </LeadButton>
@@ -87,16 +87,16 @@ function Hero() {
   return (
     <section className="relative overflow-hidden bg-neutral-900">
       <HeroBanner />
-      <Container className="relative z-10 flex min-h-[560px] [text-shadow:0_1px_14px_rgb(0_0_0/0.35)] flex-col justify-center pt-12 pb-24 lg:min-h-[max(600px,calc(100svh-115px))]">
-        <h1 className="max-w-[660px] animate-rise text-[40px] leading-[1.07] font-extrabold text-white [animation-delay:100ms] sm:text-[52px] lg:text-[60px]">
+      <Container className="relative z-10 flex min-h-[35rem] [text-shadow:0_1px_14px_rgb(0_0_0/0.35)] flex-col justify-center pt-12 pb-24 lg:min-h-[max(37.5rem,calc(100svh-7.1875rem))]">
+        <h1 className="max-w-[41.25rem] animate-rise text-[2.5rem] leading-[1.07] font-extrabold text-white [animation-delay:100ms] sm:text-[3.25rem] lg:text-[3.75rem]">
           Find the right college. <span className="text-teal">Get in with expert help.</span>
         </h1>
-        <p className="mt-5 max-w-[540px] animate-rise text-lg text-white/80 [animation-delay:200ms]">
+        <p className="mt-5 max-w-[33.75rem] animate-rise text-lg text-white/80 [animation-delay:200ms]">
           Compare fees, ranks and placements of top colleges for courses after 12th and after graduation.
           When you need help, a real counsellor will shortlist with you, help you apply and stay till your seat is locked.
         </p>
 
-        <div className="mt-8 max-w-[920px] animate-rise [animation-delay:300ms]">
+        <div className="mt-8 max-w-[57.5rem] animate-rise [animation-delay:300ms]">
           <HeroFinder />
         </div>
 
@@ -141,10 +141,10 @@ function Counselling() {
             <ol className="relative mt-6 ml-2 grid gap-5 border-l border-teal/30 pl-8">
               {steps.map((s, i) => (
                 <li key={s.t} className="relative">
-                  <span className="absolute top-0 -left-[50px] grid size-9 place-items-center rounded-full bg-teal font-display text-base font-extrabold text-brand ring-4 ring-brand">
+                  <span className="absolute top-0 -left-[3.125rem] grid size-9 place-items-center rounded-full bg-teal font-display text-base font-extrabold text-brand ring-4 ring-brand">
                     {i + 1}
                   </span>
-                  <h3 className="text-[22px] font-semibold">{s.t}</h3>
+                  <h3 className="text-[1.375rem] font-semibold">{s.t}</h3>
                   <p className="mt-1 text-white/70">{s.d}</p>
                 </li>
               ))}
@@ -152,7 +152,7 @@ function Counselling() {
             <div className="mt-6 flex flex-wrap gap-3">
               <LeadButton
                 source="how-it-works"
-                className="inline-flex items-center justify-center rounded-full bg-teal px-6 py-3.5 text-[15px] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
+                className="inline-flex items-center justify-center rounded-full bg-teal px-6 py-3.5 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
               >
                 Book a free session
               </LeadButton>
@@ -165,7 +165,7 @@ function Counselling() {
             <ul className="grid grid-cols-2 content-start gap-x-4 gap-y-7 sm:grid-cols-3">
               {COUNSELLORS.map((c) => (
                 <li key={c.name}>
-                  <div className="zoom relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-2xl bg-ink-80">
+                  <div className="zoom relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-xl bg-ink-80">
                     <Image src={c.photo} alt={c.name} fill quality={90} sizes="(min-width:1024px) 200px, 45vw" className="object-cover" />
                   </div>
                   <p className="mt-3 font-semibold">{c.name}</p>
@@ -177,7 +177,7 @@ function Counselling() {
               ))}
             </ul>
           ) : (
-            <div className="relative min-h-[320px] overflow-hidden rounded-2xl lg:min-h-full">
+            <div className="relative min-h-[20rem] overflow-hidden rounded-xl lg:min-h-full">
               <Image src="/images/study-table.jpg" alt="" fill sizes="(min-width:1024px) 520px, 100vw" className="object-cover" />
             </div>
           )}
@@ -189,7 +189,7 @@ function Counselling() {
 
 function Exams() {
   const upcoming = EXAMS.filter((e) => e.status !== "Closed").slice(0, 6);
-  const cols = "md:grid-cols-[84px_1.5fr_1fr_190px]";
+  const cols = "md:grid-cols-[6.875rem_1.6fr_1fr_13.125rem]";
   return (
     <section className="pt-8 pb-10 sm:pt-10 sm:pb-14">
       <Container>
@@ -199,37 +199,50 @@ function Exams() {
           action={<TextLink href="/exams">All exams and dates</TextLink>}
         />
 
-        <div className="overflow-hidden rounded-[22px] bg-white shadow-lift ring-1 ring-line">
-          <div className={`hidden gap-6 bg-mint-soft px-6 py-3.5 text-sm font-semibold text-brand md:grid ${cols}`}>
+        <div className="border-t border-b border-line">
+          <div className={`hidden gap-6 border-b border-line px-5 py-5 sm:px-7 text-[0.9375rem] font-bold tracking-[0.1em] text-brand uppercase md:grid ${cols}`}>
             <span>Exam date</span>
             <span>Exam</span>
             <span>Last date to apply</span>
             <span className="text-right">Status</span>
           </div>
-          <ul className="divide-y divide-line">
+          <ul>
             {upcoming.map((e) => {
               const open = e.status === "Applications open";
               const [month, day] = e.examDate.split("–")[0].replace(/,?\s*20\d\d$/, "").split(" ");
               return (
-                <li key={e.slug}>
+                <li key={e.slug} className="border-b border-line last:border-b-0">
                   <Link
                     href="/exams"
-                    className={`grid items-center gap-x-6 gap-y-3 px-5 py-4 sm:px-6 md:py-5 ${cols} grid-cols-[72px_1fr]`}
+                    className={`group relative grid items-center gap-x-6 gap-y-1 px-5 py-5 transition-colors duration-200 hover:bg-white sm:px-7 ${cols} grid-cols-1`}
                   >
-                    <span className="grid h-[72px] w-[72px] place-content-center rounded-2xl bg-brand text-center text-white md:h-[64px] md:w-[64px]">
-                      <span className="block text-xs font-semibold tracking-wide text-teal uppercase">{month}</span>
-                      <span className="block font-display text-[26px] leading-none font-extrabold">{day ?? ""}</span>
+                    <span
+                      aria-hidden
+                      className="absolute inset-y-3 left-0 w-1 origin-center scale-y-0 rounded-r-full bg-marigold transition-transform duration-300 group-hover:scale-y-100"
+                    />
+                    <span className="font-display text-[1.625rem] leading-none font-extrabold text-brand">
+                      {day ?? ""} <span className="text-[1.0625rem] font-bold text-marigold-600">{month}</span>
                     </span>
                     <span className="min-w-0">
-                      <span className="block text-lg font-bold text-ink">{e.name}</span>
+                      <span className="block text-lg font-bold text-ink transition-colors group-hover:text-royal">{e.name}</span>
                       <span className="block truncate text-sm text-muted">{e.full}</span>
                     </span>
-                    <span className="col-start-2 text-[15px] text-ink-80 md:col-start-auto">
-                      <span className="text-muted md:hidden">Apply by </span>
+                    <span className="text-[0.9375rem] font-medium text-ink-80">
+                      <span className="font-normal text-muted md:hidden">Apply by </span>
                       {e.applyBy}
                     </span>
-                    <span className={`col-start-2 text-sm font-semibold md:col-start-auto md:text-right ${open ? "text-mint" : "text-muted"}`}>
-                      {open ? "Applications open" : "Opening soon"}
+                    <span className="flex items-center gap-3 md:justify-end">
+                      <span className={`inline-flex items-center gap-2 text-[0.9375rem] font-semibold ${open ? "text-mint" : "text-marigold-600"}`}>
+                        <span className="relative flex size-2.5">
+                          {open && <span className="absolute inline-flex size-full animate-ping rounded-full bg-mint opacity-60" />}
+                          <span className={`relative inline-flex size-2.5 rounded-full ${open ? "bg-mint" : "bg-marigold"}`} />
+                        </span>
+                        {open ? "Applications open" : "Opening soon"}
+                      </span>
+                      <ArrowUpRight
+                        className="hidden size-4 text-subtle transition duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-royal md:block"
+                        aria-hidden
+                      />
                     </span>
                   </Link>
                 </li>
@@ -264,7 +277,7 @@ function ComparePairs() {
               href={`/compare?c=${a.slug},${b.slug}`}
               data-reveal
               style={{ "--d": `${i * 100}ms` } as React.CSSProperties}
-              className="group overflow-hidden rounded-[var(--radius-card)] bg-white shadow-lift ring-1 ring-line transition hover:-translate-y-1.5 hover:shadow-float"
+              className="group flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-lift ring-1 ring-line transition hover:-translate-y-1.5 hover:shadow-float"
             >
               <div className="relative grid h-40 grid-cols-2 gap-1">
                 {[a, b].map((c) => (
@@ -276,7 +289,7 @@ function ComparePairs() {
                   VS
                 </span>
               </div>
-              <div className="grid grid-cols-2 gap-4 p-5">
+              <div className="grid flex-1 grid-cols-2 content-start gap-4 p-5">
                 {[a, b].map((c) => (
                   <div key={c.slug}>
                     <p className="leading-snug font-semibold">{c.name}</p>
@@ -294,7 +307,7 @@ function ComparePairs() {
                   </div>
                 ))}
               </div>
-              <p className="mx-5 mb-5 flex items-center justify-center gap-1.5 rounded-full bg-royal-50 py-2.5 text-sm font-semibold text-royal transition group-hover:bg-royal group-hover:text-white">
+              <p className="mx-5 mt-auto mb-5 flex items-center justify-center gap-1.5 rounded-full bg-royal-50 py-2.5 text-sm font-semibold text-royal transition group-hover:bg-royal group-hover:text-white">
                 See full comparison <ArrowUpRight className="size-4" />
               </p>
             </Link>
@@ -315,11 +328,11 @@ function Testimonials() {
           title="They found their college with us"
         />
       </Container>
-      <div className="no-scrollbar flex snap-x snap-mandatory gap-7 overflow-x-auto px-4 pt-6 pb-8 scroll-px-4 sm:px-6 sm:scroll-px-6 lg:px-[max(2rem,calc((100vw_-_1240px)_/_2_+_2rem))] lg:scroll-px-[max(2rem,calc((100vw_-_1240px)_/_2_+_2rem))]">
+      <div className="no-scrollbar flex snap-x snap-mandatory gap-7 overflow-x-auto px-4 pt-6 pb-8 scroll-px-4 sm:px-6 sm:scroll-px-6 lg:px-[max(2rem,calc((100vw_-_77.5rem)_/_2_+_2rem))] lg:scroll-px-[max(2rem,calc((100vw_-_77.5rem)_/_2_+_2rem))]">
         {TESTIMONIALS.map((t, i) => (
           <figure
             key={t.name}
-            className={`relative flex w-[82vw] max-w-[360px] shrink-0 snap-start flex-col rounded-md bg-white p-3.5 pb-6 shadow-float transition duration-300 hover:rotate-0 ${tilt[i % tilt.length]}`}
+            className={`relative flex w-[82vw] max-w-[22.5rem] shrink-0 snap-start flex-col rounded-md bg-white p-3.5 pb-6 shadow-float transition duration-300 hover:rotate-0 ${tilt[i % tilt.length]}`}
           >
             <span className="absolute -top-3 left-1/2 h-7 w-24 -translate-x-1/2 rotate-[-4deg] bg-sun/70" aria-hidden />
             {/* Same frame for every card. The whole photo sits inside it; any spare space shows a soft blur of the same photo. */}
@@ -331,7 +344,7 @@ function Testimonials() {
               <p className="font-display text-xl font-bold text-ink">{t.name}</p>
               <p className="mt-1 text-sm font-semibold text-mint">Admitted to {t.outcome}</p>
             </figcaption>
-            <blockquote className="mt-3 flex-1 px-1 text-[15px] leading-relaxed text-ink-80">&ldquo;{t.text}&rdquo;</blockquote>
+            <blockquote className="mt-3 flex-1 px-1 text-[0.9375rem] leading-relaxed text-ink-80">&ldquo;{t.text}&rdquo;</blockquote>
           </figure>
         ))}
       </div>

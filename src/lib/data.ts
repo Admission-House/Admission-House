@@ -271,6 +271,7 @@ export const COLLEGES: College[] = [
     scholarship: true,
     campusAcres: 325,
     image: "/images/colleges/iit-delhi.jpg",
+    imagePosition: "center 100%",
     hue: "#1B2A4A",
     tagline: "Second in NIRF Engineering 2025",
     about:
@@ -384,6 +385,7 @@ export const COLLEGES: College[] = [
     scholarship: true,
     campusAcres: 23,
     image: "/images/colleges/nlsiu.jpg",
+    imagePosition: "center",
     hue: "#1B2A4A",
     tagline: "First in NIRF Law for five years running",
     about:
@@ -720,9 +722,9 @@ export const COUNSELLORS: Counsellor[] = [
   { name: "Ritu Malhotra", initials: "RM", role: "Senior admission counsellor", focus: ["Management", "Commerce"], languages: ["Hindi", "English", "Punjabi"], years: 11, students: 3200, rating: 4.9, tone: "#0D7377", photo: "/images/c-ritu.jpg" },
   { name: "Arvind Iyer", initials: "AI", role: "Engineering admissions lead", focus: ["Engineering", "Computer Applications"], languages: ["English", "Tamil", "Hindi"], years: 9, students: 2750, rating: 4.9, tone: "#EA7300", photo: "/images/c-arvind.jpg" },
   { name: "Dr. Farah Khan", initials: "FK", role: "Medical & NEET counsellor", focus: ["Medical", "Pharmacy"], languages: ["Hindi", "English", "Urdu"], years: 13, students: 4100, rating: 5.0, tone: "#E0475B", photo: "/images/c-farah.jpg" },
-  { name: "Sneha Kulkarni", initials: "SK", role: "Design & creative careers", focus: ["Design", "Arts"], languages: ["Marathi", "Hindi", "English"], years: 7, students: 1380, rating: 4.8, tone: "#C2410C", photo: "/images/c-sneha-centered.jpg" },
+  { name: "Sneha Kulkarni", initials: "SK", role: "Design & creative careers", focus: ["Design", "Arts"], languages: ["Marathi", "Hindi", "English"], years: 7, students: 1380, rating: 4.8, tone: "#C2410C", photo: "/images/c-sneha-new.jpg" },
   { name: "Abhishek Rao", initials: "AR", role: "Law admissions counsellor", focus: ["Law"], languages: ["Telugu", "English", "Hindi"], years: 8, students: 1600, rating: 4.8, tone: "#7C3AED", photo: "/images/c-abhishek-2.jpg" },
-  { name: "Priyanka Das", initials: "PD", role: "PG & study-gap specialist", focus: ["Science", "Arts", "Management"], languages: ["Bengali", "Assamese", "English", "Hindi"], years: 10, students: 2240, rating: 4.9, tone: "#0E7490", photo: "/images/c-priyanka.jpg" },
+  { name: "Priyanka Das", initials: "PD", role: "PG & study-gap specialist", focus: ["Science", "Arts", "Management"], languages: ["Bengali", "Assamese", "English", "Hindi"], years: 10, students: 2240, rating: 4.9, tone: "#0E7490", photo: "/images/c-priyanka-new.png" },
 ];
 
 export interface Testimonial {

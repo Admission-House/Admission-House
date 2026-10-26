@@ -64,7 +64,7 @@ export function HeroBanner() {
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
-        <div className="mx-auto flex max-w-[1240px] items-end justify-between gap-4 px-4 pb-5 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[77.5rem] items-end justify-between gap-4 px-4 pb-5 sm:px-6 lg:px-8">
           <div className="flex gap-2" role="tablist" aria-label="Featured colleges">
             {SLIDES.map((c, i) => (
               <button

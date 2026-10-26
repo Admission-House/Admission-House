@@ -8,7 +8,7 @@ import { filterColleges } from "@/lib/filter";
 import { Select } from "../select";
 
 const TRIGGER =
-  "flex w-full cursor-pointer items-center justify-between gap-2 text-left text-[17px] font-semibold text-brand outline-none focus-visible:underline";
+  "flex w-full cursor-pointer items-center justify-between gap-2 text-left text-[1.0625rem] font-semibold text-brand outline-none focus-visible:underline";
 
 function Field({ label, children, wide }: { label: string; children: React.ReactNode; wide?: boolean }) {
   return (
@@ -56,7 +56,7 @@ export function HeroFinder() {
     <form
       onSubmit={go}
       aria-label="Find colleges"
-      className="flex flex-col divide-y divide-line rounded-3xl bg-white p-2 shadow-float sm:flex-row sm:items-center sm:divide-x sm:divide-y-0 sm:rounded-full"
+      className="flex flex-col divide-y divide-line rounded-xl bg-white p-2 shadow-float lg:flex-row lg:items-center lg:divide-x lg:divide-y-0 lg:rounded-full"
     >
       <Field label="Looking for" wide>
         <Select

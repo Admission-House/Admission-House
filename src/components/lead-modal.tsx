@@ -26,9 +26,9 @@ export function LeadModal({ context, onClose }: { context: LeadContext | null; o
         if (e.target === ref.current) onClose();
       }}
       aria-labelledby="lead-title"
-      className="m-auto w-[min(560px,calc(100vw-24px))] max-h-[calc(100dvh-24px)] overflow-hidden rounded-[var(--radius-panel)] bg-white p-0 text-ink shadow-float backdrop:bg-ink/55 backdrop:backdrop-blur-sm"
+      className="m-auto w-[min(35rem,calc(100vw-1.5rem))] max-h-[calc(100dvh-1.5rem)] overflow-hidden rounded-[var(--radius-panel)] bg-white p-0 text-ink shadow-float backdrop:bg-ink/55 backdrop:backdrop-blur-sm"
     >
-      <div key={context?.source} className="max-h-[calc(100dvh-24px)] thin-scroll overflow-y-auto">
+      <div key={context?.source} className="max-h-[calc(100dvh-1.5rem)] thin-scroll overflow-y-auto">
         <div className="relative p-6 sm:p-8">
           <button
             onClick={onClose}
@@ -37,7 +37,7 @@ export function LeadModal({ context, onClose }: { context: LeadContext | null; o
           >
             <X className="size-5" />
           </button>
-          <h2 id="lead-title" className="pr-10 text-2xl font-semibold sm:text-[28px]">
+          <h2 id="lead-title" className="pr-10 text-2xl font-semibold sm:text-[1.75rem]">
             {heading}
           </h2>
           <p className="mt-1.5 mb-6 text-muted">

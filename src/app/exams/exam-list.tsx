@@ -23,6 +23,7 @@ export function ExamList() {
   return (
     <>
       <PageHero
+        wide
         title="Entrance exams for 2027"
         intro="Tentative dates based on previous years. Official dates are confirmed by each exam body. We'll remind you before every deadline if you sign up."
         image="/images/hero-books.jpg"
@@ -51,7 +52,7 @@ export function ExamList() {
           </div>
       </PageHero>
 
-      <Container className="grid gap-8 py-8 sm:py-10 lg:grid-cols-[1fr_320px]">
+      <Container wide className="grid gap-8 py-8 sm:py-10 lg:grid-cols-[1fr_20rem]">
         <ul className="grid content-start gap-4">
           {list.map((e) => (
             <li key={e.slug} className="rounded-[var(--radius-card)] bg-white p-5 ring-1 ring-line sm:p-6">

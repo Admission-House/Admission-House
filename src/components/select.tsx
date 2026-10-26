@@ -11,7 +11,7 @@ export interface SelectOption {
 
 const TRIGGER: Record<"field" | "pill", string> = {
   field:
-    "flex w-full items-center justify-between gap-2 rounded-xl border bg-white px-3.5 py-3 text-left text-[15px] text-ink outline-none transition",
+    "flex h-12 w-full items-center justify-between gap-2 rounded-xl border bg-white px-4 text-left text-[0.9375rem] text-ink outline-none transition",
   pill: "inline-flex items-center gap-2 rounded-full border bg-white px-4 py-2 text-sm font-semibold text-ink outline-none transition",
 };
 
@@ -236,7 +236,7 @@ export function Select({
   const triggerClass =
     variant === "inline"
       ? className
-      : `${TRIGGER[variant]} ${open ? "border-royal" : "border-line hover:border-ink/30 focus-visible:border-royal"} ${className}`;
+      : `${TRIGGER[variant]} ${open ? "border-royal" : "border-ink/15 hover:border-ink/30 focus-visible:border-royal"} ${className}`;
 
   const list =
     open && portalTarget
@@ -255,7 +255,7 @@ export function Select({
               maxHeight: pos?.maxHeight ?? MAX_HEIGHT,
               visibility: pos ? "visible" : "hidden",
             }}
-            className={`fixed z-[100] w-max max-w-[min(320px,calc(100vw-24px))] thin-scroll animate-menu-in thin-scroll overflow-y-auto overscroll-contain rounded-2xl bg-white p-1.5 font-sans text-[15px] leading-normal font-medium tracking-normal text-ink shadow-float ring-1 ring-line ${
+            className={`fixed z-[100] w-max max-w-[min(20rem,calc(100vw-1.5rem))] thin-scroll animate-menu-in thin-scroll overflow-y-auto overscroll-contain rounded-xl bg-white p-1.5 font-sans text-[0.9375rem] leading-normal font-medium tracking-normal text-ink shadow-float ring-1 ring-line ${
               pos?.above ? "origin-bottom" : "origin-top"
             }`}
           >

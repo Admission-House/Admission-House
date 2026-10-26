@@ -21,19 +21,19 @@ export function SectionNav({ sections }: { sections: { id: string; label: string
   }, [sections]);
 
   return (
-    <nav aria-label="On this page" className="sticky top-[76px] z-20 border-y border-line bg-white/95 backdrop-blur">
-      <ul className="no-scrollbar mx-auto flex max-w-[1240px] gap-1 overflow-x-auto px-4 sm:px-6 lg:px-8">
+    <nav aria-label="On this page" className="sticky top-[4.75rem] z-20 border-y border-line bg-white/95 backdrop-blur">
+      <ul className="no-scrollbar mx-auto flex max-w-[90rem] gap-1 overflow-x-auto px-4 sm:px-6 lg:px-8">
         {sections.map((s) => (
           <li key={s.id}>
             <a
               href={`#${s.id}`}
               aria-current={active === s.id ? "true" : undefined}
-              className={`relative block px-3.5 py-3.5 text-[15px] font-semibold whitespace-nowrap transition ${
+              className={`relative block px-3.5 py-3.5 text-[0.9375rem] font-semibold whitespace-nowrap transition ${
                 active === s.id ? "text-royal" : "text-muted hover:text-ink"
               }`}
             >
               {s.label}
-              {active === s.id && <span className="absolute inset-x-3 bottom-0 h-[3px] rounded-full bg-royal" />}
+              {active === s.id && <span className="absolute inset-x-3 bottom-0 h-[0.1875rem] rounded-full bg-royal" />}
             </a>
           </li>
         ))}

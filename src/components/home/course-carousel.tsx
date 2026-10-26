@@ -64,10 +64,10 @@ export function CourseCarousel({ level, title, delay = 0 }: { level: Level; titl
       aria-label={title}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
-      className={`grid overflow-hidden rounded-3xl sm:grid-cols-[minmax(0,1fr)_40%] ${tone.card}`}
+      className={`grid overflow-hidden rounded-xl sm:grid-cols-[minmax(0,1fr)_40%] ${tone.card}`}
     >
       {/* Photo: stacked, the current one fades in. On phones it sits above the text. */}
-      <div className="relative order-first m-3 h-44 overflow-hidden rounded-2xl bg-brand/20 sm:order-last sm:h-auto sm:min-h-[300px]">
+      <div className="relative order-first m-3 h-44 overflow-hidden rounded-xl bg-brand/20 sm:order-last sm:h-auto sm:min-h-[18.75rem]">
         {courses.map((c, i) => (
           <Image
             key={c.slug}
@@ -82,7 +82,7 @@ export function CourseCarousel({ level, title, delay = 0 }: { level: Level; titl
       </div>
 
       <div className="flex min-w-0 flex-col">
-        <p className={`px-7 pt-6 text-[15px] font-semibold sm:px-9 sm:pt-9 ${tone.label}`}>{title}</p>
+        <p className={`px-7 pt-6 text-[0.9375rem] font-semibold sm:px-9 sm:pt-9 ${tone.label}`}>{title}</p>
 
         <div
           className="touch-pan-y overflow-hidden"
@@ -106,9 +106,9 @@ export function CourseCarousel({ level, title, delay = 0 }: { level: Level; titl
                 aria-hidden={i !== index}
                 className="w-full shrink-0 px-7 pt-5 sm:px-9"
               >
-                <p className="font-display text-[44px] leading-none font-extrabold tracking-tight sm:text-[56px]">{c.name}</p>
+                <p className="font-display text-[2.75rem] leading-none font-extrabold tracking-tight sm:text-[3.5rem]">{c.name}</p>
                 <p className="mt-3 text-lg">{c.full}</p>
-                <p className={`mt-4 text-[15px] ${tone.soft}`}>
+                <p className={`mt-4 text-[0.9375rem] ${tone.soft}`}>
                   {c.duration}. Entrance through {c.exams.slice(0, 2).join(" or ")}.
                 </p>
               </div>
@@ -131,7 +131,7 @@ export function CourseCarousel({ level, title, delay = 0 }: { level: Level; titl
           </div>
           <Link
             href={`/colleges?level=${current.level}&stream=${encodeURIComponent(current.stream)}`}
-            className={`inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-[15px] font-semibold transition ${tone.button}`}
+            className={`inline-flex shrink-0 items-center gap-2 rounded-full px-5 py-2.5 text-[0.9375rem] font-semibold transition ${tone.button}`}
           >
             Explore colleges <ArrowRight className="size-4" aria-hidden />
           </Link>

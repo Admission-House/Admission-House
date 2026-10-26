@@ -39,7 +39,7 @@ export function CollegeCard({ college, index = 0 }: { college: College; index?: 
     <article
       data-reveal
       style={{ "--d": `${(index % 3) * 80}ms` } as React.CSSProperties}
-      className="group relative flex flex-col overflow-hidden rounded-2xl bg-white ring-1 ring-line transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-24px_rgb(11_43_51/0.35)]"
+      className="group relative flex flex-col overflow-hidden rounded-xl bg-white ring-1 ring-line transition duration-300 hover:-translate-y-1 hover:shadow-[0_1.5rem_3rem_-1.5rem_rgb(11_43_51/0.35)]"
     >
       <div className="zoom relative overflow-hidden">
         <CollegeCover college={college} className="aspect-[16/9]" />
@@ -64,25 +64,25 @@ export function CollegeCard({ college, index = 0 }: { college: College; index?: 
       </div>
 
       <div className="flex flex-1 flex-col px-5 pt-4 pb-5">
-        <h3 className="min-h-[2.75em] font-sans text-[17px] leading-snug font-bold tracking-normal">
+        <h3 className="min-h-[2.75em] font-sans text-[1.0625rem] leading-snug font-bold tracking-normal">
           <Link href={`/colleges/${college.slug}`} className="after:absolute after:inset-0 after:content-['']">
             {college.name}
           </Link>
         </h3>
-        <p className="mt-0.5 text-[15px] text-muted">
+        <p className="mt-0.5 text-[0.9375rem] text-muted">
           {college.city}, {college.state}
         </p>
 
         <dl className="mt-4 grid grid-cols-2 gap-4 border-t border-line pt-4">
           <div>
-            <dt className="text-[13px] text-muted">Fees a year</dt>
-            <dd className="mt-0.5 font-display text-[17px] font-bold">
+            <dt className="text-[0.8125rem] text-muted">Fees a year</dt>
+            <dd className="mt-0.5 font-display text-[1.0625rem] font-bold">
               {formatLakh(min)} to {formatLakh(max)}
             </dd>
           </div>
           <div>
-            <dt className="text-[13px] text-muted">{pkg ? pkg.label : "Entrance exam"}</dt>
-            <dd className="mt-0.5 font-display text-[17px] font-bold">{pkg ? pkg.value : college.exams.slice(0, 2).join(", ")}</dd>
+            <dt className="text-[0.8125rem] text-muted">{pkg ? pkg.label : "Entrance exam"}</dt>
+            <dd className="mt-0.5 font-display text-[1.0625rem] font-bold">{pkg ? pkg.value : college.exams.slice(0, 2).join(", ")}</dd>
           </div>
         </dl>
 

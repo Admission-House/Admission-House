@@ -19,7 +19,7 @@ export default function AboutPage() {
     <>
       <section className="bg-white">
         <Container className="py-14 sm:py-20">
-          <h1 className="max-w-3xl text-[36px] font-extrabold sm:text-[58px]">
+          <h1 className="max-w-3xl text-[2.25rem] font-extrabold sm:text-[3.625rem]">
             Choosing a college shouldn&apos;t depend on who you happen to know.
           </h1>
           <div className="mt-8 grid gap-6 text-lg text-ink-80 lg:grid-cols-2 lg:gap-12">
