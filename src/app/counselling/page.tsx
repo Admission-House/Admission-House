@@ -6,6 +6,7 @@ import { Container, SectionHeading } from "@/components/ui";
 import { LeadForm } from "@/components/lead-form";
 import { Faq } from "@/components/faq";
 import { JsonLd } from "@/components/json-ld";
+import { SITE } from "@/lib/site";
 import { CounsellorGrid } from "./counsellor-grid";
 
 export const metadata: Metadata = {
@@ -88,11 +89,24 @@ export default function CounsellingPage() {
         <Container className="grid gap-10 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
           <h2 className="text-[30px] font-semibold sm:text-[40px]">Before you book</h2>
           <JsonLd
-            data={{
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
-            }}
+            data={[
+              {
+                "@context": "https://schema.org",
+                "@type": "FAQPage",
+                mainEntity: FAQS.map((f) => ({ "@type": "Question", name: f.q, acceptedAnswer: { "@type": "Answer", text: f.a } })),
+              },
+              {
+                "@context": "https://schema.org",
+                "@type": "Service",
+                name: "Free college admission counselling",
+                serviceType: "Admission counselling",
+                url: `${SITE.url}/counselling`,
+                provider: { "@id": `${SITE.url}/#organization` },
+                areaServed: { "@type": "Country", name: "India" },
+                availableLanguage: ["English", "Hindi"],
+                offers: { "@type": "Offer", price: "0", priceCurrency: "INR" },
+              },
+            ]}
           />
           <Faq items={FAQS} />
         </Container>

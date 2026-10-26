@@ -20,6 +20,9 @@ export const SOCIAL: Record<"instagram" | "facebook" | "youtube", string> = {
   youtube: "",
 };
 
+/** Bump when page content meaningfully changes; feeds the sitemap's lastmod. */
+export const CONTENT_UPDATED = "2026-10-26";
+
 export const telHref = `tel:${SITE.phoneTel}`;
 
 export function whatsappHref(text = "Hi, I need help with college admission") {
