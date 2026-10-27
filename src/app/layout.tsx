@@ -7,7 +7,7 @@ import { Footer } from "@/components/footer";
 import { WhatsAppButton } from "@/components/whatsapp";
 import { RevealObserver } from "@/components/reveal-observer";
 import { JsonLd } from "@/components/json-ld";
-import { SITE } from "@/lib/site";
+import { SITE, SOCIAL } from "@/lib/site";
 
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
@@ -32,6 +32,7 @@ export const metadata: Metadata = {
     url: "./",
   },
   twitter: { card: "summary_large_image" },
+  manifest: "/manifest.webmanifest",
   title: {
     default: "Admissions House | Find the right college, with a counsellor by your side",
     template: "%s | Admissions House",
@@ -44,6 +45,8 @@ export const viewport: Viewport = {
   themeColor: "#0B2B33",
 };
 
+const SAME_AS = Object.values(SOCIAL).filter(Boolean);
+
 const ORGANIZATION = {
   "@context": "https://schema.org",
   "@graph": [
@@ -51,8 +54,18 @@ const ORGANIZATION = {
       "@type": ["EducationalOrganization", "ProfessionalService"],
       "@id": `${SITE.url}/#organization`,
       name: SITE.name,
+      alternateName: ["Admission House", "AdmissionsHouse", "Admissions House India"],
       url: SITE.url,
-      logo: `${SITE.url}/brand/logo-original.png`,
+      logo: {
+        "@type": "ImageObject",
+        "@id": `${SITE.url}/#logo`,
+        url: `${SITE.url}/brand/logo-square.png`,
+        contentUrl: `${SITE.url}/brand/logo-square.png`,
+        width: 512,
+        height: 512,
+      },
+      image: `${SITE.url}/brand/logo-square.png`,
+      ...(SAME_AS.length > 0 && { sameAs: SAME_AS }),
       description:
         "College admission counselling and college search for students after 12th and after graduation in India.",
       telephone: SITE.phoneTel,
@@ -81,8 +94,14 @@ const ORGANIZATION = {
       "@id": `${SITE.url}/#website`,
       url: SITE.url,
       name: SITE.name,
+      alternateName: "Admission House",
       inLanguage: "en-IN",
       publisher: { "@id": `${SITE.url}/#organization` },
+      potentialAction: {
+        "@type": "SearchAction",
+        target: { "@type": "EntryPoint", urlTemplate: `${SITE.url}/colleges?q={search_term_string}` },
+        "query-input": "required name=search_term_string",
+      },
     },
   ],
 };

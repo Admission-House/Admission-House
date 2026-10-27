@@ -21,6 +21,9 @@ export const SOCIAL: Record<"instagram" | "facebook" | "linkedin" | "youtube", s
   youtube: "",
 };
 
+/** Bump when page content meaningfully changes; feeds the sitemap's lastmod. */
+export const CONTENT_UPDATED = "2026-10-26";
+
 export const telHref = `tel:${SITE.phoneTel}`;
 
 /** First message a visitor sends on WhatsApp. It reads as a complete request, so most people can send it as it is. */
