@@ -9,9 +9,10 @@ import { COLLEGES, COURSES, STREAMS, STREAM_IMAGES } from "@/lib/data";
 const WAIT = 2000; // the row stands still this long between moves
 const SLIDE = 450; // one card takes this long to slide across
 const GAP = 20;
+const GAP_SM = 12; // phones show two cards, so a tighter gap
 
 /** How many cards fit across the container at the current width. */
-const perView = (w: number) => (w >= 1000 ? 5 : w >= 700 ? 3 : w >= 480 ? 2 : 1);
+const perView = (w: number) => (w >= 1000 ? 5 : w >= 700 ? 3 : 2);
 
 /**
  * A row of field cards that exactly fills the page container, so its left edge lines up with the
@@ -26,6 +27,7 @@ export function FieldMarquee() {
   const [paused, setPaused] = useState(false);
   const [kick, setKick] = useState(0); // bumped by the arrows so the timer starts over
   const [cardW, setCardW] = useState(0);
+  const [gap, setGap] = useState(GAP);
   const viewport = useRef<HTMLDivElement>(null);
 
   // Size the cards so a whole number of them fills the container exactly.
@@ -35,7 +37,9 @@ export function FieldMarquee() {
     const measure = () => {
       const w = el.clientWidth;
       const n = perView(w);
-      setCardW(Math.floor((w - GAP * (n - 1)) / n));
+      const g = w < 480 ? GAP_SM : GAP;
+      setGap(g);
+      setCardW(Math.floor((w - g * (n - 1)) / n));
     };
     measure();
     const ro = new ResizeObserver(measure);
@@ -83,9 +87,9 @@ export function FieldMarquee() {
     return () => clearTimeout(id);
   }, [step, total]);
 
-  const pitch = cardW + GAP;
+  const pitch = cardW + gap;
   const arrow =
-    "absolute top-[calc(50%-3.5rem)] z-10 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-white text-brand shadow-float ring-1 ring-line transition hover:bg-brand hover:text-white";
+    "absolute top-[calc(50%-3.5rem)] z-10 grid size-8 -translate-y-1/2 sm:size-11 place-items-center rounded-full bg-white text-brand shadow-float ring-1 ring-line transition hover:bg-brand hover:text-white";
 
   return (
     <div className="relative" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
@@ -121,7 +125,7 @@ export function FieldMarquee() {
           }}
         >
           {[false, true].map((copy) => (
-            <ul key={String(copy)} className="flex" style={{ gap: GAP, paddingRight: GAP }} aria-hidden={copy || undefined}>
+            <ul key={String(copy)} className="flex" style={{ gap, paddingRight: gap }} aria-hidden={copy || undefined}>
               {STREAMS.map((s) => {
                 const count = COLLEGES.filter((c) => c.streams.includes(s)).length;
                 const courses = COURSES.filter((c) => c.stream === s)
@@ -145,9 +149,9 @@ export function FieldMarquee() {
                           className="object-cover transition duration-700 ease-out group-hover:scale-[1.05]"
                         />
                       </span>
-                      <span className="block px-4 pt-4 pb-5">
-                        <span className="block font-sans text-[1.0625rem] leading-snug font-bold text-white">{s}</span>
-                        <span className="mt-1 block truncate text-[0.8438rem] text-white/70">
+                      <span className="block px-2.5 pt-3 pb-3.5 sm:px-4 sm:pt-4 sm:pb-5">
+                        <span className="block font-sans text-[0.9375rem] leading-snug font-bold text-white sm:text-[1.0625rem]">{s}</span>
+                        <span className="mt-1 block truncate text-xs sm:text-[0.8438rem] text-white/70">
                           {count} {count === 1 ? "college" : "colleges"}
                           {courses && ` · ${courses}`}
                         </span>

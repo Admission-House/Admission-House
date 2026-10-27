@@ -87,16 +87,16 @@ function Hero() {
   return (
     <section className="relative overflow-hidden bg-neutral-900">
       <HeroBanner />
-      <Container className="relative z-10 flex min-h-[35rem] [text-shadow:0_1px_14px_rgb(0_0_0/0.35)] flex-col justify-center pt-12 pb-24 lg:min-h-[max(37.5rem,calc(100svh-7.1875rem))]">
-        <h1 className="max-w-[41.25rem] animate-rise text-[2.5rem] leading-[1.07] font-extrabold text-white [animation-delay:100ms] sm:text-[3.25rem] lg:text-[3.75rem]">
+      <Container className="relative z-10 flex min-h-[calc(100svh-7rem)] [text-shadow:0_1px_14px_rgb(0_0_0/0.35)] flex-col justify-center pt-6 pb-14 sm:min-h-[35rem] sm:pt-12 sm:pb-24 lg:min-h-[max(37.5rem,calc(100svh-7.1875rem))]">
+        <h1 className="max-w-[41.25rem] animate-rise text-[2rem] leading-[1.1] font-extrabold text-white [animation-delay:100ms] sm:text-[3.25rem] lg:text-[3.75rem]">
           Find the right college. <span className="text-teal">Get in with expert help.</span>
         </h1>
-        <p className="mt-5 max-w-[33.75rem] animate-rise text-lg text-white/80 [animation-delay:200ms]">
+        <p className="mt-3 max-w-[33.75rem] animate-rise text-[0.9375rem] leading-snug text-white/80 sm:mt-5 sm:text-lg sm:leading-normal [animation-delay:200ms]">
           Compare fees, ranks and placements of top colleges for courses after 12th and after graduation.
           When you need help, a real counsellor will shortlist with you, help you apply and stay till your seat is locked.
         </p>
 
-        <div className="mt-8 max-w-[57.5rem] animate-rise [animation-delay:300ms]">
+        <div className="mt-5 max-w-[57.5rem] sm:mt-8 animate-rise [animation-delay:300ms]">
           <HeroFinder />
         </div>
 
@@ -328,23 +328,23 @@ function Testimonials() {
           title="They found their college with us"
         />
       </Container>
-      <div className="no-scrollbar flex snap-x snap-mandatory gap-7 overflow-x-auto px-4 pt-6 pb-8 scroll-px-4 sm:px-6 sm:scroll-px-6 lg:px-[max(2rem,calc((100vw_-_77.5rem)_/_2_+_2rem))] lg:scroll-px-[max(2rem,calc((100vw_-_77.5rem)_/_2_+_2rem))]">
+      <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pt-6 sm:gap-7 pb-8 scroll-px-4 sm:px-6 sm:scroll-px-6 lg:px-[max(2rem,calc((100vw_-_77.5rem)_/_2_+_2rem))] lg:scroll-px-[max(2rem,calc((100vw_-_77.5rem)_/_2_+_2rem))]">
         {TESTIMONIALS.map((t, i) => (
           <figure
             key={t.name}
-            className={`relative flex w-[82vw] max-w-[22.5rem] shrink-0 snap-start flex-col rounded-md bg-white p-3.5 pb-6 shadow-float transition duration-300 hover:rotate-0 ${tilt[i % tilt.length]}`}
+            className={`relative flex w-[calc(50vw-1.5rem)] max-w-[22.5rem] shrink-0 snap-start flex-col rounded-md bg-white p-2 pb-4 sm:w-[82vw] sm:p-3.5 sm:pb-6 shadow-float transition duration-300 hover:rotate-0 ${tilt[i % tilt.length]}`}
           >
-            <span className="absolute -top-3 left-1/2 h-7 w-24 -translate-x-1/2 rotate-[-4deg] bg-sun/70" aria-hidden />
+            <span className="absolute -top-2 left-1/2 h-5 w-14 sm:-top-3 sm:h-7 sm:w-24 -translate-x-1/2 rotate-[-4deg] bg-sun/70" aria-hidden />
             {/* Same frame for every card. The whole photo sits inside it; any spare space shows a soft blur of the same photo. */}
-            <div className="relative aspect-[4/3] overflow-hidden rounded-sm bg-sand">
+            <div className="relative aspect-square overflow-hidden rounded-sm bg-sand sm:aspect-[4/3]">
               <Image src={t.photo} alt="" fill sizes="360px" aria-hidden className="scale-125 object-cover opacity-70 blur-xl" />
               <Image src={t.photo} alt={t.name} fill sizes="360px" className="object-contain" />
             </div>
             <figcaption className="mt-4 px-1">
-              <p className="font-display text-xl font-bold text-ink">{t.name}</p>
-              <p className="mt-1 text-sm font-semibold text-mint">Admitted to {t.outcome}</p>
+              <p className="font-display text-[0.9375rem] font-bold text-ink sm:text-xl">{t.name}</p>
+              <p className="mt-0.5 text-xs font-semibold text-mint sm:mt-1 sm:text-sm">Admitted to {t.outcome}</p>
             </figcaption>
-            <blockquote className="mt-3 flex-1 px-1 text-[0.9375rem] leading-relaxed text-ink-80">&ldquo;{t.text}&rdquo;</blockquote>
+            <blockquote className="mt-2 flex-1 px-1 text-xs leading-snug sm:mt-3 sm:text-[0.9375rem] sm:leading-relaxed text-ink-80">&ldquo;{t.text}&rdquo;</blockquote>
           </figure>
         ))}
       </div>

@@ -8,11 +8,11 @@ import { filterColleges } from "@/lib/filter";
 import { Select } from "../select";
 
 const TRIGGER =
-  "flex w-full cursor-pointer items-center justify-between gap-2 text-left text-[1.0625rem] font-semibold text-brand outline-none focus-visible:underline";
+  "flex w-full cursor-pointer items-center justify-between gap-2 text-left text-sm font-semibold text-brand sm:text-[1.0625rem] outline-none focus-visible:underline";
 
 function Field({ label, children, wide }: { label: string; children: React.ReactNode; wide?: boolean }) {
   return (
-    <div className={`min-w-0 px-5 py-3 [&>span]:block [&>span]:w-full ${wide ? "flex-[1.35]" : "flex-1"}`}>
+    <div className={`min-w-0 px-3 py-2 sm:px-5 sm:py-3 [&>span]:block [&>span]:w-full ${wide ? "lg:flex-[1.35]" : "lg:flex-1"}`}>
       <p className="text-xs font-semibold text-muted">{label}</p>
       {children}
     </div>
@@ -56,7 +56,7 @@ export function HeroFinder() {
     <form
       onSubmit={go}
       aria-label="Find colleges"
-      className="flex flex-col divide-y divide-line rounded-xl bg-white p-2 shadow-float lg:flex-row lg:items-center lg:divide-x lg:divide-y-0 lg:rounded-full"
+      className="grid grid-cols-2 rounded-xl bg-white p-1.5 shadow-float [text-shadow:none]max-lg:[&>div:nth-child(-n+2)]:border-b max-lg:[&>div:nth-child(-n+2)]:border-line max-lg:[&>div:nth-child(odd)]:border-r max-lg:[&>div:nth-child(odd)]:border-line lg:flex lg:items-center lg:divide-x lg:divide-line lg:rounded-full lg:p-2"
     >
       <Field label="Looking for" wide>
         <Select
@@ -66,8 +66,8 @@ export function HeroFinder() {
           onChange={changeLevel}
           className={TRIGGER}
           options={[
-            { value: "UG", label: "Under Graduation (UG)" },
-            { value: "PG", label: "Post Graduation (PG)" },
+            { value: "UG", label: "Undergraduate" },
+            { value: "PG", label: "Postgraduate" },
           ]}
         />
       </Field>
@@ -86,7 +86,7 @@ export function HeroFinder() {
       </Field>
       <button
         type="submit"
-        className="m-1 inline-flex h-14 shrink-0 items-center justify-center gap-2 rounded-full bg-brand px-7 font-semibold whitespace-nowrap text-white transition hover:bg-brand/90"
+        className="m-1 inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand px-3 text-sm font-semibold sm:h-14 sm:px-7 sm:text-base whitespace-nowrap text-white transition hover:bg-brand/90"
       >
         <Search className="size-5" aria-hidden />
         {count === 0 ? "See all colleges" : `Show ${count} ${count === 1 ? "college" : "colleges"}`}
