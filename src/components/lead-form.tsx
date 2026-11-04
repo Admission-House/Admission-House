@@ -93,7 +93,7 @@ export function LeadForm({
   const dark = tone === "dark";
   const label = dark ? "text-white/80" : "text-ink";
   const field =
-    "h-12 w-full rounded-xl border bg-white px-4 text-[0.9375rem] text-ink placeholder:text-subtle outline-none transition hover:border-ink/30 focus:border-royal focus:ring-4 focus:ring-royal/10";
+    "h-12 w-full rounded-xl border bg-white px-4 text-[0.9375rem] text-ink placeholder:text-subtle outline-none transition hover:border-ink/30 focus:border-royal";
 
   if (state === "done") {
     return (
@@ -131,7 +131,7 @@ export function LeadForm({
           ).map(([value, text]) => (
             <label
               key={value}
-              className={`cursor-pointer rounded-lg px-3 py-2.5 text-center text-sm font-semibold transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-royal ${
+              className={`cursor-pointer rounded-lg px-3 py-2.5 text-center text-sm font-semibold transition ${
                 level === value
                   ? "bg-royal text-white shadow-sm"
                   : dark
@@ -159,7 +159,7 @@ export function LeadForm({
           {(["Online", "Regular"] as const).map((value) => (
             <label
               key={value}
-              className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-4 py-3 text-[0.9375rem] font-medium transition has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-royal ${
+              className={`flex cursor-pointer items-center gap-2.5 rounded-xl border px-4 py-3 text-[0.9375rem] font-medium transition has-[:focus-visible]:border-royal ${
                 mode === value
                   ? "border-royal bg-royal-50 text-royal"
                   : errors.mode
@@ -291,7 +291,10 @@ export function LeadForm({
         />
         <span>
           Call or WhatsApp me about admissions. We never share your number with colleges without
-          asking you.
+          asking you.{" "}
+          <a href="/privacy-policy" target="_blank" rel="noopener" className="font-semibold underline underline-offset-2">
+            Privacy policy
+          </a>
           {errors.consent && <span className="block text-rose">{errors.consent}</span>}
         </span>
       </label>

@@ -23,6 +23,12 @@ const FEATURED: [slug: string, display: string, initials: string][] = [
   ["lovely-professional-university-jalandhar-jalandhar", "Lovely Professional University", "LPU"],
   ["chandigarh-university-cu-chandigarh", "Chandigarh University", "CU"],
   ["osmania-university-ou-hyderabad", "Osmania University", "OU"],
+  ["kalinga-institute-of-industrial-technology-bhubaneswar", "KIIT University", "KIIT"],
+  ["shiv-nadar-university-noida-greater-noida", "Shiv Nadar University", "SNU"],
+  ["bits-pilani-birla-institute-of-technology-and-science-pilani", "BITS Pilani", "BITS"],
+  ["srm-institute-of-science-and-technology-chennai", "SRM Institute of Science and Technology", "SRM"],
+  ["panjab-university-pu-chd-chandigarh", "Panjab University", "PU"],
+  ["university-of-hyderabad-hyderabad", "University of Hyderabad", "UoH"],
 ];
 
 function findLogo(slug: string): string | null {
@@ -61,15 +67,15 @@ export function Universities() {
             <li key={d!.s}>
               <Link
                 href={`/colleges/${d!.s}`}
-                className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lift ring-1 ring-line transition duration-300 hover:-translate-y-1 hover:shadow-float hover:ring-brand/30"
+                className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lift ring-1 ring-line"
               >
                 <span className="absolute top-0 left-0 rounded-br-lg bg-royal-50 px-2.5 py-1.5 text-xs font-bold text-brand">{d!.k.length} Courses</span>
 
                 <div className="grid h-28 place-items-center px-5 pt-6">
                   {logo ? (
-                    <Image src={logo} alt={`${name} logo`} width={160} height={72} className="max-h-16 w-auto max-w-full object-contain" />
+                    <Image src={logo} alt={`${name} logo`} width={160} height={80} unoptimized={logo.endsWith(".svg")} className="max-h-[4.5rem] w-auto max-w-full object-contain" />
                   ) : (
-                    <span className="grid size-16 place-items-center rounded-full bg-brand font-display text-[0.9375rem] font-extrabold tracking-wide text-white ring-4 ring-royal-50 transition duration-300 group-hover:bg-royal">
+                    <span className="grid size-16 place-items-center rounded-full bg-brand font-display text-[0.9375rem] font-extrabold tracking-wide text-white ring-4 ring-royal-50">
                       {initials}
                     </span>
                   )}

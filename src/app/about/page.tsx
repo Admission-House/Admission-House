@@ -18,11 +18,11 @@ export default function AboutPage() {
   return (
     <>
       <section className="bg-white">
-        <Container className="py-14 sm:py-20">
+        <Container className="pt-10 pb-5 sm:pt-10 sm:pb-5">
           <h1 className="max-w-3xl text-[2.25rem] font-extrabold sm:text-[3.625rem]">
             Choosing a college shouldn&apos;t depend on who you happen to know.
           </h1>
-          <div className="mt-8 grid gap-6 text-lg text-ink-80 lg:grid-cols-2 lg:gap-12">
+          <div className="mt-6 grid gap-6 text-lg text-ink-80 lg:grid-cols-2 lg:gap-12">
             <p>
               Every year, millions of students in India pick a college with half the information they need,
               guided by a relative, a coaching centre, or an ad. Students from smaller towns, first-generation

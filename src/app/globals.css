@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Applies on screens up to 48rem (768px) tall: small laptops, or any laptop with browser bars and display scaling. */
+@custom-variant short (@media (max-height: 48rem));
+
 /*
   Admissions House, design tokens
   Peacock teal + saffron + sunflower on a warm paper background.
@@ -198,4 +201,9 @@
 .scroll-down { animation: scroll-down var(--dur, 30s) linear infinite; }
 .pause-on-hover:hover .scroll-up,
 .pause-on-hover:hover .scroll-down { animation-play-state: paused; }
+@keyframes scroll-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes scroll-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+.scroll-left { animation: scroll-left var(--dur, 40s) linear infinite; }
+.scroll-right { animation: scroll-right var(--dur, 40s) linear infinite; }
+.fade-x { mask-image: linear-gradient(to right, transparent, #000 10%, #000 90%, transparent); }
 .fade-y { mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent); }

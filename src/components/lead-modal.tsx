@@ -37,19 +37,15 @@ export function LeadModal({ context, onClose }: { context: LeadContext | null; o
           >
             <X className="size-5" />
           </button>
-          <h2 id="lead-title" className="pr-10 text-2xl font-semibold sm:text-[1.75rem]">
+          <h2 id="lead-title" className={`pr-10 text-2xl font-semibold sm:text-[1.75rem] ${interest ? "" : "mb-6"}`}>
             {heading}
           </h2>
-          <p className="mt-1.5 mb-6 text-muted">
-            {interest ? (
-              <>
-                About <span className="font-semibold text-ink">{interest}</span>. Share your number
-                and a counsellor will call you back.
-              </>
-            ) : (
-              "Share your number and a counsellor will call you back. No spam, no paid plans."
-            )}
-          </p>
+          {interest && (
+            <p className="mt-1.5 mb-6 text-muted">
+              About <span className="font-semibold text-ink">{interest}</span>. Share your number
+              and a counsellor will call you back.
+            </p>
+          )}
           {context && <LeadForm context={context} />}
         </div>
       </div>

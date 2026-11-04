@@ -83,7 +83,7 @@ export function Header() {
   return (
     <>
       <div className="bg-brand text-[0.8125rem] text-white/80">
-        <div className="mx-auto flex max-w-[82.5rem] items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[84rem] items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-8">
           <p className="truncate">
             <span className="mr-2 inline-block size-1.5 -translate-y-px rounded-full bg-teal align-middle" />
             Admissions for 2027 are open. JEE Main applications close on Nov 22.{" "}
@@ -103,7 +103,7 @@ export function Header() {
           scrolled ? "shadow-[0_0.625rem_1.875rem_-1.125rem_rgb(11_43_51/0.45)]" : ""
         }`}
       >
-        <div className="mx-auto flex h-[4.875rem] max-w-[82.5rem] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-[4.875rem] max-w-[84rem] items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
           <Link href="/" aria-label="Admissions House home" className="shrink-0 rounded-lg">
             <Logo />
           </Link>
@@ -164,7 +164,7 @@ export function Header() {
             mega ? "visible translate-y-0 opacity-100" : "invisible -translate-y-1 opacity-0"
           }`}
         >
-          <div className="mx-auto max-w-[82.5rem] overflow-hidden rounded-xl bg-white shadow-float ring-1 ring-line">
+          <div className="mx-auto max-w-[84rem] overflow-hidden rounded-xl bg-white ring-1 ring-line">
             {mega === "colleges" && <CollegesMenu onPick={() => setMega(null)} />}
             {mega === "courses" && <CoursesMenu onPick={() => setMega(null)} />}
           </div>

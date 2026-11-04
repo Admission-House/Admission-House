@@ -55,8 +55,7 @@ export default function CounsellingPage() {
             )}
           </div>
           <div className="rounded-[var(--radius-panel)] bg-white p-6 text-ink shadow-float sm:p-8">
-            <h2 className="text-2xl font-semibold">Book your free session</h2>
-            <p className="mt-1 mb-6 text-muted">Takes 30 seconds. We&apos;ll call you to set a time.</p>
+            <h2 className="mb-6 text-2xl font-semibold">Book your free session</h2>
             <LeadForm context={{ source: "counselling-hero" }} submitLabel="Book free session" />
           </div>
         </Container>

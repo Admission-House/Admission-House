@@ -103,7 +103,7 @@ export function ExamList() {
         </ul>
 
         <aside>
-          <div className="sticky top-28 rounded-[var(--radius-card)] bg-ink p-6 text-white">
+          <div className="rounded-[var(--radius-card)] bg-ink p-6 text-white">
             <BellRing className="size-8 text-marigold" />
             <p className="mt-4 font-display text-2xl font-semibold">Never miss a form deadline</p>
             <p className="mt-2 text-white/70">

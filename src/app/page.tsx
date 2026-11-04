@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Star } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BadgeCheck, Star } from "lucide-react";
 import { COUNSELLORS, EXAMS, FAQS, TESTIMONIALS, getCollege, feeRange, formatLakh, packageStat } from "@/lib/data";
 import { Container, SectionHeading, TextLink, btn } from "@/components/ui";
 import { HeroFinder } from "@/components/home/hero-finder";
@@ -89,20 +89,20 @@ function Hero() {
   return (
     <section className="relative overflow-hidden bg-neutral-900">
       <HeroBanner />
-      <Container className="relative z-10 flex min-h-[calc(100svh-7rem)] [text-shadow:0_2px_18px_rgb(0_0_0/0.55)] flex-col justify-center pt-14 pb-10 sm:min-h-[35rem] sm:pt-28 sm:pb-16 lg:min-h-[max(37.5rem,calc(100svh-7.1875rem))]">
-        <h1 className="animate-rise text-[1.75rem] leading-[1.1] font-extrabold tracking-tight whitespace-nowrap text-white [animation-delay:100ms] min-[400px]:text-[2rem] sm:text-[3rem] lg:text-[4rem]">
+      <Container className="relative z-10 flex min-h-[calc(100svh-7rem)] [text-shadow:0_2px_18px_rgb(0_0_0/0.55)] flex-col justify-center pt-14 pb-10 sm:min-h-[calc(100svh-7.25rem)] sm:pt-[clamp(1rem,7svh,7rem)] sm:pb-[clamp(3.5rem,9svh,4rem)]">
+        <h1 className="animate-rise text-[1.75rem] leading-[1.1] font-extrabold tracking-tight whitespace-nowrap text-white [animation-delay:100ms] min-[400px]:text-[2rem] sm:text-[3rem] lg:text-[clamp(2.5rem,7.5svh,4rem)]">
           Come With a Dream
           <span className="mt-1 block bg-gradient-to-r from-teal via-[#7af0dc] to-[#ffb347] bg-clip-text text-transparent [text-shadow:none] [filter:drop-shadow(0_2px_10px_rgb(0_0_0/0.5))]">
             Leave With a Direction
           </span>
         </h1>
         <div className="mt-4 h-1 w-20 animate-rise rounded-full bg-gradient-to-r from-teal to-[#ffb347] [animation-delay:150ms] sm:mt-5" aria-hidden />
-        <p className="mt-4 max-w-[33.75rem] animate-rise text-[0.9375rem] leading-snug font-medium text-white sm:mt-5 sm:text-lg sm:leading-normal [animation-delay:200ms]">
+        <p className="mt-4 max-w-[33.75rem] animate-rise text-[0.9375rem] leading-snug font-medium text-white sm:mt-5 sm:text-lg sm:leading-normal short:sm:mt-3 short:sm:text-base short:sm:leading-snug [animation-delay:200ms]">
           Compare fees, ranks and placements of top colleges for courses after 12th and after graduation.
           When you need help, a real counsellor will shortlist with you, help you apply and stay till your seat is locked.
         </p>
 
-        <div className="mt-5 max-w-[57.5rem] sm:mt-8 animate-rise [animation-delay:300ms]">
+        <div className="mt-5 max-w-[57.5rem] sm:mt-8 short:sm:mt-5 animate-rise [animation-delay:300ms]">
           <HeroFinder />
         </div>
 
@@ -136,7 +136,7 @@ function Counselling() {
   return (
     <section className="bg-brand py-8 text-white sm:py-10">
       <Container>
-        <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:gap-12">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
           <div>
             <SectionHeading
               tone="dark"
@@ -144,18 +144,27 @@ function Counselling() {
               title="One counsellor, from first call to final seat"
               intro="One person, assigned to you, who knows your marks, your budget and your parents' worries."
             />
-            <ol className="relative mt-6 ml-2 grid gap-5 border-l border-teal/30 pl-8">
+            <ol className="mt-5 grid gap-3">
               {steps.map((s, i) => (
-                <li key={s.t} className="relative">
-                  <span className="absolute top-0 -left-[3.125rem] grid size-9 place-items-center rounded-full bg-teal font-display text-base font-extrabold text-brand ring-4 ring-brand">
-                    {i + 1}
+                <li
+                  key={s.t}
+                  data-reveal
+                  style={{ "--d": `${i * 110}ms` } as React.CSSProperties}
+                  className="relative flex gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-3.5 sm:p-4"
+                >
+                  <span className="relative grid size-10 shrink-0 place-items-center rounded-full bg-teal font-display text-lg font-extrabold text-brand">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-teal/40 [animation-duration:2.8s]" aria-hidden />
+                    <span className="relative">{String(i + 1).padStart(2, "0")}</span>
                   </span>
-                  <h3 className="text-[1.375rem] font-semibold">{s.t}</h3>
-                  <p className="mt-1 text-white/70">{s.d}</p>
+                  {i < steps.length - 1 && <span className="absolute top-[3.25rem] left-[2rem] h-[calc(100%-2.25rem+0.75rem)] w-px bg-teal/40 sm:left-[2.25rem]" aria-hidden />}
+                  <div>
+                    <h3 className="text-[1.125rem] font-semibold">{s.t}</h3>
+                    <p className="mt-0.5 text-[0.9375rem] leading-snug text-white/70">{s.d}</p>
+                  </div>
                 </li>
               ))}
             </ol>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-3">
               <LeadButton
                 source="how-it-works"
                 className="inline-flex items-center justify-center rounded-full bg-teal px-6 py-3.5 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
@@ -168,19 +177,42 @@ function Counselling() {
             </div>
           </div>
           {COUNSELLORS.length > 0 ? (
-            <ul className="grid grid-cols-2 content-start gap-x-4 gap-y-7 sm:grid-cols-3">
-              {COUNSELLORS.map((c) => (
-                <li key={c.name}>
-                  <div className="relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-xl bg-ink-80">
-                    <Image src={c.photo} alt={c.name} fill quality={90} sizes="(min-width:1024px) 200px, 45vw" className="object-cover" />
-                  </div>
-                  <p className="mt-3 font-semibold">{c.name}</p>
-                  <p className="text-sm text-white/60">{c.focus.join(", ")}</p>
-                  <p className="mt-1 inline-flex items-center gap-1 text-sm text-white/80">
-                    <Star className="size-3.5 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
-                  </p>
-                </li>
-              ))}
+            <ul className="grid grid-cols-2 content-start items-start gap-4 sm:grid-cols-3">
+              {COUNSELLORS.map((c, i) => {
+                const first = c.name.startsWith("Dr.") ? c.name : c.name.split(" ")[0];
+                return (
+                  <li
+                    key={c.name}
+                    data-reveal
+                    style={{ "--d": `${(i % 3) * 120 + Math.floor(i / 3) * 60}ms` } as React.CSSProperties}
+                    className={i % 3 === 1 ? "sm:mt-6" : ""}
+                  >
+                    <article className={`rounded-3xl bg-white p-2.5 text-ink shadow-[0_1rem_2rem_-1rem_rgb(0_0_0/0.5)] ${i % 2 === 0 ? "animate-float" : "animate-float-late"}`}>
+                      <div className="relative aspect-[5/4] overflow-hidden rounded-2xl bg-sand">
+                        <Image src={c.photo} alt={c.name} fill quality={90} sizes="(min-width:1024px) 200px, 45vw" className="object-cover object-top" />
+                        <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-xs font-bold text-white backdrop-blur-sm">
+                          <Star className="size-3 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
+                        </span>
+                      </div>
+                      <div className="px-1.5 pt-2.5 pb-1">
+                        <p className="flex items-center gap-1.5 text-[1.0625rem] leading-tight font-bold">
+                          <span className="truncate">{c.name}</span>
+                          <BadgeCheck className="size-4 shrink-0 fill-teal text-white" aria-label="Verified" />
+                        </p>
+                        <p className="mt-0.5 truncate text-sm text-muted">{c.focus.join(", ")}</p>
+                        <span className="mt-1.5 inline-block text-sm font-semibold text-marigold-600">{c.years} years experience</span>
+                        <LeadButton
+                          source="home-counsellor"
+                          title={`Book a free session with ${first}`}
+                          className="mt-2.5 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white"
+                        >
+                          Talk now <ArrowRight className="size-4" aria-hidden />
+                        </LeadButton>
+                      </div>
+                    </article>
+                  </li>
+                );
+              })}
             </ul>
           ) : (
             <div className="relative min-h-[20rem] overflow-hidden rounded-xl lg:min-h-full">
@@ -334,7 +366,7 @@ function Testimonials() {
           title="They found their college with us"
         />
       </Container>
-      <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pt-6 sm:gap-7 pb-8 scroll-px-4 sm:px-6 sm:scroll-px-6 lg:px-[max(2rem,calc((100vw_-_77.5rem)_/_2_+_2rem))] lg:scroll-px-[max(2rem,calc((100vw_-_77.5rem)_/_2_+_2rem))]">
+      <div className="no-scrollbar flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pt-6 sm:gap-7 pb-8 scroll-px-4 sm:px-6 sm:scroll-px-6 lg:px-[max(2rem,calc((100vw_-_84rem)_/_2_+_2rem))] lg:scroll-px-[max(2rem,calc((100vw_-_84rem)_/_2_+_2rem))]">
         {TESTIMONIALS.map((t, i) => (
           <figure
             key={t.name}

@@ -42,7 +42,7 @@ interface Position {
 export function Select({
   value,
   onChange,
-  options,
+  options: allOptions,
   label,
   name,
   variant = "field",
@@ -75,6 +75,9 @@ export function Select({
   const [pos, setPos] = useState<Position | null>(null);
   const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null);
 
+  // With a placeholder, the empty "any/all" option is not listed: the trigger shows the
+  // placeholder instead. Clicking the selected item again clears the choice.
+  const options = placeholder ? allOptions.filter((o) => o.value !== "") : allOptions;
   const selectedIndex = options.findIndex((o) => o.value === value);
   const selected = options[selectedIndex];
 
@@ -180,7 +183,8 @@ export function Select({
   }
 
   function choose(i: number) {
-    onChange(options[i].value);
+    const v = options[i].value;
+    onChange(placeholder && v === value ? "" : v);
     setOpen(false);
     triggerRef.current?.focus();
   }
@@ -279,8 +283,8 @@ export function Select({
                   onMouseEnter={() => setActive(i)}
                   onMouseDown={(e) => e.preventDefault()}
                   onClick={() => choose(i)}
-                  className={`flex cursor-pointer items-center justify-between gap-4 rounded-xl px-3 py-2.5 whitespace-nowrap transition-colors duration-150 ${
-                    i === active ? "bg-mint-soft text-brand" : ""
+                  className={`flex cursor-pointer items-center justify-between gap-4 rounded-lg px-3 py-2.5 whitespace-nowrap ${
+                    i === active ? "bg-ink/[0.06]" : ""
                   } ${isSelected ? "font-semibold text-brand" : ""}`}
                 >
                   <span className="block first-letter:uppercase">{o.label}</span>
@@ -311,8 +315,8 @@ export function Select({
         onKeyDown={onKeyDown}
         className={triggerClass}
       >
-        <span className={`truncate ${selected && !(placeholder && selected.value === "") ? "" : "text-subtle"}`}>
-          {placeholder && selected?.value === "" ? placeholder : (selected?.label ?? placeholder ?? "Select")}
+        <span className={`truncate ${selected ? "" : "text-subtle"}`}>
+          {selected?.label ?? placeholder ?? "Select"}
         </span>
         <ChevronDown
           aria-hidden

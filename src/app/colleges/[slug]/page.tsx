@@ -293,7 +293,7 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
 
         {/* Sticky side card */}
         <aside className="lg:order-none">
-          <div className="sticky top-28 grid gap-4">
+          <div className="grid gap-4">
             <div className="rounded-[var(--radius-card)] bg-white p-6 ring-1 ring-line">
               <p className="text-sm text-muted">Fees per year</p>
               <p className="font-display text-3xl font-semibold text-ink">{feeLabel(c)}</p>

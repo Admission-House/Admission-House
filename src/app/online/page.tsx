@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import { OnlineCard } from "./online-card";
 import { Container } from "@/components/ui";
 import { LeadButton } from "@/components/lead-button";
 import { SITE, telHref } from "@/lib/site";
@@ -66,93 +68,19 @@ const CERTIFICATES = [
   "Financial Accounting",
 ];
 
-type Card = { name: string; full: string; level: "After 12th" | "After graduation" | "Diploma" | "Executive" | "Certificate" };
-
-const COLUMNS: { dir: "up" | "down"; dur: string; items: Card[] }[] = [
-  {
-    dir: "up",
-    dur: "34s",
-    items: [
-      { name: "BBA", full: "Business Administration", level: "After 12th" },
-      { name: "MBA", full: "Business Administration", level: "After graduation" },
-      { name: "B.Com", full: "Commerce", level: "After 12th" },
-      { name: "PGD Data Science", full: "Diploma", level: "Diploma" },
-    ],
-  },
-  {
-    dir: "down",
-    dur: "40s",
-    items: [
-      { name: "BCA", full: "Computer Applications", level: "After 12th" },
-      { name: "MCA", full: "Computer Applications", level: "After graduation" },
-      { name: "Executive MBA", full: "Executive programme", level: "Executive" },
-      { name: "M.Sc", full: "Science", level: "After graduation" },
-    ],
-  },
-  {
-    dir: "up",
-    dur: "37s",
-    items: [
-      { name: "BA", full: "Arts", level: "After 12th" },
-      { name: "MA", full: "Arts", level: "After graduation" },
-      { name: "M.Com", full: "Commerce", level: "After graduation" },
-      { name: "Data Analytics", full: "Certificate", level: "Certificate" },
-    ],
-  },
-];
-
-// One colour per level, so the cards read as a set instead of a patchwork.
-const LEVEL_STYLE: Record<Card["level"], { bar: string; tag: string }> = {
-  "After 12th": { bar: "bg-teal", tag: "text-royal" },
-  "After graduation": { bar: "bg-marigold", tag: "text-marigold-600" },
-  Diploma: { bar: "bg-sun", tag: "text-ink-80" },
-  Executive: { bar: "bg-brand", tag: "text-brand" },
-  Certificate: { bar: "bg-royal", tag: "text-royal" },
-};
-
-/** Three columns of course cards that drift up and down, fading at the top and bottom. */
-function ScrollingColumns() {
-  return (
-    <div className="pause-on-hover relative grid h-[26rem] grid-cols-2 gap-4 sm:h-[31rem] lg:grid-cols-3" aria-label="Online courses we offer">
-      {COLUMNS.map((col, ci) => (
-        <div key={ci} className={`fade-y overflow-hidden ${ci === 2 ? "max-lg:hidden" : ""} ${ci === 1 ? "lg:pt-6" : ""}`}>
-          <div className={`flex flex-col gap-4 ${col.dir === "up" ? "scroll-up" : "scroll-down"}`} style={{ "--dur": col.dur } as React.CSSProperties}>
-            {[...col.items, ...col.items].map((c, i) => {
-              const st = LEVEL_STYLE[c.level];
-              return (
-                <LeadButton
-                  key={i}
-                  source="online-hero-card"
-                  title={`Ask about online ${c.name}`}
-                  course={`${c.name} (online)`}
-                  className="group relative block w-full overflow-hidden rounded-2xl bg-white p-4 pl-5 text-left shadow-[0_0.5rem_1.5rem_-0.75rem_rgb(11_43_51/0.35)] ring-1 ring-black/5 transition duration-300 hover:-translate-y-1 hover:shadow-float"
-                >
-                  <span className={`absolute inset-y-0 left-0 w-1.5 ${st.bar}`} aria-hidden />
-                  <span className={`block text-[0.6875rem] font-bold tracking-wider uppercase ${st.tag}`}>{c.level}</span>
-                  <span className="mt-1.5 block font-display text-[1.1875rem] leading-tight font-extrabold text-brand">{c.name}</span>
-                  <span className="mt-1 block text-sm text-muted">{c.full}</span>
-                  <span className="mt-3 inline-flex items-center gap-1 text-sm font-semibold text-brand opacity-70 transition group-hover:opacity-100">
-                    Enquire <ArrowRight className="size-3.5 transition group-hover:translate-x-0.5" aria-hidden />
-                  </span>
-                </LeadButton>
-              );
-            })}
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export default function OnlinePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-[#fff6ea]">
-        <Container className="grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1.05fr_1fr] lg:gap-14 lg:py-20">
+      <section className="relative flex min-h-[calc(100svh-7.25rem)] items-center overflow-hidden bg-neutral-900">
+        {/* Full-width campus photo, shaded on the text side like the home page banner */}
+        <Image src="/images/hero/blue-sky-campus.jpg" alt="" fill priority quality={82} sizes="100vw" className="object-cover object-[center_75%]" />
+        <div className="absolute inset-0 bg-black/55 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#031f1e]/90 lg:via-black/60 lg:to-black/15" aria-hidden />
+        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/35 to-transparent" aria-hidden />
+        <Container className="relative z-10 grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1.1fr] lg:gap-12 lg:py-[clamp(1rem,6svh,5rem)]">
           <div className="animate-rise">
-            <p className="text-sm font-bold tracking-widest text-marigold-600 uppercase">Online courses</p>
-            <h1 className="mt-4 text-[2.5rem] leading-[1.05] font-extrabold text-brand sm:text-[3.5rem] lg:text-[4rem]">
+            <p className="text-sm font-bold tracking-widest text-sun uppercase">Online courses</p>
+            <h1 className="mt-4 text-[2.5rem] leading-[1.05] font-extrabold text-white sm:text-[3.5rem] lg:text-[4rem]">
               Your degree,{" "}
               <span className="relative whitespace-nowrap">
                 on your own time
@@ -160,26 +88,26 @@ export default function OnlinePage() {
               </span>
               .
             </h1>
-            <p className="mt-6 max-w-lg text-[1.125rem] leading-relaxed text-ink-80">
+            <p className="mt-6 max-w-lg text-[1.125rem] leading-relaxed text-white/85">
               Studying online means you do not have to leave your job or your city. Pick a course, tell us your marks and what you want to do next, and we will help you choose a university and finish the admission.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <LeadButton
                 source="online-hero"
                 title="Talk to an online admissions counsellor"
-                className="rounded-full bg-brand px-7 py-4 text-[0.9375rem] font-semibold text-white transition hover:-translate-y-0.5 hover:bg-royal"
+                className="rounded-full bg-teal px-7 py-4 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
               >
                 Talk to a counsellor
               </LeadButton>
               <a
                 href="#courses"
-                className="inline-flex items-center gap-2 rounded-full px-5 py-4 text-[0.9375rem] font-semibold text-brand underline decoration-brand/30 underline-offset-4 hover:decoration-brand"
+                className="inline-flex items-center gap-2 rounded-full px-5 py-4 text-[0.9375rem] font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
               >
                 See online courses <ArrowRight className="size-4" aria-hidden />
               </a>
             </div>
           </div>
-          <ScrollingColumns />
+          <OnlineCard />
         </Container>
       </section>
 

@@ -18,7 +18,7 @@ const POINTS = ["Free counselling", "Hindi and English", "Help from shortlist to
 
 function Label({ n, title, note }: { n: number; title: string; note: string }) {
   return (
-    <div className="mx-auto flex max-w-[77.5rem] items-baseline gap-3 px-4 pt-10 pb-3 sm:px-6 lg:px-8">
+    <div className="mx-auto flex max-w-[84rem] items-baseline gap-3 px-4 pt-10 pb-3 sm:px-6 lg:px-8">
       <span className="grid size-8 place-items-center rounded-full bg-brand text-sm font-bold text-white">{n}</span>
       <h2 className="font-sans text-xl font-bold text-brand">{title}</h2>
       <p className="text-sm text-muted">{note}</p>
@@ -51,8 +51,8 @@ function FinderBar({ className = "" }: { className?: string }) {
   return (
     <div className={`flex flex-col divide-y divide-line rounded-xl bg-white p-2 sm:flex-row sm:items-center sm:divide-x sm:divide-y-0 sm:rounded-full ${className}`}>
       {field("Looking for", "UG, after 12th")}
-      {field("Course", "Any course")}
-      {field("City", "Any city")}
+      {field("Course", "Select course")}
+      {field("City", "Select city")}
       <span className="m-1 inline-flex h-14 shrink-0 items-center justify-center gap-2 rounded-full bg-brand px-7 font-semibold text-white">
         <Search className="size-5" aria-hidden /> Show 13 colleges
       </span>
@@ -82,7 +82,7 @@ export default function HeroPreview() {
   if (process.env.NODE_ENV === "production") notFound();
   return (
     <div className="bg-white pb-24">
-      <div className="mx-auto max-w-[77.5rem] px-4 pt-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[84rem] px-4 pt-10 sm:px-6 lg:px-8">
         <h1 className="font-display text-3xl font-extrabold text-brand">Hero section previews</h1>
         <p className="mt-2 max-w-2xl text-muted">
           Five different ideas, all with the logo&apos;s colours and real photos. Pick a number and I will build it with the working

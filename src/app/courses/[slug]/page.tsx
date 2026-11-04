@@ -81,7 +81,7 @@ async function Results({ params, searchParams }: { params: Promise<{ slug: strin
       />
       {(extra.description || facts.length > 2 || exams.length > 0 || careers.length > 0) && (
         <section className="pt-4">
-          <div className="mx-auto w-full max-w-[77.5rem] px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-[84rem] px-4 sm:px-6 lg:px-8">
             <div className="rounded-xl bg-white p-5 ring-1 ring-line sm:p-7">
               {extra.description && <p className="max-w-3xl text-[1.0625rem] text-ink-80">{extra.description}</p>}
               <dl className="mt-4 grid grid-cols-2 gap-x-6 sm:grid-cols-3">
@@ -104,7 +104,7 @@ async function Results({ params, searchParams }: { params: Promise<{ slug: strin
       )}
       {specs.length > 0 && (
         <section className="pt-4">
-          <div className="mx-auto w-full max-w-[77.5rem] px-4 sm:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-[84rem] px-4 sm:px-6 lg:px-8">
             <div className="rounded-xl bg-white p-5 ring-1 ring-line sm:p-7">
               <h2 className="text-xl font-bold">Specialisations in {c.name}</h2>
               <SpecList items={specs.map((x) => ({ slug: x.slug, label: x.label.replace(`${c.name} in `, "") }))} />

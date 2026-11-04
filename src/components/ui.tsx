@@ -14,7 +14,7 @@ export const btn = {
 };
 
 export function Container({ className = "", wide, children }: { className?: string; wide?: boolean; children: React.ReactNode }) {
-  return <div className={`mx-auto w-full ${wide ? "max-w-[90rem]" : "max-w-[77.5rem]"} px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>;
+  return <div className={`mx-auto w-full ${wide ? "max-w-[90rem]" : "max-w-[84rem]"} px-4 sm:px-6 lg:px-8 ${className}`}>{children}</div>;
 }
 
 export function SectionHeading({

@@ -72,7 +72,7 @@ function Card({ title, c, total, skin, extra, photo }: { title: string; c: Cours
 
 function Label({ n, title, note }: { n: number; title: string; note: string }) {
   return (
-    <div className="mx-auto flex max-w-[77.5rem] flex-wrap items-baseline gap-3 px-4 pt-12 pb-4 sm:px-6 lg:px-8">
+    <div className="mx-auto flex max-w-[84rem] flex-wrap items-baseline gap-3 px-4 pt-12 pb-4 sm:px-6 lg:px-8">
       <span className="grid size-8 place-items-center rounded-full bg-brand text-sm font-bold text-white">{n}</span>
       <h2 className="font-sans text-xl font-bold text-brand">{title}</h2>
       <p className="text-sm text-muted">{note}</p>
@@ -129,7 +129,7 @@ export default function CoursesPreview() {
 
   return (
     <div className="bg-white pb-24">
-      <div className="mx-auto max-w-[77.5rem] px-4 pt-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-[84rem] px-4 pt-10 sm:px-6 lg:px-8">
         <h1 className="font-display text-3xl font-extrabold text-brand">Course card previews</h1>
         <p className="mt-2 max-w-2xl text-muted">
           The same two sliding cards as now (UG and PG, dots, Explore colleges). Only the colours change, and they no longer have to match
