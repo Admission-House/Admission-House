@@ -189,3 +189,13 @@
   .thin-scroll { scrollbar-width: thin; scrollbar-color: rgb(11 43 51 / 0.25) transparent; }
 }
 
+/* Scrolling course columns on the online page. Each track holds its list twice, so moving it
+   by half its height loops without a jump. These keep running even when the system asks for
+   reduced motion, on request of the site owner. */
+@keyframes scroll-up { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes scroll-down { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+.scroll-up { animation: scroll-up var(--dur, 30s) linear infinite; }
+.scroll-down { animation: scroll-down var(--dur, 30s) linear infinite; }
+.pause-on-hover:hover .scroll-up,
+.pause-on-hover:hover .scroll-down { animation-play-state: paused; }
+.fade-y { mask-image: linear-gradient(to bottom, transparent, #000 14%, #000 86%, transparent); }

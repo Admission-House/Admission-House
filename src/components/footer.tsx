@@ -163,8 +163,9 @@ export function Footer() {
         <div className="mt-4 flex flex-col gap-2 border-t border-white/10 pt-4 text-[0.8125rem] text-white/50 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Admissions House. College details are collected from public sources and may change; please confirm with the college.</p>
           <div className="flex gap-5">
-            <Link href="/contact" className="hover:text-white">Privacy policy</Link>
-            <Link href="/contact" className="hover:text-white">Terms of use</Link>
+            {/* Plain text for now: the pages are added when the client provides the policies. */}
+            <span>Privacy policy</span>
+            <span>Terms of use</span>
           </div>
         </div>
       </Container>

@@ -21,7 +21,7 @@ export function matchCollege(c: College, f: CollegeFilters) {
   if (f.stream && !c.streams.includes(f.stream)) return false;
   if (f.city && c.city !== f.city) return false;
   if (f.budget && !programs.some((p) => p.fee <= f.budget!)) return false;
-  if (f.types?.length && !f.types.includes(c.type)) return false;
+  if (f.types?.length && (c.type === "" || !f.types.includes(c.type))) return false;
   if (f.hostel && !c.hostel) return false;
   if (f.scholarship && !c.scholarship) return false;
   if (f.q) {

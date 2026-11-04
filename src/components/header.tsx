@@ -3,9 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Phone, Search, X } from "lucide-react";
 import { CITIES, COLLEGES, COURSES, STREAMS } from "@/lib/data";
+import stats from "@/lib/directory-stats.json";
 import { Logo } from "./ui";
 import { useLead } from "./providers";
 import { SITE, telHref } from "@/lib/site";
@@ -15,6 +16,7 @@ type MenuKey = "colleges" | "courses";
 const NAV: { href: string; label: string; menu?: MenuKey }[] = [
   { href: "/colleges", label: "Colleges", menu: "colleges" },
   { href: "/courses", label: "Courses", menu: "courses" },
+  { href: "/online", label: "Online" },
   { href: "/exams", label: "Exams" },
   { href: "/compare", label: "Compare" },
   { href: "/counselling", label: "Counselling" },
@@ -145,13 +147,6 @@ export function Header() {
             <SearchBox inputRef={searchRef} />
 
             <button
-              onClick={() => open({ source: "header" })}
-              className="hidden rounded-full bg-brand px-6 py-3 text-[0.9375rem] font-semibold whitespace-nowrap text-white transition hover:bg-brand/90 sm:inline-flex"
-            >
-              Free counselling
-            </button>
-
-            <button
               onClick={() => setMenu(true)}
               aria-label="Open menu"
               aria-expanded={menu}
@@ -279,13 +274,23 @@ function SearchBox({ inputRef }: { inputRef: React.RefObject<HTMLInputElement | 
     setQ("");
   }
 
-  const results = useMemo(() => {
-    const words = q.trim().toLowerCase().split(/\s+/).filter(Boolean);
-    if (!words.length) return [];
-    return COLLEGES.filter((c) => {
-      const hay = [c.name, c.short, c.city, c.state, ...c.streams, ...c.exams, ...c.programs.map((p) => p.name)].join(" ").toLowerCase();
-      return words.every((w) => hay.includes(w));
-    }).slice(0, 5);
+  // Search runs on the server because the directory has thousands of colleges.
+  const [fetched, setFetched] = useState<{ slug: string; name: string; city: string }[]>([]);
+  const results = q.trim().length >= 2 ? fetched : [];
+  useEffect(() => {
+    const term = q.trim();
+    if (term.length < 2) return;
+    const ctl = new AbortController();
+    const t = setTimeout(() => {
+      fetch(`/api/colleges/search?q=${encodeURIComponent(term)}&limit=6`, { signal: ctl.signal })
+        .then((r) => r.json())
+        .then((d) => setFetched(Array.isArray(d) ? d : []))
+        .catch(() => {});
+    }, 180);
+    return () => {
+      clearTimeout(t);
+      ctl.abort();
+    };
   }, [q]);
 
   const go = (href: string) => {
@@ -304,7 +309,7 @@ function SearchBox({ inputRef }: { inputRef: React.RefObject<HTMLInputElement | 
       }}
     >
       <label
-        className={`absolute top-0 right-0 z-10 flex h-11 w-11 cursor-text items-center gap-2.5 overflow-hidden rounded-full bg-white px-[0.8125rem] text-brand ring-1 transition-[width,box-shadow] duration-300 focus-within:w-[min(21.25rem,calc(100vw-2rem))] focus-within:shadow-lift min-[1400px]:w-[14.375rem] min-[1400px]:px-4 min-[1400px]:focus-within:w-[20rem] ${
+        className={`absolute top-0 right-0 z-10 flex h-11 w-11 cursor-text items-center gap-2.5 overflow-hidden rounded-full bg-white px-[0.8125rem] text-brand ring-1 transition-[width,box-shadow] duration-300 focus-within:w-[min(21.25rem,calc(100vw-2rem))] focus-within:shadow-lift min-[1400px]:w-[14.375rem] min-[1400px]:px-4 min-[1400px]:focus-within:w-[17rem] ${
           open ? "ring-royal" : "ring-line hover:ring-ink/40"
         }`}
       >
@@ -369,7 +374,7 @@ function SearchBox({ inputRef }: { inputRef: React.RefObject<HTMLInputElement | 
                     <span className="min-w-0">
                       <span className="block truncate font-semibold text-brand">{c.name}</span>
                       <span className="block truncate text-sm text-muted">
-                        {c.city}, {c.state}
+                        {c.city || "India"}
                       </span>
                     </span>
                     <ArrowUpRight className="size-4 shrink-0 text-muted" aria-hidden />
@@ -409,7 +414,7 @@ function CollegesMenu({ onPick }: { onPick: () => void }) {
                 <span className="min-w-0">
                   <span className="block truncate font-semibold text-brand">{s}</span>
                   <span className="text-xs text-muted">
-                    {COLLEGES.filter((c) => c.streams.includes(s)).length === 1 ? "1 college" : `${COLLEGES.filter((c) => c.streams.includes(s)).length} colleges`}
+                    {`${(((stats.stream as Record<string, { total: number }>)[s]?.total ?? 0) + COLLEGES.filter((c) => c.streams.includes(s)).length).toLocaleString("en-IN")} colleges`}
                   </span>
                 </span>
               </Link>

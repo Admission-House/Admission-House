@@ -19,10 +19,11 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
-import { COLLEGES, feeRange, formatLakh, getCollege, type College } from "@/lib/data";
+import { COLLEGES, feeLabel, feeRange, placeLabel, type College } from "@/lib/data";
+import { useColleges } from "@/lib/use-colleges";
+import { CollegePicker } from "@/components/college-picker";
 import { Container } from "@/components/ui";
 import { PageHero } from "@/components/page-hero";
-import { Select } from "@/components/select";
 import { useCompare, useLead } from "@/components/providers";
 
 const NA = "Not listed";
@@ -67,9 +68,9 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
     group: "Basics",
     icon: Building2,
     rows: [
-      { label: "Location", value: (c) => `${c.city}, ${c.state}` },
-      { label: "Type", value: (c) => c.type },
-      { label: "Established", value: (c) => c.established },
+      { label: "Location", value: (c) => placeLabel(c) || <Muted /> },
+      { label: "Type", value: (c) => c.type || <Muted /> },
+      { label: "Established", value: (c) => c.established || <Muted /> },
       { label: "Campus size", value: (c) => (c.campusAcres ? `${c.campusAcres} acres` : <Muted />), score: (c) => c.campusAcres ?? -1 },
     ],
   },
@@ -78,7 +79,7 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
     icon: Award,
     rows: [
       { label: "Rank", value: (c) => (c.nirf ? `#${c.nirf}, ${c.rankNote}` : (c.rankNote ?? <Muted>Not ranked</Muted>)), score: (c) => (c.nirf ? -c.nirf : -999) },
-      { label: "Accreditation", value: (c) => c.accreditation },
+      { label: "Accreditation", value: (c) => c.accreditation || <Muted /> },
       { label: "Approvals", value: (c) => <Chips items={c.approvals} /> },
     ],
   },
@@ -88,11 +89,8 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
     rows: [
       {
         label: "Fees per year",
-        value: (c) => {
-          const [a, b] = feeRange(c);
-          return `${formatLakh(a)} to ${formatLakh(b)}`;
-        },
-        score: (c) => -feeRange(c)[0],
+        value: (c) => feeLabel(c),
+        score: (c) => (c.basic ? -1e9 : -feeRange(c)[0]),
       },
       { label: "Average package", value: (c) => (c.avgPackage ? `₹${c.avgPackage} LPA` : <Muted />), score: (c) => c.avgPackage ?? -1 },
       { label: "Median package", value: (c) => (c.medianPackage ? `₹${c.medianPackage} LPA` : <Muted />), score: (c) => c.medianPackage ?? -1 },
@@ -161,9 +159,9 @@ export function CompareView() {
   const { open } = useLead();
   const compare = useCompare();
 
-  const fromUrl = (sp.get("c") ?? "").split(",").filter((s) => getCollege(s));
+  const fromUrl = (sp.get("c") ?? "").split(",").filter(Boolean);
   const slugs = fromUrl.length ? fromUrl.slice(0, 3) : compare.items;
-  const colleges = slugs.map((s) => getCollege(s)!).filter(Boolean);
+  const colleges = useColleges(slugs);
 
   // Keep the shared compare list in sync with what's on screen.
   useEffect(() => {
@@ -185,7 +183,6 @@ export function CompareView() {
     ["nlsiu-bangalore", "nalsar-hyderabad"],
   ] as const;
   const shortName = (slug: string) => COLLEGES.find((c) => c.slug === slug)?.short ?? slug;
-  const options = COLLEGES.filter((c) => !slugs.includes(c.slug));
   const gridStyle = { gridTemplateColumns: "var(--cmp-cols)" };
 
   return (
@@ -211,13 +208,7 @@ export function CompareView() {
                       </span>
                       <div className="text-sm font-semibold">
                         <p className="mb-2">Add a college</p>
-                        <Select
-                          label="Add a college to compare"
-                          value=""
-                          placeholder="Choose college"
-                          onChange={(v) => v && setSlugs([...slugs, v])}
-                          options={options.map((o) => ({ value: o.slug, label: o.name }))}
-                        />
+                        <CollegePicker exclude={slugs} onPick={(v) => setSlugs([...slugs, v])} />
                       </div>
                     </div>
                   );
@@ -243,7 +234,7 @@ export function CompareView() {
                         {c.name}
                       </Link>
                       <p className="mt-1 inline-flex items-center gap-1 text-sm text-muted">
-                        <MapPin className="size-3.5" aria-hidden /> {c.city}
+                        <MapPin className="size-3.5" aria-hidden /> {c.city || "India"}
                       </p>
                       <button
                         onClick={() => open({ source: "compare-apply", title: "Apply with a counsellor's help", college: c.name })}

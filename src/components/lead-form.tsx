@@ -253,6 +253,7 @@ export function LeadForm({
           <Select
             id={`${id}-stream`}
             name="stream"
+            placeholder="Select field of study"
             value={stream}
             onChange={setStream}
             options={[{ value: "", label: "Not sure yet" }, ...STREAMS.map((s) => ({ value: s, label: s }))]}
@@ -265,6 +266,7 @@ export function LeadForm({
           <Select
             id={`${id}-city`}
             name="city"
+            placeholder="Select preferred city"
             value={city}
             onChange={setCity}
             options={[{ value: "", label: "Anywhere in India" }, ...CITIES.map((c) => ({ value: c, label: c }))]}

@@ -1,12 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Check, ChevronDown } from "lucide-react";
 
 export interface SelectOption {
   value: string;
   label: string;
+  /** Heading shown above the first option of each group. */
+  group?: string;
 }
 
 const TRIGGER: Record<"field" | "pill", string> = {
@@ -261,9 +263,15 @@ export function Select({
           >
             {options.map((o, i) => {
               const isSelected = o.value === value;
+              const heading = o.group && o.group !== options[i - 1]?.group ? o.group : null;
               return (
+                <Fragment key={o.value}>
+                {heading && (
+                  <li role="presentation" className="px-3 pt-2.5 pb-1 text-[0.6875rem] font-bold tracking-wider text-muted uppercase first:pt-1">
+                    {heading}
+                  </li>
+                )}
                 <li
-                  key={o.value}
                   id={`${listId}-${i}`}
                   data-index={i}
                   role="option"
@@ -278,6 +286,7 @@ export function Select({
                   <span className="block first-letter:uppercase">{o.label}</span>
                   {isSelected && <Check className="size-4 shrink-0" aria-hidden />}
                 </li>
+                </Fragment>
               );
             })}
           </ul>,
@@ -302,7 +311,9 @@ export function Select({
         onKeyDown={onKeyDown}
         className={triggerClass}
       >
-        <span className={`truncate ${selected ? "" : "text-subtle"}`}>{selected?.label ?? placeholder ?? "Select"}</span>
+        <span className={`truncate ${selected && !(placeholder && selected.value === "") ? "" : "text-subtle"}`}>
+          {placeholder && selected?.value === "" ? placeholder : (selected?.label ?? placeholder ?? "Select")}
+        </span>
         <ChevronDown
           aria-hidden
           strokeWidth={variant === "inline" ? 3 : 2}

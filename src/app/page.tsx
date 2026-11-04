@@ -7,6 +7,7 @@ import { HeroFinder } from "@/components/home/hero-finder";
 import { HeroBanner } from "@/components/home/hero-banner";
 import { FieldMarquee } from "@/components/home/field-marquee";
 import { TopColleges } from "@/components/home/top-colleges";
+import { Universities } from "@/components/home/universities";
 
 import { Faq } from "@/components/faq";
 import { LeadButton } from "@/components/lead-button";
@@ -35,6 +36,7 @@ export default function Home() {
           <TopColleges />
         </Container>
       </section>
+      <Universities />
       <Counselling />
       <Exams />
       <ComparePairs />
@@ -87,11 +89,15 @@ function Hero() {
   return (
     <section className="relative overflow-hidden bg-neutral-900">
       <HeroBanner />
-      <Container className="relative z-10 flex min-h-[calc(100svh-7rem)] [text-shadow:0_1px_14px_rgb(0_0_0/0.35)] flex-col justify-center pt-6 pb-14 sm:min-h-[35rem] sm:pt-12 sm:pb-24 lg:min-h-[max(37.5rem,calc(100svh-7.1875rem))]">
-        <h1 className="max-w-[41.25rem] animate-rise text-[2rem] leading-[1.1] font-extrabold text-white [animation-delay:100ms] sm:text-[3.25rem] lg:text-[3.75rem]">
-          Find the right college. <span className="text-teal">Get in with expert help.</span>
+      <Container className="relative z-10 flex min-h-[calc(100svh-7rem)] [text-shadow:0_2px_18px_rgb(0_0_0/0.55)] flex-col justify-center pt-14 pb-10 sm:min-h-[35rem] sm:pt-28 sm:pb-16 lg:min-h-[max(37.5rem,calc(100svh-7.1875rem))]">
+        <h1 className="animate-rise text-[1.75rem] leading-[1.1] font-extrabold tracking-tight whitespace-nowrap text-white [animation-delay:100ms] min-[400px]:text-[2rem] sm:text-[3rem] lg:text-[4rem]">
+          Come With a Dream
+          <span className="mt-1 block bg-gradient-to-r from-teal via-[#7af0dc] to-[#ffb347] bg-clip-text text-transparent [text-shadow:none] [filter:drop-shadow(0_2px_10px_rgb(0_0_0/0.5))]">
+            Leave With a Direction
+          </span>
         </h1>
-        <p className="mt-3 max-w-[33.75rem] animate-rise text-[0.9375rem] leading-snug text-white/80 sm:mt-5 sm:text-lg sm:leading-normal [animation-delay:200ms]">
+        <div className="mt-4 h-1 w-20 animate-rise rounded-full bg-gradient-to-r from-teal to-[#ffb347] [animation-delay:150ms] sm:mt-5" aria-hidden />
+        <p className="mt-4 max-w-[33.75rem] animate-rise text-[0.9375rem] leading-snug font-medium text-white sm:mt-5 sm:text-lg sm:leading-normal [animation-delay:200ms]">
           Compare fees, ranks and placements of top colleges for courses after 12th and after graduation.
           When you need help, a real counsellor will shortlist with you, help you apply and stay till your seat is locked.
         </p>
@@ -165,7 +171,7 @@ function Counselling() {
             <ul className="grid grid-cols-2 content-start gap-x-4 gap-y-7 sm:grid-cols-3">
               {COUNSELLORS.map((c) => (
                 <li key={c.name}>
-                  <div className="zoom relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-xl bg-ink-80">
+                  <div className="relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-xl bg-ink-80">
                     <Image src={c.photo} alt={c.name} fill quality={90} sizes="(min-width:1024px) 200px, 45vw" className="object-cover" />
                   </div>
                   <p className="mt-3 font-semibold">{c.name}</p>

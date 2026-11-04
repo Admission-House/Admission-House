@@ -2,20 +2,21 @@
 
 import Link from "next/link";
 import { MapPin } from "lucide-react";
-import { feeRange, formatLakh, packageStat, type College } from "@/lib/data";
+import { feeLabel, packageStat, placeLabel, type College } from "@/lib/data";
 import { CompareToggle } from "./college-card";
 import { useLead } from "./providers";
 
 export function CollegeRow({ college }: { college: College }) {
   const { open } = useLead();
-  const [min, max] = feeRange(college);
-
   const pkg = packageStat(college);
   const facts = [
-    { label: "Fees a year", value: `${formatLakh(min)} to ${formatLakh(max)}` },
+    college.basic
+      ? { label: "Courses", value: college.programs.length ? `${college.programs.slice(0, 3).map((p) => p.name).join(", ")}${college.programs.length > 3 ? ` +${college.programs.length - 3} more` : ""}` : "Ask a counsellor" }
+      : null,
+    { label: "Fees a year", value: feeLabel(college) },
     pkg && { label: pkg.label, value: pkg.value },
     college.highestPackage && { label: "Highest package", value: `₹${college.highestPackage} LPA` },
-    { label: "Exams", value: college.exams.slice(0, 2).join(", ") },
+    college.exams.length ? { label: "Exams", value: college.exams.slice(0, 2).join(", ") } : null,
   ].filter((f): f is { label: string; value: string } => !!f);
 
   return (
@@ -35,12 +36,12 @@ export function CollegeRow({ college }: { college: College }) {
         </div>
         <p className="mt-1 flex flex-wrap items-center gap-x-3 text-[0.9375rem] text-muted">
           <span className="inline-flex items-center gap-1">
-            <MapPin className="size-3.5" /> {college.city}, {college.state}
+            <MapPin className="size-3.5" /> {placeLabel(college) || "India"}
           </span>
-          <span>{college.type}, since {college.established}</span>
+          {!college.basic && <span>{college.type}, since {college.established}</span>}
         </p>
 
-        <dl className="mt-4 grid grid-cols-2 gap-y-3 border-y border-line py-3.5 lg:grid-cols-4 lg:divide-x lg:divide-line">
+        <dl className={`mt-4 grid grid-cols-2 gap-y-3 border-y border-line py-3.5 lg:divide-x lg:divide-line ${college.basic ? "lg:grid-cols-[2fr_1fr]" : "lg:grid-cols-4"}`}>
           {facts.map((f) => (
             <div key={f.label} className="lg:px-4 lg:first:pl-0">
               <dt className="text-[0.8125rem] text-muted">{f.label}</dt>
@@ -49,10 +50,12 @@ export function CollegeRow({ college }: { college: College }) {
           ))}
         </dl>
 
-        <p className="mt-3 text-[0.9375rem] text-muted">
-          {[college.accreditation, ...college.approvals.map((a) => `${a} approved`)].join(", ")}
-          {college.scholarship && ". Scholarships available"}
-        </p>
+        {!college.basic && (
+          <p className="mt-3 text-[0.9375rem] text-muted">
+            {[college.accreditation, ...college.approvals.map((a) => `${a} approved`)].join(", ")}
+            {college.scholarship && ". Scholarships available"}
+          </p>
+        )}
 
         <div className="mt-auto flex flex-wrap items-center gap-2 pt-4">
           <button

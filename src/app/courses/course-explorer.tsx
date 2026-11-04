@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Briefcase, Clock, FileText, GraduationCap, IndianRupee } from "lucide-react";
+import stats from "@/lib/directory-stats.json";
 import { COLLEGES, COURSES, STREAMS, formatLakh, type Level, type Stream } from "@/lib/data";
 import { Container } from "@/components/ui";
 import { PageHero } from "@/components/page-hero";
@@ -83,7 +84,7 @@ export function CourseExplorer() {
 
         <ul className="grid gap-5 md:grid-cols-2">
           {list.map((c) => {
-            const count = COLLEGES.filter((col) => col.streams.includes(c.stream) && col.programs.some((p) => p.level === c.level)).length;
+            const count = ((stats.course as Record<string, { total: number }>)[c.slug]?.total ?? 0) + COLLEGES.filter((col) => col.programs.some((p) => p.name === c.name)).length;
             return (
               <li
                 key={c.slug}
@@ -131,7 +132,7 @@ export function CourseExplorer() {
 
                 <div className="mt-auto flex flex-wrap gap-2.5 pt-6">
                   <Link
-                    href={`/colleges?level=${c.level}&stream=${encodeURIComponent(c.stream)}`}
+                    href={`/courses/${c.slug}`}
                     className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-royal"
                   >
                     {count > 0 ? `See ${count} ${count === 1 ? "college" : "colleges"}` : "Find colleges"} <ArrowRight className="size-4" aria-hidden />

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Check, Plus } from "lucide-react";
-import { feeRange, formatLakh, packageStat, type College } from "@/lib/data";
+import { feeLabel, packageStat, placeLabel, type College } from "@/lib/data";
 import { CollegeCover } from "./college-cover";
 import { useCompare, useLead } from "./providers";
 
@@ -31,7 +31,6 @@ export function CompareToggle({ college, compact }: { college: College; compact?
 export function CollegeCard({ college, index = 0 }: { college: College; index?: number }) {
   const { open } = useLead();
   const { has, toggle, full } = useCompare();
-  const [min, max] = feeRange(college);
   const pkg = packageStat(college);
   const added = has(college.slug);
 
@@ -70,19 +69,19 @@ export function CollegeCard({ college, index = 0 }: { college: College; index?: 
           </Link>
         </h3>
         <p className="mt-0.5 text-[0.9375rem] text-muted">
-          {college.city}, {college.state}
+          {placeLabel(college)}
         </p>
 
         <dl className="mt-4 grid grid-cols-2 gap-4 border-t border-line pt-4">
           <div>
             <dt className="text-[0.8125rem] text-muted">Fees a year</dt>
             <dd className="mt-0.5 font-display text-[1.0625rem] font-bold">
-              {formatLakh(min)} to {formatLakh(max)}
+              {feeLabel(college)}
             </dd>
           </div>
           <div>
             <dt className="text-[0.8125rem] text-muted">{pkg ? pkg.label : "Entrance exam"}</dt>
-            <dd className="mt-0.5 font-display text-[1.0625rem] font-bold">{pkg ? pkg.value : college.exams.slice(0, 2).join(", ")}</dd>
+            <dd className="mt-0.5 font-display text-[1.0625rem] font-bold">{pkg ? pkg.value : college.exams.slice(0, 2).join(", ") || "Ask a counsellor"}</dd>
           </div>
         </dl>
 

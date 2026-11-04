@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, MapPin } from "lucide-react";
-import { COLLEGES, EXAMS, feeRange, formatLakh, getCollege } from "@/lib/data";
+import { COLLEGES, EXAMS, feeLabel, placeLabel } from "@/lib/data";
+import { getAnyCollege, similarTo } from "@/lib/directory";
 import { CollegeCard, CompareToggle } from "@/components/college-card";
 import { LeadButton } from "@/components/lead-button";
 import { JsonLd } from "@/components/json-ld";
@@ -16,12 +18,12 @@ export function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps<"/colleges/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const c = getCollege(slug);
+  const c = getAnyCollege(slug);
   if (!c) return {};
   return {
     alternates: { canonical: `/colleges/${c.slug}` },
-    title: `${c.name}, ${c.city}: courses, fees and placements 2027`,
-    description: `${c.name}: ${c.programs.length} courses, fees from ${formatLakh(feeRange(c)[0])} a year. ${c.tagline}.`,
+    title: c.basic ? `${c.name}${c.city ? `, ${c.city}` : ""}: courses and admission 2027` : `${c.name}, ${c.city}: courses, fees and placements 2027`,
+    description: c.basic ? `${c.name}${c.city ? ` in ${c.city}` : ""}: courses offered and admission help from a counsellor.` : `${c.name}: ${c.programs.length} courses, fees from ${feeLabel(c).split(" to ")[0]} a year. ${c.tagline}.`,
   };
 }
 
@@ -32,20 +34,30 @@ const SECTIONS = [
   { id: "admission", label: "Admission" },
 ];
 
-export default async function CollegePage({ params }: PageProps<"/colleges/[slug]">) {
+// params is read inside Suspense so colleges outside generateStaticParams can still stream in.
+export default function CollegePage({ params }: PageProps<"/colleges/[slug]">) {
+  return (
+    <Suspense>
+      <CollegeDetails params={params} />
+    </Suspense>
+  );
+}
+
+async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]">["params"] }) {
   const { slug } = await params;
-  const c = getCollege(slug);
+  const c = getAnyCollege(slug);
   if (!c) notFound();
 
-  const [min, max] = feeRange(c);
-  const similar = COLLEGES.filter((x) => x.slug !== c.slug && x.streams.includes(c.streams[0])).slice(0, 3);
+  const similar = c.basic ? similarTo(c) : COLLEGES.filter((x) => x.slug !== c.slug && x.streams.includes(c.streams[0])).slice(0, 3);
   const exams = EXAMS.filter((e) => c.exams.includes(e.name));
   const hasPlacement = !!(c.avgPackage || c.medianPackage || c.highestPackage || c.placementNote || c.recruiters.length);
   const facts = [
-    { label: "Established", value: String(c.established) },
+    c.established ? { label: "Established", value: String(c.established) } : null,
+    c.city ? { label: "City", value: c.city } : null,
     c.campusAcres ? { label: "Campus", value: `${c.campusAcres} acres` } : null,
-    { label: "Type", value: c.type },
-    { label: "Fees per year", value: `${formatLakh(min)} to ${formatLakh(max)}` },
+    c.type ? { label: "Type", value: c.type } : null,
+    c.programs.length ? { label: "Courses listed", value: String(c.programs.length) } : null,
+    { label: "Fees per year", value: feeLabel(c) },
     c.hostel !== undefined ? { label: "Hostel", value: c.hostel ? "Available" : "Not available" } : null,
     c.scholarship !== undefined ? { label: "Scholarships", value: c.scholarship ? "Available" : "Not offered" } : null,
   ].filter((f): f is NonNullable<typeof f> => !!f);
@@ -60,9 +72,9 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
             name: c.name,
             url: `${SITE.url}/colleges/${c.slug}`,
             description: c.about,
-            foundingDate: String(c.established),
+            foundingDate: c.established ? String(c.established) : undefined,
             image: `${SITE.url}${c.image}`,
-            address: { "@type": "PostalAddress", addressLocality: c.city, addressRegion: c.state, addressCountry: "IN" },
+            address: { "@type": "PostalAddress", addressLocality: c.city || undefined, addressRegion: c.state || undefined, addressCountry: "IN" },
           },
           {
             "@context": "https://schema.org",
@@ -91,16 +103,16 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
               <h1 className="text-[2rem] font-extrabold sm:text-[2.625rem]">{c.name}</h1>
               <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-muted">
                 <span className="inline-flex items-center gap-1">
-                  <MapPin className="size-4" /> {c.city}, {c.state}
+                  <MapPin className="size-4" /> {placeLabel(c) || "India"}
                 </span>
-                <span>{c.type} college, est. {c.established}</span>
+                {!c.basic && <span>{c.type} college, est. {c.established}</span>}
                 {c.rankNote && (
                   <span className="font-semibold text-ink">{c.nirf ? `#${c.nirf} ${c.rankNote}` : c.rankNote}</span>
                 )}
               </p>
-              <p className="mt-3 text-[0.9375rem] text-ink-80">
+              {!c.basic && <p className="mt-3 text-[0.9375rem] text-ink-80">
                 {[c.accreditation, ...c.approvals.map((a) => `${a} approved`), c.scholarship ? "Scholarships available" : ""].filter(Boolean).join(" · ")}
-              </p>
+              </p>}
             </div>
             <div className="flex shrink-0 flex-wrap items-center gap-2">
               <CompareToggle college={c} />
@@ -140,24 +152,28 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
                 <Fact key={f.label} label={f.label} value={f.value} />
               ))}
             </dl>
-            <h3 className="mt-8 text-lg font-semibold">Why students choose {c.short}</h3>
-            <ul className="mt-2 grid gap-x-8 sm:grid-cols-2">
-              {c.highlights.map((h) => (
-                <li key={h} className="border-b border-line py-3 text-[0.9375rem] text-ink">
-                  {h}
-                </li>
-              ))}
-            </ul>
+            {c.highlights.length > 0 && (
+              <>
+                <h3 className="mt-8 text-lg font-semibold">Why students choose {c.short}</h3>
+                <ul className="mt-2 grid gap-x-8 sm:grid-cols-2">
+                  {c.highlights.map((h) => (
+                    <li key={h} className="border-b border-line py-3 text-[0.9375rem] text-ink">
+                      {h}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </Panel>
 
           {/* Courses */}
-          <Panel id="courses" title="Courses and fees" intro="Fees are shown as published for each course. Hostel and exam fees may be extra.">
+          <Panel id="courses" title="Courses and fees" intro={c.basic ? "Courses this college is listed for. A counsellor can share current fees and seats." : "Fees are shown as published for each course. Hostel and exam fees may be extra."}>
             <ul className="divide-y divide-line sm:hidden">
               {c.programs.map((p) => (
                 <li key={p.name} className="flex items-center justify-between gap-4 py-4 first:pt-0">
                   <div className="min-w-0">
                     <p className="font-semibold">{p.name}</p>
-                    <p className="text-xs text-muted">{p.level === "UG" ? "After 12th" : "After graduation"}</p>
+                    <p className="text-xs text-muted">{p.levelLabel ?? (p.level === "UG" ? "After 12th" : "After graduation")}</p>
                     <p className="mt-1 text-sm text-ink-80">
                       {p.duration} · <span className="font-semibold text-ink">{p.feeText}</span>
                     </p>
@@ -189,7 +205,7 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
                     <tr key={p.name} className="border-b border-line last:border-0">
                       <th scope="row" className="py-4 pr-4 pl-5 font-semibold sm:pl-0">
                         {p.name}
-                        <span className="mt-0.5 block text-xs font-normal text-muted">{p.level === "UG" ? "After 12th" : "After graduation"}</span>
+                        <span className="mt-0.5 block text-xs font-normal text-muted">{p.levelLabel ?? (p.level === "UG" ? "After 12th" : "After graduation")}</span>
                       </th>
                       <td className="px-4 py-4 text-ink-80">{p.duration}</td>
                       <td className="px-4 py-4 font-semibold">{p.feeText}</td>
@@ -246,7 +262,7 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
             <ol className="grid gap-x-8 sm:grid-cols-2">
               {[
                 ["Check eligibility", "Make sure you meet the minimum marks for your course."],
-                ["Take the entrance exam", `${c.short} accepts ${c.exams.join(", ")}.`],
+                ["Take the entrance exam", c.exams.length ? `${c.short} accepts ${c.exams.join(", ")}.` : "Check which entrance exam your course needs. A counsellor can confirm this for you."],
                 ["Apply online", "Fill the college form and upload marksheets and ID proof."],
                 ["Counselling and seat fee", "Attend counselling, lock your seat and pay the seat fee."],
               ].map(([t, d], i) => (
@@ -280,9 +296,7 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
           <div className="sticky top-28 grid gap-4">
             <div className="rounded-[var(--radius-card)] bg-white p-6 ring-1 ring-line">
               <p className="text-sm text-muted">Fees per year</p>
-              <p className="font-display text-3xl font-semibold text-ink">
-                {formatLakh(min)} to {formatLakh(max)}
-              </p>
+              <p className="font-display text-3xl font-semibold text-ink">{feeLabel(c)}</p>
               <p className="mt-4 text-[0.9375rem] text-ink-80">
                 Talk to a counsellor about cut-offs, scholarships and your chances at {c.short}.
               </p>
@@ -298,10 +312,12 @@ export default async function CollegePage({ params }: PageProps<"/colleges/[slug
                 Call {SITE.phoneDisplay}
               </a>
             </div>
-            <div className="rounded-[var(--radius-card)] bg-white p-5 ring-1 ring-line">
-              <p className="font-semibold">Exams accepted</p>
-              <p className="mt-2 text-[0.9375rem] text-ink-80">{c.exams.join(", ")}</p>
-            </div>
+            {c.exams.length > 0 && (
+              <div className="rounded-[var(--radius-card)] bg-white p-5 ring-1 ring-line">
+                <p className="font-semibold">Exams accepted</p>
+                <p className="mt-2 text-[0.9375rem] text-ink-80">{c.exams.join(", ")}</p>
+              </div>
+            )}
           </div>
         </aside>
       </div>

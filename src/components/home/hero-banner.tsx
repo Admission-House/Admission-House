@@ -59,8 +59,9 @@ export function HeroBanner() {
           />
         ))}
         {/* Neutral dark shade, only strong enough behind the text, so the photo keeps its own colours */}
-        <div className="absolute inset-0 bg-black/45 lg:bg-transparent lg:bg-gradient-to-r lg:from-black/78 lg:via-black/48 lg:to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-black/55 to-transparent" />
+        <div className="absolute inset-0 bg-black/55 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#031f1e]/90 lg:via-black/62 lg:to-black/5" />
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/45 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/65 to-transparent" />
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">

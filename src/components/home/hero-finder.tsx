@@ -3,8 +3,8 @@
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search } from "lucide-react";
-import { CITIES, COURSES, type Level } from "@/lib/data";
-import { filterColleges } from "@/lib/filter";
+import { COLLEGES, COURSES, type Level } from "@/lib/data";
+import stats from "@/lib/directory-stats.json";
 import { Select } from "../select";
 
 const TRIGGER =
@@ -34,8 +34,18 @@ export function HeroFinder() {
     [level],
   );
 
-  const stream = COURSES.find((c) => c.slug === course)?.stream ?? "";
-  const count = useMemo(() => filterColleges({ level, stream, city }).length, [level, stream, city]);
+  // Directory colleges are counted from a small precomputed table; the 13 featured ones are counted here.
+  const count = useMemo(() => {
+    type Row = { total: number; city: Record<string, number> };
+    const row = (course ? (stats.course as Record<string, Row>)[course] : (stats.level as Record<string, Row>)[level]) ?? { total: 0, city: {} };
+    const inDirectory = city ? (row.city[city] ?? 0) : row.total;
+    const courseName = COURSES.find((c) => c.slug === course)?.name;
+    const featuredCity = city === "Bangalore" ? "Bengaluru" : city === "Delhi" ? "Delhi NCR" : city;
+    const featured = COLLEGES.filter(
+      (c) => (!featuredCity || c.city === featuredCity) && c.programs.some((p) => (courseName ? p.name === courseName : p.level === level)),
+    ).length;
+    return inDirectory + featured;
+  }, [level, course, city]);
 
   function changeLevel(v: string) {
     setLevel(v as Level);
@@ -47,7 +57,7 @@ export function HeroFinder() {
     if (count === 0) return router.push(`/colleges?level=${level}`);
     const p = new URLSearchParams();
     p.set("level", level);
-    if (stream) p.set("stream", stream);
+    if (course) p.set("course", course);
     if (city) p.set("city", city);
     router.push(`/colleges?${p}`);
   }
@@ -72,16 +82,17 @@ export function HeroFinder() {
         />
       </Field>
       <Field label="Course">
-        <Select variant="inline" label="Course" value={course} onChange={setCourse} className={TRIGGER} options={courseOptions} />
+        <Select variant="inline" label="Course" placeholder="Select course" value={course} onChange={setCourse} className={TRIGGER} options={courseOptions} />
       </Field>
       <Field label="City">
         <Select
           variant="inline"
           label="City"
+          placeholder="Select city"
           value={city}
           onChange={setCity}
           className={TRIGGER}
-          options={[{ value: "", label: "Any city" }, ...CITIES.map((c) => ({ value: c, label: c }))]}
+          options={[{ value: "", label: "Any city" }, ...(stats.cities as string[]).map((c) => ({ value: c, label: c }))]}
         />
       </Field>
       <button
@@ -89,7 +100,7 @@ export function HeroFinder() {
         className="m-1 inline-flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand px-3 text-sm font-semibold sm:h-14 sm:px-7 sm:text-base whitespace-nowrap text-white transition hover:bg-brand/90"
       >
         <Search className="size-5" aria-hidden />
-        {count === 0 ? "See all colleges" : `Show ${count} ${count === 1 ? "college" : "colleges"}`}
+        {count === 0 ? "See all colleges" : `Show ${count.toLocaleString("en-IN")} ${count === 1 ? "college" : "colleges"}`}
       </button>
     </form>
   );

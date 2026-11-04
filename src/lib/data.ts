@@ -38,6 +38,8 @@ export type CollegeType = "Private" | "Government" | "Deemed";
 export interface Program {
   name: string;
   level: Level;
+  /** Shown instead of the After 12th / After graduation label, e.g. Diploma. */
+  levelLabel?: string;
   duration: string;
   /** Approximate tuition in lakh rupees per year. Used only for filtering and sorting. */
   fee: number;
@@ -49,10 +51,13 @@ export interface College {
   slug: string;
   name: string;
   short: string;
-  city: City;
+  city: string;
   state: string;
-  type: CollegeType;
+  type: CollegeType | "";
+  /** 0 when unknown (directory listings). */
   established: number;
+  /** True for directory listings that only have a name, city and course list. */
+  basic?: boolean;
   /** Rank within its category; lower is better. */
   nirf?: number;
   /** What the rank is for, e.g. "NIRF 2025, Management". */
@@ -619,7 +624,8 @@ export function getCollege(slug: string) {
 }
 
 export function feeRange(c: College): [number, number] {
-  const fees = c.programs.map((p) => p.fee);
+  const fees = c.programs.map((p) => p.fee).filter((f) => f > 0);
+  if (!fees.length) return [0, 0];
   return [Math.min(...fees), Math.max(...fees)];
 }
 
@@ -771,3 +777,15 @@ export const STREAM_IMAGES: Record<Stream, string> = {
   Pharmacy: "/images/st-pharmacy.jpg",
   Arts: "/images/st-arts.jpg",
 };
+
+/** "Mumbai, Maharashtra", or just the city when the state is not known. */
+export function placeLabel(c: College) {
+  return [c.city, c.state].filter(Boolean).join(", ");
+}
+
+/** Fee text for cards. Directory listings have no fee data, so they point to a counsellor. */
+export function feeLabel(c: College) {
+  if (c.basic) return "Ask a counsellor";
+  const [a, b] = feeRange(c);
+  return `${formatLakh(a)} to ${formatLakh(b)}`;
+}

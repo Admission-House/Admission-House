@@ -3,16 +3,15 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
-import { getCollege } from "@/lib/data";
+import { useColleges } from "@/lib/use-colleges";
 import { useCompare } from "./providers";
 import { Monogram } from "./college-cover";
 
 export function CompareTray() {
   const { items, remove, clear } = useCompare();
   const pathname = usePathname();
+  const colleges = useColleges(items);
   if (!items.length || pathname.startsWith("/compare")) return null;
-
-  const colleges = items.map(getCollege).filter((c) => !!c);
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-3 sm:px-4 sm:pb-4" role="region" aria-label="Compare list">
