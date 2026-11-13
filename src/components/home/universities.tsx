@@ -11,17 +11,30 @@ import { DIRECTORY, isUniversity } from "@/lib/directory";
 // A logo is used when a file named after the slug exists in public/logos (png, svg, webp, jpg),
 // for example public/logos/delhi-university-du-delhi.png. Without one the initials are shown.
 const FEATURED: [slug: string, display: string, initials: string][] = [
+  // Priority list from the client, in their order.
+  ["amity-university-noida-noida", "Amity University", "AU"],
+  ["lovely-professional-university-jalandhar-jalandhar", "Lovely Professional University", "LPU"],
+  ["chandigarh-university-cu-chandigarh", "Chandigarh University", "CU"],
+  ["manipal-university-manipal", "Manipal University", "MAHE"],
+  ["bennett-university-greater-noida", "Bennett University", "BU"],
+  ["sikkim-manipal-university-gangtok", "Sikkim Manipal University", "SMU"],
+  ["dy-patil-university-navi-mumbai-navi-mumbai", "DY Patil University, Mumbai", "DYP"],
+  ["alliance-university-bangalore-bangalore", "Alliance University", "ALU"],
+  ["shoolini-university-solan", "Shoolini University", "SU"],
+  ["andhra-university-visakhapatnam-visakhapatnam", "Andhra University", "AU"],
+  ["vit-vellore-vellore", "Vellore Institute of Technology (VIT)", "VIT"],
+  ["narsee-monjee-institute-of-management-studies-mumbai", "NMIMS", "NMIMS"],
+  ["galgotias-university-greater-noida", "Galgotias University", "GU"],
+  ["ganeshi-lal-agrawal-university-mathura", "GLA University", "GLA"],
+  ["op-jindal-global-university-sonipat", "OP Jindal Global University", "OPJGU"],
+  // The rest follow.
   ["delhi-university-du-delhi", "Delhi University", "DU"],
   ["mumbai-university-mumbai", "Mumbai University", "MU"],
   ["jawaharlal-nehru-university-delhi", "Jawaharlal Nehru University", "JNU"],
   ["banaras-hindu-university-varanasi", "Banaras Hindu University", "BHU"],
   ["aligarh-muslim-university-aligarh", "Aligarh Muslim University", "AMU"],
   ["jamia-millia-islamia-university-delhi", "Jamia Millia Islamia", "JMI"],
-  ["amity-university-noida-noida", "Amity University", "AU"],
-  ["manipal-university-manipal", "Manipal University", "MAHE"],
   ["christ-university-bangalore", "Christ University", "CU"],
-  ["lovely-professional-university-jalandhar-jalandhar", "Lovely Professional University", "LPU"],
-  ["chandigarh-university-cu-chandigarh", "Chandigarh University", "CU"],
   ["osmania-university-ou-hyderabad", "Osmania University", "OU"],
   ["kalinga-institute-of-industrial-technology-bhubaneswar", "KIIT University", "KIIT"],
   ["shiv-nadar-university-noida-greater-noida", "Shiv Nadar University", "SNU"],
@@ -41,7 +54,8 @@ function findLogo(slug: string): string | null {
 export function Universities() {
   const bySlug = new Map(DIRECTORY.map((d) => [d.s, d]));
   const total = DIRECTORY.filter((d) => isUniversity(d.n)).length;
-  const cards = FEATURED.map(([slug, name, initials]) => ({ d: bySlug.get(slug), name, initials, logo: findLogo(slug) })).filter((x) => !!x.d);
+  // Show 18 cards (3 rows on desktop). Entries below the first 18 are spares: swap them in by reordering the list above.
+  const cards = FEATURED.map(([slug, name, initials]) => ({ d: bySlug.get(slug), name, initials, logo: findLogo(slug) })).filter((x) => !!x.d).slice(0, 18);
 
   return (
     <section className="section-y">
