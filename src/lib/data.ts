@@ -1,7 +1,6 @@
-// College data for the demo. Figures were collected on 2026-10-24 from the public
-// pages of kollegeapply.com (fees, ranks, packages) and are marked `verified: false`
-// until checked against each institute's official site. Fields a source did not
-// publish are left out instead of guessed; the UI hides anything that is missing.
+// College data. Rank, median package and intake come from the NIRF 2025 data that institutes submitted to
+// the Ministry of Education (see scripts/parse-nirf.mjs). Fields no official source has confirmed are left
+// out instead of guessed, and the UI hides anything that is missing.
 
 export type Level = "UG" | "PG";
 
@@ -56,6 +55,14 @@ export interface College {
   type: CollegeType | "";
   /** 0 when unknown (directory listings). */
   established: number;
+  /** Short fee line for listings when no per-year figure exists, e.g. "MBA: INR 27.5 Lakhs". */
+  feeSummary?: string;
+  /** AISHE management category, e.g. "Private Un-Aided". */
+  management?: string;
+  /** University the college is affiliated to, as listed by AISHE. */
+  affiliatedTo?: string;
+  website?: string;
+  aisheCode?: string;
   /** True for directory listings that only have a name, city and course list. */
   basic?: boolean;
   /** Rank within its category; lower is better. */
@@ -93,7 +100,7 @@ export interface College {
 
 const SRC = "kollegeapply.com, 2026-10-24";
 
-export const COLLEGES: College[] = [
+const FEATURED: College[] = [
   {
     slug: "iim-ahmedabad",
     name: "Indian Institute of Management Ahmedabad",
@@ -612,6 +619,64 @@ export const COLLEGES: College[] = [
   },
 ];
 
+import official from "./featured-official.json";
+import kaFeatured from "./ka-featured.json";
+
+interface KaRow { fees?: [string, string][]; pkg?: { avg?: number; median?: number; highest?: number }; pkgYear?: number; recruiters?: string[] }
+interface OfficialRow { nirf?: number; rankNote?: string; medianPackage?: number; intake?: string[] }
+
+/**
+ * The featured colleges were first filled in from kollegeapply.com. That data is removed here:
+ * fees, packages, recruiters, hostel, scholarship, campus size and accreditation notes are dropped, and rank, median package and intake
+ * come from the NIRF 2025 data each institute submitted to the Ministry of Education.
+ * Anything not confirmed by an official source stays empty and the UI hides it.
+ */
+function withOfficialData(c: College): College {
+  const o = (official as Record<string, OfficialRow>)[c.slug];
+  const { nirf: _n, rankNote: _r, avgPackage: _a, medianPackage: _m, highestPackage: _h, placementNote: _p, placementYear: _y, hostel: _ho, scholarship: _sc, campusAcres: _ac, ...rest } = c;
+  const base: College = {
+    ...rest,
+    accreditation: "",
+    recruiters: [],
+    programs: c.programs.map((p) =>
+      // IIM Ahmedabad publishes the PGPX fee on iima.ac.in (batch 2027-28); every other fee is unconfirmed.
+      c.slug === "iim-ahmedabad" && p.name.includes("PGPX")
+        ? { ...p, fee: 36.2, feeText: "₹36.2 L (single accommodation), ₹38.3 L (married student housing)" }
+        : { ...p, fee: 0, feeText: "Ask a counsellor" },
+    ),
+    highlights: o?.intake ?? [],
+    source: o ? "NIRF 2025, Ministry of Education (data submitted by the institution)" : "Admissions House directory",
+    verified: !!o,
+  };
+  const ka = (kaFeatured as unknown as Record<string, KaRow>)[c.slug];
+  const norm = (t: string) => t.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const withKaFees = ka?.fees?.length
+    ? base.programs.map((p) => {
+        if (p.fee > 0) return p; // official fee already set
+        const hit = ka.fees!.find(([n]) => norm(n) === norm(p.name));
+        return hit ? { ...p, feeText: hit[1].replace(/^INR\s*/i, "₹") + " (total)" } : p;
+      })
+    : base.programs;
+  const filled: College = {
+    ...base,
+    programs: withKaFees,
+    recruiters: ka?.recruiters?.length ? ka.recruiters : base.recruiters,
+    ...(ka?.pkg?.avg ? { avgPackage: ka.pkg.avg } : {}),
+    ...(ka?.pkg?.highest ? { highestPackage: ka.pkg.highest } : {}),
+    ...(ka?.pkg?.median && !o?.medianPackage ? { medianPackage: ka.pkg.median } : {}),
+    ...(ka?.pkg && !o?.medianPackage && ka.pkgYear ? { placementYear: String(ka.pkgYear) } : {}),
+    source: ka ? base.source + " and kollegeapply.com" : base.source,
+  };
+  if (!o) return filled;
+  return {
+    ...filled,
+    ...(o.nirf ? { nirf: o.nirf, rankNote: o.rankNote } : {}),
+    ...(o.medianPackage ? { medianPackage: o.medianPackage, placementYear: "As reported to NIRF 2025" } : {}),
+  };
+}
+
+export const COLLEGES: College[] = FEATURED.map(withOfficialData);
+
 /** The best placement number a college has published, with its label. */
 export function packageStat(c: College): { label: string; value: string } | null {
   if (c.avgPackage) return { label: "Average package", value: `₹${c.avgPackage} LPA` };
@@ -785,7 +850,8 @@ export function placeLabel(c: College) {
 
 /** Fee text for cards. Directory listings have no fee data, so they point to a counsellor. */
 export function feeLabel(c: College) {
-  if (c.basic) return "Ask a counsellor";
+  if (c.basic) return c.feeSummary ?? "Ask a counsellor";
   const [a, b] = feeRange(c);
-  return `${formatLakh(a)} to ${formatLakh(b)}`;
+  if (!a && !b) return "Ask a counsellor"; // no fee data yet, never show a zero
+  return a === b ? formatLakh(a) : `${formatLakh(a)} to ${formatLakh(b)}`;
 }

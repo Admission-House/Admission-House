@@ -41,7 +41,7 @@ export function filterColleges(f: CollegeFilters, sort: SortKey = "popular") {
   const sorters: Record<SortKey, (a: College, b: College) => number> = {
     // Best-ranked first; colleges without a rank go last.
     popular: (a, b) => (a.nirf ?? 999) - (b.nirf ?? 999),
-    fees: (a, b) => feeRange(a)[0] - feeRange(b)[0],
+    fees: (a, b) => (feeRange(a)[0] || 1e9) - (feeRange(b)[0] || 1e9),
     placement: (a, b) => packageOf(b) - packageOf(a),
   };
   return list.sort(sorters[sort]);

@@ -71,6 +71,9 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
       { label: "Location", value: (c) => placeLabel(c) || <Muted /> },
       { label: "Type", value: (c) => c.type || <Muted /> },
       { label: "Established", value: (c) => c.established || <Muted /> },
+      { label: "Management", value: (c) => c.management || <Muted /> },
+      { label: "Affiliated to", value: (c) => c.affiliatedTo || <Muted /> },
+      { label: "Website", value: (c) => c.website || <Muted /> },
       { label: "Campus size", value: (c) => (c.campusAcres ? `${c.campusAcres} acres` : <Muted />), score: (c) => c.campusAcres ?? -1 },
     ],
   },
@@ -90,7 +93,7 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
       {
         label: "Fees per year",
         value: (c) => feeLabel(c),
-        score: (c) => (c.basic ? -1e9 : -feeRange(c)[0]),
+        score: (c) => (c.basic || !feeRange(c)[0] ? -1e9 : -feeRange(c)[0]),
       },
       { label: "Average package", value: (c) => (c.avgPackage ? `₹${c.avgPackage} LPA` : <Muted />), score: (c) => c.avgPackage ?? -1 },
       { label: "Median package", value: (c) => (c.medianPackage ? `₹${c.medianPackage} LPA` : <Muted />), score: (c) => c.medianPackage ?? -1 },

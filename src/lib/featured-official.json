@@ -1,0 +1,107 @@
+{
+ "iim-ahmedabad": {
+  "nirf": 1,
+  "rankNote": "NIRF 2025, Management",
+  "medianPackage": 31,
+  "intake": [
+   "PG 2-year: sanctioned intake 455, 896 students enrolled"
+  ]
+ },
+ "iim-bangalore": {
+  "nirf": 2,
+  "rankNote": "NIRF 2025, Management",
+  "intake": [
+   "PG 2-year: sanctioned intake 598, 1109 students enrolled"
+  ]
+ },
+ "iit-bombay": {
+  "nirf": 3,
+  "rankNote": "NIRF 2025, Overall",
+  "intake": [
+   "UG 4-year: sanctioned intake 1161, 5164 students enrolled",
+   "UG 5-year: sanctioned intake 80",
+   "PG 2-year: sanctioned intake 1558"
+  ]
+ },
+ "iit-delhi": {
+  "nirf": 2,
+  "rankNote": "NIRF 2025, Engineering",
+  "intake": [
+   "UG 4-year: sanctioned intake 1113, 4337 students enrolled",
+   "UG 5-year: sanctioned intake 116, 543 students enrolled",
+   "PG 2-year: sanctioned intake 1668, 2319 students enrolled"
+  ]
+ },
+ "iit-madras": {
+  "nirf": 1,
+  "rankNote": "NIRF 2025, Overall",
+  "intake": [
+   "UG 4-year: sanctioned intake 961, 3589 students enrolled",
+   "UG 5-year: sanctioned intake 93, 1186 students enrolled",
+   "PG 1-year: sanctioned intake 172, 172 students enrolled",
+   "PG 2-year: sanctioned intake 916, 1859 students enrolled",
+   "PG 3-year: sanctioned intake 245, 507 students enrolled"
+  ]
+ },
+ "aiims-delhi": {
+  "nirf": 1,
+  "rankNote": "NIRF 2025, Medical",
+  "intake": [
+   "UG 3-year: sanctioned intake 56, 147 students enrolled",
+   "UG 4-year: sanctioned intake 128, 460 students enrolled",
+   "UG 5-year: sanctioned intake 132, 773 students enrolled",
+   "PG 1-year: sanctioned intake 51, 51 students enrolled",
+   "PG 2-year: sanctioned intake 103, 195 students enrolled",
+   "PG 3-year: sanctioned intake 693, 1613 students enrolled",
+   "PG 6-year: sanctioned intake 11, 31 students enrolled"
+  ]
+ },
+ "nlsiu-bangalore": {
+  "nirf": 1,
+  "rankNote": "NIRF 2025, Law",
+  "intake": [
+   "UG 5-year: sanctioned intake 240, 736 students enrolled",
+   "PG 1-year: sanctioned intake 100, 97 students enrolled",
+   "PG 3-year: sanctioned intake 120, 131 students enrolled"
+  ]
+ },
+ "nalsar-hyderabad": {
+  "nirf": 3,
+  "rankNote": "NIRF 2025, Law",
+  "intake": [
+   "UG 5-year: sanctioned intake 161, 704 students enrolled",
+   "PG 1-year: sanctioned intake 82, 69 students enrolled",
+   "PG 2-year: sanctioned intake 60, 45 students enrolled"
+  ]
+ },
+ "srcc-delhi": {
+  "nirf": 18,
+  "rankNote": "NIRF 2025, College",
+  "intake": [
+   "UG 4-year: sanctioned intake 781, 2210 students enrolled",
+   "PG 2-year: sanctioned intake 126, 230 students enrolled"
+  ]
+ },
+ "hindu-college-delhi": {
+  "nirf": 1,
+  "rankNote": "NIRF 2025, College",
+  "intake": [
+   "UG 4-year: sanctioned intake 956, 2026 students enrolled",
+   "PG 2-year: sanctioned intake 241, 453 students enrolled"
+  ]
+ },
+ "xlri-jamshedpur": {
+  "nirf": 10,
+  "rankNote": "NIRF 2025, Management",
+  "intake": [
+   "PG 2-year: sanctioned intake 480, 799 students enrolled"
+  ]
+ },
+ "sibm-pune": {
+  "nirf": 11,
+  "rankNote": "NIRF 2025, Management",
+  "intake": [
+   "PG 2-year: sanctioned intake 300, 599 students enrolled"
+  ]
+ }
+}
