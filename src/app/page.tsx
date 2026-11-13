@@ -139,16 +139,18 @@ function CounsellorCard({ c, i, float }: { c: (typeof COUNSELLORS)[number]; i: n
           <article className={`rounded-3xl bg-white p-1.5 text-ink shadow-[0_1rem_2rem_-1rem_rgb(0_0_0/0.5)] ${float ? (i % 2 === 0 ? "animate-float" : "animate-float-late") : ""}`}>
             <div className="relative aspect-[5/4] overflow-hidden rounded-[1.1rem] bg-sand">
               <Image src={c.photo} alt={c.name} fill quality={90} sizes="(min-width:1024px) 200px, 45vw" className="object-cover object-top" />
-              <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-xs font-bold text-white backdrop-blur-sm">
-                <Star className="size-3 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
-              </span>
+              {c.rating && (
+                <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-xs font-bold text-white backdrop-blur-sm">
+                  <Star className="size-3 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
+                </span>
+              )}
             </div>
             <div className="px-1.5 pt-2 pb-0.5">
               <p className="flex items-center gap-1.5 text-[1.0625rem] leading-tight font-bold">
                 <span className="truncate">{c.name}</span>
                 <BadgeCheck className="size-4 shrink-0 fill-teal text-white" aria-label="Verified" />
               </p>
-              <p className="mt-0.5 truncate text-sm text-muted">{c.focus.join(", ")}</p>
+              <p className="mt-0.5 truncate text-sm text-muted">{c.focus.length ? c.focus.join(", ") : (c.role ?? "Admission counsellor")}</p>
               <span className="mt-1.5 inline-block text-sm font-semibold text-marigold-600">{c.years} years experience</span>
               <LeadButton
                 source="home-counsellor"

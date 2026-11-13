@@ -778,24 +778,29 @@ export const EXAMS: Exam[] = [
 export interface Counsellor {
   name: string;
   initials: string;
-  role: string;
+  /** Optional until the client shares it; the UI falls back to "Admission counsellor". */
+  role?: string;
   focus: Stream[];
   languages: string[];
   years: number;
-  students: number;
-  rating: number;
+  /** Optional: hidden in the UI when not provided, never guessed. */
+  students?: number;
+  rating?: number;
   tone: string;
+  /** Head-and-shoulders crop, used on the home page and in small spots. */
   photo: string;
+  /** The whole original photo, shown nearly uncropped on the counselling page. */
+  photoFull?: string;
 }
 
 // Sample counsellors for the demo. Replace with the client's real team before launch; sections that show them hide themselves if this list is empty.
 export const COUNSELLORS: Counsellor[] = [
-  { name: "Ritu Malhotra", initials: "RM", role: "Senior admission counsellor", focus: ["Management", "Commerce"], languages: ["Hindi", "English", "Punjabi"], years: 11, students: 3200, rating: 4.9, tone: "#0D7377", photo: "/images/c-ritu.jpg" },
-  { name: "Arvind Iyer", initials: "AI", role: "Engineering admissions lead", focus: ["Engineering", "Computer Applications"], languages: ["English", "Tamil", "Hindi"], years: 9, students: 2750, rating: 4.9, tone: "#EA7300", photo: "/images/c-arvind.jpg" },
-  { name: "Dr. Farah Khan", initials: "FK", role: "Medical & NEET counsellor", focus: ["Medical", "Pharmacy"], languages: ["Hindi", "English", "Urdu"], years: 13, students: 4100, rating: 5.0, tone: "#E0475B", photo: "/images/c-farah.jpg" },
-  { name: "Sneha Kulkarni", initials: "SK", role: "Design & creative careers", focus: ["Design", "Arts"], languages: ["Marathi", "Hindi", "English"], years: 7, students: 1380, rating: 4.8, tone: "#C2410C", photo: "/images/c-sneha-new.jpg" },
-  { name: "Abhishek Rao", initials: "AR", role: "Law admissions counsellor", focus: ["Law"], languages: ["Telugu", "English", "Hindi"], years: 8, students: 1600, rating: 4.8, tone: "#7C3AED", photo: "/images/c-abhishek-2.jpg" },
-  { name: "Priyanka Das", initials: "PD", role: "PG & study-gap specialist", focus: ["Science", "Arts", "Management"], languages: ["Bengali", "Assamese", "English", "Hindi"], years: 10, students: 2240, rating: 4.9, tone: "#0E7490", photo: "/images/c-priyanka-new.png" },
+  { name: "Riya Singh", initials: "RS", focus: [], languages: ["Hindi", "English"], years: 4, tone: "#0D7377", photo: "/images/c-riya-card.jpg", photoFull: "/images/c-riya.jpg" },
+  { name: "Shankar", initials: "S", focus: [], languages: ["Hindi", "English"], years: 4, tone: "#EA7300", photo: "/images/c-shankar-card.jpg", photoFull: "/images/c-shankar.jpg" },
+  { name: "Abhishek Sharma", initials: "AS", focus: [], languages: ["Hindi", "English"], years: 6, tone: "#E0475B", photo: "/images/c-abhishek-sharma-card.jpg", photoFull: "/images/c-abhishek-sharma.jpg" },
+  { name: "Khushi Kushwah", initials: "KK", focus: [], languages: ["Hindi", "English"], years: 2, tone: "#C2410C", photo: "/images/c-khushi-card.jpg", photoFull: "/images/c-khushi.jpg" },
+  { name: "Amandeep Singh", initials: "AS", focus: [], languages: ["English", "Punjabi", "Hindi"], years: 4, tone: "#7C3AED", photo: "/images/c-amandeep-card.jpg", photoFull: "/images/c-amandeep.jpg" },
+  { name: "Monu Attri", initials: "MA", focus: [], languages: ["Hindi", "English"], years: 2, tone: "#0E7490", photo: "/images/c-monu-card.jpg", photoFull: "/images/c-monu.jpg" },
 ];
 
 export interface Testimonial {
