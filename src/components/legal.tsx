@@ -43,7 +43,7 @@ export function LegalPage({
   return (
     <Container className="py-10 sm:py-14">
       <header className="border-b border-line pb-8">
-        <h1 className="text-[2.25rem] font-extrabold sm:text-[3.25rem]">{title}</h1>
+        <h1 className="t-h1">{title}</h1>
         <p className="mt-2 text-sm text-muted">Last updated: {updated}</p>
         <p className="mt-5 max-w-3xl text-lg leading-relaxed text-ink-80">{intro}</p>
       </header>
@@ -54,7 +54,7 @@ export function LegalPage({
         <div className="min-w-0">
           {sections.map((s, i) => (
             <section key={s.title} id={`s${i + 1}`} className="scroll-mt-28 border-b border-line py-8 first:pt-0 last:border-b-0">
-              <h2 className="flex gap-3 text-[1.375rem] font-extrabold sm:text-[1.625rem]">
+              <h2 className="t-h3 flex gap-3">
                 <span className="text-marigold">{i + 1}.</span>
                 {s.title}
               </h2>

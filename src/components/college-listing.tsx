@@ -94,9 +94,9 @@ export function CollegeListing({
 
         {pages > 1 && (
           <nav className="mt-8 flex items-center justify-center gap-3" aria-label="Pages">
-            {page > 1 && <Link href={href(page - 1)} className="rounded-full border border-line px-5 py-2 text-sm font-semibold hover:bg-white">Previous</Link>}
+            {page > 1 && <Link href={href(page - 1)} className="inline-flex min-h-11 items-center rounded-full border border-line px-5 py-2 text-sm font-semibold hover:bg-white">Previous</Link>}
             <span className="text-sm text-muted">{page} / {pages}</span>
-            {page < pages && <Link href={href(page + 1)} className="rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white hover:bg-brand/90">Next</Link>}
+            {page < pages && <Link href={href(page + 1)} className="inline-flex min-h-11 items-center rounded-full bg-brand px-5 py-2 text-sm font-semibold text-white hover:bg-brand/90">Next</Link>}
           </nav>
         )}
       </Container>

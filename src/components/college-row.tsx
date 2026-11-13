@@ -22,14 +22,17 @@ export function CollegeRow({ college }: { college: College }) {
   return (
     <article className="rounded-xl bg-white p-5 ring-1 ring-line transition hover:ring-ink/25 sm:p-6">
       <div className="flex min-w-0 flex-col">
+        <div className="-mt-2 -mr-3 mb-1 flex justify-end sm:-mt-3 sm:-mr-3.5">
+          <CompareToggle college={college} />
+        </div>
         <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
-          <h2 className="font-sans text-xl leading-snug font-bold tracking-normal">
+          <h2 className="t-h3 font-sans tracking-normal">
             <Link href={`/colleges/${college.slug}`} className="hover:text-royal">
               {college.name}
             </Link>
           </h2>
           {college.rankNote && (
-            <span className="rounded-md bg-royal-50 px-2.5 py-1 text-[0.8125rem] font-bold text-royal">
+            <span className="text-[0.875rem] font-bold text-royal">
               {college.nirf ? `#${college.nirf} ${college.rankNote}` : college.rankNote}
             </span>
           )}
@@ -60,11 +63,11 @@ export function CollegeRow({ college }: { college: College }) {
         <div className="mt-auto flex flex-wrap items-center gap-2 pt-4">
           <button
             onClick={() => open({ source: "row-apply", title: "Apply with a counsellor's help", college: college.name })}
-            className="rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-white hover:bg-royal"
+            className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white hover:bg-royal lg:py-2.5"
           >
             Apply now
           </button>
-          <Link href={`/colleges/${college.slug}`} className="rounded-full px-4 py-2.5 text-sm font-semibold ring-1 ring-line hover:ring-ink">
+          <Link href={`/colleges/${college.slug}`} className="rounded-full px-4 py-3 text-sm font-semibold ring-1 ring-line hover:ring-ink lg:py-2.5">
             View college
           </Link>
           <button
@@ -73,9 +76,6 @@ export function CollegeRow({ college }: { college: College }) {
           >
             Brochure
           </button>
-          <div className="ml-auto">
-            <CompareToggle college={college} />
-          </div>
         </div>
       </div>
     </article>

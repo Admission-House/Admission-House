@@ -30,9 +30,9 @@ export default function CounsellingPage() {
       <section className="relative overflow-hidden bg-ink text-white">
         <Image src="/images/study-table.jpg" alt="" fill priority sizes="100vw" className="object-cover opacity-25" />
         <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/90 to-ink/60" aria-hidden />
-        <Container className="relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1fr] lg:gap-16">
+        <Container className="relative grid items-center gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1fr] lg:items-start lg:gap-16 lg:py-8">
           <div>
-            <h1 className="text-[2.25rem] font-extrabold sm:text-[3.375rem]">Talk to an admission counsellor before you decide</h1>
+            <h1 className="t-h1">Talk to an admission counsellor before you decide</h1>
             <p className="mt-5 max-w-lg text-lg text-white/70">
               One counsellor, assigned to you from your first call to your admission letter. Free for
               students and parents.
@@ -54,20 +54,20 @@ export default function CounsellingPage() {
               </figure>
             )}
           </div>
-          <div className="rounded-[var(--radius-panel)] bg-white p-6 text-ink shadow-float sm:p-8">
-            <h2 className="mb-6 text-2xl font-semibold">Book your free session</h2>
+          <div className="rounded-[var(--radius-panel)] bg-white p-4 text-ink shadow-float max-sm:-mx-2.5 sm:p-8">
+            <h2 className="t-h3 mb-4 sm:mb-6">Book your free session</h2>
             <LeadForm context={{ source: "counselling-hero" }} submitLabel="Book free session" />
           </div>
         </Container>
       </section>
 
-      <section className="py-20 sm:py-24">
+      <section className="section-y">
         <Container>
           <SectionHeading title="What your counsellor helps with" intro="Everything between “which course?” and “seat confirmed”." />
           <ul className="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
             {HELP.map((h) => (
               <li key={h.t} data-reveal className="border-t-2 border-ink pt-5">
-                <h3 className="font-sans text-lg font-bold tracking-normal">{h.t}</h3>
+                <h3 className="t-h4 font-sans tracking-normal">{h.t}</h3>
                 <p className="mt-1.5 text-muted">{h.d}</p>
               </li>
             ))}
@@ -76,7 +76,7 @@ export default function CounsellingPage() {
       </section>
 
       {COUNSELLORS.length > 0 && (
-        <section className="bg-white py-20 sm:py-24">
+        <section className="bg-white section-y">
           <Container>
             <SectionHeading title="Meet our counsellors" intro="Pick someone who speaks your language and knows your field." />
             <CounsellorGrid />
@@ -84,10 +84,10 @@ export default function CounsellingPage() {
         </section>
       )}
 
-      <section className="py-10 sm:py-14">
+      <section className="section-y">
         <Container>
           <div className="mx-auto max-w-[55rem]">
-          <h2 className="mb-8 text-center text-[1.875rem] font-semibold sm:text-[2.5rem]">Before you book</h2>
+          <h2 className="t-h2 mb-6 text-center sm:mb-8">Before you book</h2>
           <JsonLd
             data={[
               {

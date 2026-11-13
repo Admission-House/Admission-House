@@ -101,7 +101,7 @@ export function LeadForm({
         <span className="grid size-12 place-items-center rounded-full bg-mint-100 text-mint">
           <CheckCircle2 className="size-6" />
         </span>
-        <h3 className={`text-2xl font-semibold ${dark ? "text-white" : "text-ink"}`}>
+        <h3 className={`t-h3 ${dark ? "text-white" : "text-ink"}`}>
           Thanks, {firstName}. Your request is in.
         </h3>
         <p className={dark ? "text-white/75" : "text-muted"}>

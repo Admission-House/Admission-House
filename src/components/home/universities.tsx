@@ -44,44 +44,43 @@ export function Universities() {
   const cards = FEATURED.map(([slug, name, initials]) => ({ d: bySlug.get(slug), name, initials, logo: findLogo(slug) })).filter((x) => !!x.d);
 
   return (
-    <section className="py-10 sm:py-14">
+    <section className="section-y">
       <Container>
-        <div className="mb-6 flex flex-col gap-4 sm:mb-8 sm:flex-row sm:items-end sm:justify-between">
+        <div className="mb-6 flex flex-col gap-4 sm:mb-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <p className="text-lg font-medium text-ink-80 sm:text-xl">Choose your favourite university</p>
-            <h2 className="mt-1 text-[1.75rem] font-extrabold sm:text-[2.5rem]">
+            <h2 className="t-h2">
               Explore some <span className="text-marigold">popular universities</span>
             </h2>
           </div>
           <Link
             href="/universities"
-            className="group inline-flex w-fit items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-royal"
+            className="group inline-flex min-h-11 w-fit shrink-0 items-center gap-2 rounded-full bg-brand px-5 text-sm font-semibold whitespace-nowrap text-white transition hover:bg-royal"
           >
             View all {total.toLocaleString("en-IN")}+ universities
             <ArrowRight className="size-4 transition group-hover:translate-x-0.5" aria-hidden />
           </Link>
         </div>
 
-        <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <ul className="grid grid-cols-3 gap-2.5 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 xl:grid-cols-6">
           {cards.map(({ d, name, initials, logo }) => (
             <li key={d!.s}>
               <Link
                 href={`/colleges/${d!.s}`}
                 className="group relative flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-lift ring-1 ring-line"
               >
-                <span className="absolute top-0 left-0 rounded-br-lg bg-royal-50 px-2.5 py-1.5 text-xs font-bold text-brand">{d!.k.length} Courses</span>
+                <span className="absolute top-0 left-0 rounded-br-lg bg-royal-50 px-1.5 py-1 text-[0.625rem] font-bold text-brand sm:px-2.5 sm:py-1.5 sm:text-xs">{d!.k.length} Courses</span>
 
-                <div className="grid h-28 place-items-center px-5 pt-6">
+                <div className="grid h-20 place-items-center px-2 pt-5 sm:h-28 sm:px-5 sm:pt-6">
                   {logo ? (
-                    <Image src={logo} alt={`${name} logo`} width={160} height={80} unoptimized={logo.endsWith(".svg")} className="max-h-[4.5rem] w-auto max-w-full object-contain" />
+                    <Image src={logo} alt={`${name} logo`} width={160} height={80} unoptimized={logo.endsWith(".svg")} className="max-h-11 w-auto max-w-full object-contain sm:max-h-[4.5rem]" />
                   ) : (
-                    <span className="grid size-16 place-items-center rounded-full bg-brand font-display text-[0.9375rem] font-extrabold tracking-wide text-white ring-4 ring-royal-50">
+                    <span className="grid size-11 place-items-center rounded-full bg-brand font-display text-xs sm:size-16 sm:text-[0.9375rem] font-extrabold tracking-wide text-white ring-4 ring-royal-50">
                       {initials}
                     </span>
                   )}
                 </div>
 
-                <p className="px-4 pt-1 pb-5 text-center text-[0.9375rem] leading-snug font-semibold text-ink">{name}</p>
+                <p className="px-1.5 pt-1 pb-3 text-center text-xs leading-snug font-semibold text-ink sm:px-4 sm:pb-5 sm:text-[0.9375rem]">{name}</p>
               </Link>
             </li>
           ))}

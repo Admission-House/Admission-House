@@ -31,7 +31,7 @@ export function CollegeCover({
 export function Monogram({ college, size = "md" }: { college: College; size?: "sm" | "md" | "lg" }) {
   const first = college.short.split(" ")[0];
   const letters =
-    first.length <= 4
+    first.length >= 2 && first.length <= 4
       ? first
       : college.name
           .split(" ")

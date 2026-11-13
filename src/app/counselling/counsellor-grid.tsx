@@ -24,7 +24,7 @@ export function CounsellorGrid() {
           </button>
         ))}
       </div>
-      <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-3 sm:grid-cols-2 sm:gap-x-4 lg:gap-x-6 lg:gap-y-12 lg:grid-cols-3">
         {list.map((c, i) => (
           <CounsellorCard key={c.name} c={c} index={i} />
         ))}

@@ -69,7 +69,7 @@ export function OnlineCard() {
   }, [index, goTo]);
 
   return (
-    <div className="relative mx-auto w-full max-w-xl lg:max-w-[40rem]" aria-label="Online courses we offer">
+    <div className="relative w-full min-w-0 lg:mx-auto lg:max-w-[40rem]" aria-label="Online courses we offer">
       <div className="relative">
       <div ref={trackRef} onScroll={onScroll} className="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain">
         {items.map((s, n) => {
@@ -79,14 +79,14 @@ export function OnlineCard() {
             <div
               key={n}
               aria-hidden={n >= total}
-              className="relative flex h-[25rem] w-full shrink-0 snap-start flex-col overflow-hidden rounded-[2rem] border border-ink/10 bg-white sm:h-[clamp(24rem,54svh,29rem)] short:sm:h-[clamp(21.5rem,56svh,24rem)]"
+              className="relative flex w-full shrink-0 snap-start flex-col overflow-hidden rounded-3xl border border-ink/10 bg-white sm:rounded-[2rem] lg:min-h-[clamp(24rem,54svh,29rem)] short:lg:min-h-[clamp(21.5rem,56svh,24rem)]"
             >
               {/* Big faint icon in the corner */}
               <st.Icon className={`pointer-events-none absolute -top-6 -right-6 size-48 opacity-[0.07] ${st.mark}`} strokeWidth={1.25} aria-hidden />
 
-              <div className="relative flex flex-1 flex-col px-8 pt-8 pb-8 short:px-6 short:pt-5 short:pb-5">
+              <div className="relative flex flex-1 flex-col px-5 pt-6 pb-6 sm:px-8 sm:pt-7 sm:pb-7 sm:max-lg:grid sm:max-lg:grid-cols-2 sm:max-lg:content-start sm:max-lg:gap-x-10 lg:pt-8 lg:pb-8 short:px-6 short:pt-5 short:pb-5">
                 {/* Level and position */}
-                <div className="flex items-center justify-between">
+                <div className="flex items-center justify-between sm:max-lg:col-span-2">
                   <span className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs font-bold tracking-wider uppercase ${st.tag}`}>
                     <st.Icon className="size-4" aria-hidden /> {s.level}
                   </span>
@@ -95,11 +95,11 @@ export function OnlineCard() {
                   </span>
                 </div>
 
-                <h3 className="mt-6 short:mt-3 font-display text-[3.75rem] short:text-[2.75rem] leading-none font-extrabold text-brand">{s.name}</h3>
-                <p className="mt-2 text-lg short:text-base text-muted">{s.full}</p>
-                <span className={`mt-5 short:mt-2 block h-1 w-14 rounded-full ${st.bar}`} aria-hidden />
+                <h3 className="mt-5 short:mt-3 font-display t-h2 sm:mt-5 sm:max-lg:col-start-1 lg:mt-6 leading-none text-brand">{s.name}</h3>
+                <p className="mt-2 text-base sm:text-lg sm:max-lg:col-start-1 short:text-base text-muted">{s.full}</p>
+                <span className={`mt-5 short:mt-2 block h-1 w-14 rounded-full sm:max-lg:col-start-1 ${st.bar}`} aria-hidden />
 
-                <ul className="mt-5 short:mt-2.5 grid gap-3 short:gap-1.5 text-[1.0625rem] short:text-base font-medium text-ink-80">
+                <ul className="mt-4 mb-5 short:mt-2.5 grid gap-2.5 sm:mt-5 sm:mb-0 sm:gap-3 sm:max-lg:col-start-2 sm:max-lg:row-span-3 sm:max-lg:row-start-2 sm:max-lg:mt-5 sm:max-lg:content-center short:gap-1.5 text-base sm:text-[1.0625rem] short:text-base font-medium text-ink-80">
                   {s.points.map((p) => (
                     <li key={p} className="flex items-center gap-2.5">
                       <span className="grid size-5 shrink-0 place-items-center rounded-full bg-teal/20 text-brand" aria-hidden>
@@ -113,7 +113,7 @@ export function OnlineCard() {
                   source="online-hero-card"
                   title={`Ask about online ${s.name}`}
                   course={`${s.name} (online)`}
-                  className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 short:py-2.5 text-[0.9375rem] font-semibold text-white"
+                  className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 short:py-2.5 text-[0.9375rem] font-semibold text-white sm:max-lg:col-span-2 sm:max-lg:mt-6"
                 >
                   Enquire now <ArrowRight className="size-4" aria-hidden />
                 </LeadButton>

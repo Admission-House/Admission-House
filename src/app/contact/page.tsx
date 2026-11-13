@@ -17,23 +17,23 @@ const CHANNELS = [
 
 export default function ContactPage() {
   return (
-    <Container className="grid gap-10 py-12 sm:py-16 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+    <Container className="grid grid-cols-[minmax(0,1fr)] gap-10 py-10 sm:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-16">
       <div>
-        <h1 className="text-[2.25rem] font-extrabold sm:text-[3.5rem]">We pick up the phone.</h1>
-        <p className="mt-4 max-w-md text-lg text-muted">
+        <h1 className="t-h1">Get in touch with us</h1>
+        <p className="mt-3 max-w-md text-lg text-muted">
           Questions about a college, an exam or your options? Reach us any way you like and a counsellor
           will reply within 30 minutes during working hours.
         </p>
-        <ul className="mt-8 grid gap-3 sm:grid-cols-2">
+        <ul className="mt-5 grid gap-3 sm:grid-cols-2">
           {CHANNELS.map((c) => (
-            <li key={c.t}>
+            <li key={c.t} className={c.t === "Email" ? "sm:col-span-2" : undefined}>
               <a href={c.href} className="flex h-full items-start gap-3 rounded-[var(--radius-card)] bg-white p-4 ring-1 ring-line transition hover:ring-royal">
                 <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-royal-50 text-royal">
                   <c.icon className="size-5" />
                 </span>
                 <span className="min-w-0">
                   <span className="block text-sm text-muted">{c.t}</span>
-                  <span className="block truncate font-semibold">{c.v}</span>
+                  <span className="block break-all font-semibold">{c.v}</span>
                 </span>
               </a>
             </li>
@@ -50,9 +50,9 @@ export default function ContactPage() {
           </p>
         </div>
       </div>
-      <div className="h-fit rounded-[var(--radius-panel)] bg-white p-6 shadow-lift ring-1 ring-line sm:p-8">
-        <h2 className="text-2xl font-semibold">Request a call back</h2>
-        <p className="mt-1 mb-6 text-muted">Tell us a little about what you&apos;re looking for.</p>
+      <div className="h-fit rounded-[var(--radius-panel)] bg-white p-4 shadow-lift lg:-mt-8 ring-1 ring-line max-sm:-mx-2.5 sm:p-8">
+        <h2 className="t-h3">Request a call back</h2>
+        <p className="mt-1 mb-4 text-muted sm:mb-6">Tell us a little about what you&apos;re looking for.</p>
         <LeadForm context={{ source: "contact-page" }} />
       </div>
     </Container>

@@ -18,9 +18,9 @@ export default function CoursesPage() {
       <Suspense>
         <CourseExplorer />
       </Suspense>
-      <section className="pb-20">
+      <section className="section-pb">
         <Container>
-          <h2 className="text-2xl font-bold sm:text-[1.75rem]">Browse all courses</h2>
+          <h2 className="t-h2">Browse all courses</h2>
           <p className="mt-1 text-muted">Pick a course to see every college that offers it.</p>
           <div className="mt-8 grid gap-10">
             {COURSE_GROUPS.map((g) => {

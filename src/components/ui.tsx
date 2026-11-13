@@ -24,6 +24,7 @@ export function SectionHeading({
   align = "left",
   tone = "light",
   compact = false,
+  introClass = "",
 }: {
   title: React.ReactNode;
   intro?: React.ReactNode;
@@ -32,16 +33,17 @@ export function SectionHeading({
   tone?: "light" | "dark";
   /** Less space under the heading, for sections whose content starts straight away. */
   compact?: boolean;
+  introClass?: string;
 }) {
   return (
     <div
-      className={`flex flex-col gap-4 ${compact ? "mb-4 sm:mb-5" : "mb-6 sm:mb-8"} ${
-        align === "center" ? "items-center text-center" : "sm:flex-row sm:items-end sm:justify-between"
+      className={`flex flex-col gap-4 ${compact ? "mb-4 sm:mb-5" : "mb-5 sm:mb-6 lg:mb-8"} ${
+        align === "center" ? "items-center text-center" : "sm:flex-row sm:flex-wrap sm:items-end sm:justify-between"
       }`}
     >
       <div className="max-w-2xl">
-        <h2 className={`text-[2rem] font-bold sm:text-[2.75rem] ${tone === "dark" ? "text-white" : "text-ink"}`}>{title}</h2>
-        {intro && <p className={`mt-3 text-[1.0625rem] ${tone === "dark" ? "text-white/70" : "text-muted"}`}>{intro}</p>}
+        <h2 className={`t-h2 ${tone === "dark" ? "text-white" : "text-ink"}`}>{title}</h2>
+        {intro && <p className={`t-lead mt-2.5 ${tone === "dark" ? "text-white/70" : "text-muted"} ${introClass}`}>{intro}</p>}
       </div>
       {action}
     </div>
@@ -52,7 +54,7 @@ export function TextLink({ href, children }: { href: string; children: React.Rea
   return (
     <Link
       href={href}
-      className="shrink-0 text-[0.9375rem] font-semibold text-ink underline decoration-ink/25 decoration-2 underline-offset-[0.375rem] transition hover:decoration-marigold"
+      className="inline-flex min-h-11 shrink-0 items-center text-[0.9375rem] font-semibold text-ink underline decoration-ink/25 decoration-2 underline-offset-[0.375rem] transition hover:decoration-marigold"
     >
       {children}
     </Link>

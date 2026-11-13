@@ -27,7 +27,21 @@ export function Faq({ items, defaultOpen = 0 }: { items: { q: string; a: string 
                 id={`${id}-q${i}`}
                 aria-expanded={isOpen}
                 aria-controls={`${id}-a${i}`}
-                onClick={() => setOpen(isOpen ? null : i)}
+                onClick={(e) => {
+                  // Keep the clicked question fixed on screen while the previously
+                  // open answer (possibly above it) collapses, so the new answer
+                  // only ever grows downward.
+                  const btn = e.currentTarget;
+                  const startTop = btn.getBoundingClientRect().top;
+                  const t0 = performance.now();
+                  const hold = (now: number) => {
+                    const drift = btn.getBoundingClientRect().top - startTop;
+                    if (Math.abs(drift) > 0.5) window.scrollBy({ top: drift, behavior: "instant" });
+                    if (now - t0 < 350) requestAnimationFrame(hold);
+                  };
+                  requestAnimationFrame(hold);
+                  setOpen(isOpen ? null : i);
+                }}
                 className="group flex w-full items-center gap-4 px-5 py-5 text-left sm:gap-5 sm:px-6"
               >
                 <span

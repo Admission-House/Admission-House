@@ -66,7 +66,7 @@ export function HeroFinder() {
     <form
       onSubmit={go}
       aria-label="Find colleges"
-      className="grid grid-cols-2 rounded-xl bg-white p-1.5 shadow-float [text-shadow:none]max-lg:[&>div:nth-child(-n+2)]:border-b max-lg:[&>div:nth-child(-n+2)]:border-line max-lg:[&>div:nth-child(odd)]:border-r max-lg:[&>div:nth-child(odd)]:border-line lg:flex lg:items-center lg:divide-x lg:divide-line lg:rounded-full lg:p-2"
+      className="grid grid-cols-2 rounded-xl bg-white p-1.5 shadow-float max-lg:shadow-none max-lg:ring-1 max-lg:ring-line [text-shadow:none]max-lg:[&>div:nth-child(-n+2)]:border-b max-lg:[&>div:nth-child(-n+2)]:border-line max-lg:[&>div:nth-child(odd)]:border-r max-lg:[&>div:nth-child(odd)]:border-line lg:flex lg:items-center lg:divide-x lg:divide-line lg:rounded-full lg:p-2"
     >
       <Field label="Looking for" wide>
         <Select

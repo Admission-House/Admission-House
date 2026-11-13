@@ -59,13 +59,13 @@ export function HeroBanner() {
           />
         ))}
         {/* Neutral dark shade, only strong enough behind the text, so the photo keeps its own colours */}
-        <div className="absolute inset-0 bg-black/55 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#031f1e]/90 lg:via-black/62 lg:to-black/5" />
+        <div className="absolute inset-0 max-lg:bg-black/30 bg-black/55 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#031f1e]/90 lg:via-black/62 lg:to-black/5" />
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/45 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/65 to-transparent" />
+        <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-black/65 to-transparent max-lg:h-24" />
       </div>
 
       <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20">
-        <div className="mx-auto flex max-w-[84rem] items-end justify-between gap-4 px-4 pb-5 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[84rem] items-end justify-between gap-4 px-4 pb-1 max-lg:flex-col-reverse max-lg:items-start max-lg:gap-0 sm:px-6 lg:px-8 lg:pb-5">
           <div className="flex gap-2" role="tablist" aria-label="Featured colleges">
             {SLIDES.map((c, i) => (
               <button
@@ -74,7 +74,7 @@ export function HeroBanner() {
                 aria-selected={i === index}
                 aria-label={`Photo ${i + 1}`}
                 onClick={() => setIndex(i)}
-                className="group pointer-events-auto py-2"
+                className="group pointer-events-auto px-0.5 py-3 lg:py-2"
               >
                 <span className={`block h-1 rounded-full transition-all duration-300 ${i === index ? "w-9 bg-teal" : "w-4 bg-white/45 group-hover:bg-white/75"}`} />
               </button>
@@ -83,7 +83,7 @@ export function HeroBanner() {
           {current ? (
           <Link
             href={`/colleges/${current.slug}`}
-            className="group pointer-events-auto inline-flex max-w-[65%] items-center gap-2 rounded-full bg-black/35 py-2 pr-3.5 pl-4 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-black/55"
+            className="group pointer-events-auto inline-flex max-w-[65%] items-center max-lg:max-w-full gap-2 rounded-full bg-black/35 py-2 pr-3.5 pl-4 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-black/55"
           >
             <span className="min-w-0 truncate">
               {current.name}

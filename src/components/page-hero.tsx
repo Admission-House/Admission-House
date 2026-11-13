@@ -21,8 +21,8 @@ export function PageHero({
     <section className="relative">
       <Container wide={wide} className={`relative pt-8 pb-4 sm:pt-10 ${aside ? "grid items-center gap-8 lg:grid-cols-[1.4fr_1fr]" : ""}`}>
         <div className="animate-rise">
-          <h1 className="text-[2.25rem] font-extrabold sm:text-[3rem]">{title}</h1>
-          {intro && <div className="mt-3 max-w-2xl text-[1.0625rem] text-muted">{intro}</div>}
+          <h1 className="t-h1">{title}</h1>
+          {intro && <div className="t-lead mt-3 max-w-2xl text-muted">{intro}</div>}
           {children}
         </div>
         {aside && (

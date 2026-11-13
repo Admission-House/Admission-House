@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Phone, Search, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Clock, Mail, Menu, Phone, Search, X } from "lucide-react";
 import { CITIES, COLLEGES, COURSES, STREAMS } from "@/lib/data";
 import stats from "@/lib/directory-stats.json";
 import { Logo } from "./ui";
@@ -47,8 +47,28 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Freeze the page behind the open menu (also on iOS, where overflow:hidden alone still lets it scroll),
+  // then put it back exactly where it was.
   useEffect(() => {
-    document.body.style.overflow = menu ? "hidden" : "";
+    if (!menu) return;
+    const y = window.scrollY;
+    const startUrl = window.location.pathname + window.location.search;
+    const { body, documentElement: html } = document;
+    const prev = { pos: body.style.position, top: body.style.top, w: body.style.width, ov: html.style.overflow };
+    body.style.position = "fixed";
+    body.style.top = `-${y}px`;
+    body.style.width = "100%";
+    html.style.overflow = "hidden";
+    return () => {
+      body.style.position = prev.pos;
+      body.style.top = prev.top;
+      body.style.width = prev.w;
+      html.style.overflow = prev.ov;
+      // Put the page back where it was only if the menu was closed on the same page. When a menu link
+      // took us to another page, that page must open at its top, not at the old scroll position.
+      if (window.location.pathname + window.location.search === startUrl) window.scrollTo(0, y);
+      else window.scrollTo(0, 0);
+    };
   }, [menu]);
 
   useEffect(() => {
@@ -84,7 +104,21 @@ export function Header() {
     <>
       <div className="bg-brand text-[0.8125rem] text-white/80">
         <div className="mx-auto flex max-w-[84rem] items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-8">
-          <p className="truncate">
+          {/* Phones and tablets: one line that scrolls by itself. Desktop: plain text. */}
+          <div className="min-w-0 flex-1 overflow-hidden lg:hidden">
+            <div className="scroll-left flex w-max [--dur:44s]">
+              {[0, 1, 2, 3].map((n) => (
+                <span key={n} aria-hidden={n > 0} className="flex shrink-0 items-center pr-12 whitespace-nowrap">
+                  <span className="mr-2 inline-block size-1.5 rounded-full bg-teal" />
+                  Admissions for 2027 are open. JEE Main applications close on Nov 22.
+                  <Link href="/exams" tabIndex={n > 0 ? -1 : 0} className="ml-1.5 font-semibold text-white underline-offset-4 hover:underline">
+                    See exam dates
+                  </Link>
+                </span>
+              ))}
+            </div>
+          </div>
+          <p className="hidden truncate lg:block">
             <span className="mr-2 inline-block size-1.5 -translate-y-px rounded-full bg-teal align-middle" />
             Admissions for 2027 are open. JEE Main applications close on Nov 22.{" "}
             <Link href="/exams" className="font-semibold text-white underline-offset-4 hover:underline">
@@ -175,77 +209,71 @@ export function Header() {
       <div className={`fixed inset-0 z-50 lg:hidden ${menu ? "" : "pointer-events-none"}`} aria-hidden={!menu}>
         <div
           onClick={() => setMenu(false)}
-          className={`absolute inset-0 bg-brand/50 backdrop-blur-sm transition-opacity duration-300 ${menu ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 touch-none bg-brand/50 backdrop-blur-sm transition-opacity duration-300 ${menu ? "opacity-100" : "opacity-0"}`}
         />
         <div
           role="dialog"
           aria-modal="true"
           aria-label="Menu"
-          className={`absolute inset-y-2 right-2 flex w-[min(23.75rem,calc(100vw-1rem))] flex-col overflow-hidden rounded-xl bg-white shadow-float transition-transform duration-300 ${
-            menu ? "translate-x-0" : "translate-x-[110%]"
+          className={`absolute inset-y-0 right-0 flex w-full flex-col overflow-hidden bg-white shadow-float transition-transform duration-300 ${
+            menu ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <div className="flex h-[4.5rem] items-center justify-between px-5">
+          <div className="flex h-[4.875rem] shrink-0 items-center justify-between border-b border-line px-4">
             <Logo />
             <button
               onClick={() => setMenu(false)}
               aria-label="Close menu"
               tabIndex={menu ? 0 : -1}
-              className="grid size-11 place-items-center rounded-full bg-mint-soft"
+              className="grid size-11 place-items-center rounded-full bg-mint-soft text-brand"
             >
               <X className="size-5" />
             </button>
           </div>
-          <nav aria-label="Mobile" className="flex-1 thin-scroll overflow-y-auto px-3 pb-3">
-            <ul className="grid gap-1">
+          <nav aria-label="Mobile" className="flex flex-1 flex-col thin-scroll overflow-y-auto overscroll-contain">
+            <ul className="flex flex-1 flex-col">
               {[{ href: "/", label: "Home" }, ...NAV, { href: "/contact", label: "Contact" }].map((item) => {
                 const active = item.href === "/" ? pathname === "/" : isActive(item.href);
                 return (
-                  <li key={item.href}>
+                  <li key={item.href} className="flex flex-1 flex-col border-b border-line">
                     <Link
                       href={item.href}
                       tabIndex={menu ? 0 : -1}
-                      className={`flex items-center justify-between rounded-xl px-4 py-3.5 font-display text-xl font-semibold ${
-                        active ? "bg-brand text-white" : "text-brand hover:bg-mint-soft"
+                      aria-current={active ? "page" : undefined}
+                      className={`flex min-h-14 flex-1 items-center border-l-[3px] px-5 text-[1.125rem] font-semibold ${
+                        active ? "border-teal bg-mint-soft text-brand" : "border-transparent text-ink-80 active:bg-paper"
                       }`}
                     >
                       {item.label}
-                      {active && <span className="size-1.5 rounded-full bg-sun" />}
                     </Link>
                   </li>
                 );
               })}
             </ul>
-            <p className="mt-6 px-4 text-sm font-semibold text-muted">Popular fields</p>
-            <ul className="mt-3 flex flex-wrap gap-2 px-3">
-              {STREAMS.slice(0, 6).map((s) => (
-                <li key={s}>
-                  <Link
-                    href={`/colleges?stream=${encodeURIComponent(s)}`}
-                    tabIndex={menu ? 0 : -1}
-                    className="inline-block rounded-full bg-mint-soft px-3.5 py-2 text-sm font-semibold text-brand"
-                  >
-                    {s}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-auto grid gap-2.5 px-5 py-5 text-sm text-muted">
+              <p className="flex items-center gap-2.5">
+                <Clock className="size-4 shrink-0 text-royal" aria-hidden /> {SITE.hours}
+              </p>
+              <a href={`mailto:${SITE.email}`} tabIndex={menu ? 0 : -1} className="flex items-center gap-2.5">
+                <Mail className="size-4 shrink-0 text-royal" aria-hidden /> {SITE.email}
+              </a>
+            </div>
           </nav>
-          <div className="grid gap-2 border-t border-line p-4">
+          <div className="grid shrink-0 gap-2 border-t border-line p-4">
             <button
               tabIndex={menu ? 0 : -1}
               onClick={() => {
                 setMenu(false);
                 open({ source: "mobile-menu" });
               }}
-              className="rounded-full bg-brand py-3.5 font-semibold text-white"
+              className="min-h-12 rounded-full bg-brand px-6 font-semibold text-white"
             >
               Talk to a counsellor
             </button>
             <a
               href={telHref}
               tabIndex={menu ? 0 : -1}
-              className="rounded-full py-3.5 text-center font-semibold ring-1 ring-line"
+              className="inline-flex min-h-12 items-center justify-center rounded-full font-semibold text-brand ring-1 ring-line"
             >
               Call {SITE.phoneDisplay}
             </a>
@@ -309,7 +337,7 @@ function SearchBox({ inputRef }: { inputRef: React.RefObject<HTMLInputElement | 
       }}
     >
       <label
-        className={`absolute top-0 right-0 z-10 flex h-11 w-11 cursor-text items-center gap-2.5 overflow-hidden rounded-full bg-white px-[0.8125rem] text-brand ring-1 transition-[width,box-shadow] duration-300 focus-within:w-[min(21.25rem,calc(100vw-2rem))] focus-within:shadow-lift min-[1400px]:w-[14.375rem] min-[1400px]:px-4 min-[1400px]:focus-within:w-[17rem] ${
+        className={`absolute top-0 right-0 z-10 flex h-11 w-11 cursor-text items-center gap-2.5 overflow-hidden rounded-full bg-white px-[0.8125rem] text-brand ring-1 transition-[width,box-shadow] duration-300 focus-within:w-[min(21.25rem,calc(100vw-5.25rem))] focus-within:shadow-lift lg:max-[1399px]:focus-within:w-[min(21.25rem,calc(100vw-2rem))] min-[1400px]:w-[14.375rem] min-[1400px]:px-4 min-[1400px]:focus-within:w-[17.5rem] ${
           open ? "ring-royal" : "ring-line hover:ring-ink/40"
         }`}
       >
@@ -360,7 +388,7 @@ function SearchBox({ inputRef }: { inputRef: React.RefObject<HTMLInputElement | 
       </label>
 
       {open && q.trim() && (
-        <div className="absolute top-[calc(100%+0.5rem)] right-0 z-20 w-[min(23.75rem,calc(100vw-2rem))] overflow-hidden rounded-xl bg-white p-2 shadow-float ring-1 ring-line">
+        <div className="absolute top-[calc(100%+0.5rem)] right-0 max-lg:-right-[3.25rem] z-20 w-[min(23.75rem,calc(100vw-2rem))] overflow-hidden rounded-xl bg-white p-2 shadow-float ring-1 ring-line">
           {results.length > 0 ? (
             <ul>
               {results.map((c, i) => (

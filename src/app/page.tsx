@@ -26,8 +26,9 @@ export default function Home() {
       />
       <LeadPopup />
       <Hero />
+      <MobileFinder />
       <Streams />
-      <section className="bg-sand py-10 sm:py-14">
+      <section className="bg-sand section-y">
         <Container>
           <SectionHeading
             title="Top colleges in India 2027"
@@ -41,14 +42,11 @@ export default function Home() {
       <Exams />
       <ComparePairs />
       {TESTIMONIALS.length > 0 && <Testimonials />}
-      <section className="relative overflow-hidden py-10 sm:py-14">
+      <section className="relative overflow-hidden section-y">
         <Container className="relative">
           <div className="mx-auto max-w-[55rem]">
           <div className="text-center">
-            <h2 className="text-[2rem] font-bold sm:text-[2.75rem]">Frequently asked questions</h2>
-            <p className="mx-auto mt-3 max-w-xl text-[1.0625rem] text-muted">
-              Answers to what students and parents ask us most before admissions.
-            </p>
+            <h2 className="t-h2">Frequently asked questions</h2>
           </div>
           <div className="mt-12">
             <Faq items={FAQS} />
@@ -87,26 +85,35 @@ export default function Home() {
 
 function Hero() {
   return (
-    <section className="relative overflow-hidden bg-neutral-900">
+    <section className="relative h-[15rem] overflow-hidden bg-neutral-900 sm:h-[20rem] lg:h-auto">
       <HeroBanner />
-      <Container className="relative z-10 flex min-h-[calc(100svh-7rem)] [text-shadow:0_2px_18px_rgb(0_0_0/0.55)] flex-col justify-center pt-14 pb-10 sm:min-h-[calc(100svh-7.25rem)] sm:pt-[clamp(1rem,7svh,7rem)] sm:pb-[clamp(3.5rem,9svh,4rem)]">
-        <h1 className="animate-rise text-[1.75rem] leading-[1.1] font-extrabold tracking-tight whitespace-nowrap text-white [animation-delay:100ms] min-[400px]:text-[2rem] sm:text-[3rem] lg:text-[clamp(2.5rem,7.5svh,4rem)]">
+      <Container className="relative z-10 flex max-lg:min-h-0 max-lg:justify-start max-lg:pt-6 min-h-[calc(100svh-7rem)] [text-shadow:0_2px_18px_rgb(0_0_0/0.55)] flex-col justify-center pt-14 pb-10 lg:min-h-[calc(100svh-7.25rem)] lg:pt-[clamp(1rem,7svh,7rem)] lg:pb-[clamp(3.5rem,9svh,4rem)]">
+        <h1 className="t-h1 animate-rise tracking-tight whitespace-nowrap text-white [animation-delay:100ms]">
           Come With a Dream
           <span className="mt-1 block bg-gradient-to-r from-teal via-[#7af0dc] to-[#ffb347] bg-clip-text text-transparent [text-shadow:none] [filter:drop-shadow(0_2px_10px_rgb(0_0_0/0.5))]">
             Leave With a Direction
           </span>
         </h1>
-        <div className="mt-4 h-1 w-20 animate-rise rounded-full bg-gradient-to-r from-teal to-[#ffb347] [animation-delay:150ms] sm:mt-5" aria-hidden />
-        <p className="mt-4 max-w-[33.75rem] animate-rise text-[0.9375rem] leading-snug font-medium text-white sm:mt-5 sm:text-lg sm:leading-normal short:sm:mt-3 short:sm:text-base short:sm:leading-snug [animation-delay:200ms]">
+        <div className="mt-4 h-1 w-20 max-lg:hidden animate-rise rounded-full bg-gradient-to-r from-teal to-[#ffb347] [animation-delay:150ms] sm:mt-5" aria-hidden />
+        <p className="mt-4 max-w-[33.75rem] max-lg:hidden animate-rise text-[0.9375rem] leading-snug font-medium text-white sm:mt-5 sm:text-lg sm:leading-normal short:sm:mt-3 short:sm:text-base short:sm:leading-snug [animation-delay:200ms]">
           Compare fees, ranks and placements of top colleges for courses after 12th and after graduation.
           When you need help, a real counsellor will shortlist with you, help you apply and stay till your seat is locked.
         </p>
 
-        <div className="mt-5 max-w-[57.5rem] sm:mt-8 short:sm:mt-5 animate-rise [animation-delay:300ms]">
+        <div className="mt-5 max-w-[57.5rem] max-lg:hidden sm:mt-8 short:sm:mt-5 animate-rise [animation-delay:300ms]">
           <HeroFinder />
         </div>
 
       </Container>
+    </section>
+  );
+}
+
+/** Phone only: the search sits right under the banner. Desktop keeps it on the banner. */
+function MobileFinder() {
+  return (
+    <section className="bg-sand px-4 pt-4 pb-1 sm:px-6 lg:hidden">
+      <HeroFinder />
     </section>
   );
 }
@@ -126,6 +133,35 @@ function Streams() {
   );
 }
 
+function CounsellorCard({ c, i, float }: { c: (typeof COUNSELLORS)[number]; i: number; float: boolean }) {
+  const first = c.name.startsWith("Dr.") ? c.name : c.name.split(" ")[0];
+  return (
+          <article className={`rounded-3xl bg-white p-1.5 text-ink shadow-[0_1rem_2rem_-1rem_rgb(0_0_0/0.5)] ${float ? (i % 2 === 0 ? "animate-float" : "animate-float-late") : ""}`}>
+            <div className="relative aspect-[5/4] overflow-hidden rounded-[1.1rem] bg-sand">
+              <Image src={c.photo} alt={c.name} fill quality={90} sizes="(min-width:1024px) 200px, 45vw" className="object-cover object-top" />
+              <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-xs font-bold text-white backdrop-blur-sm">
+                <Star className="size-3 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
+              </span>
+            </div>
+            <div className="px-1.5 pt-2 pb-0.5">
+              <p className="flex items-center gap-1.5 text-[1.0625rem] leading-tight font-bold">
+                <span className="truncate">{c.name}</span>
+                <BadgeCheck className="size-4 shrink-0 fill-teal text-white" aria-label="Verified" />
+              </p>
+              <p className="mt-0.5 truncate text-sm text-muted">{c.focus.join(", ")}</p>
+              <span className="mt-1.5 inline-block text-sm font-semibold text-marigold-600">{c.years} years experience</span>
+              <LeadButton
+                source="home-counsellor"
+                title={`Book a free session with ${first}`}
+                className="mt-2.5 inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white"
+              >
+                Talk now <ArrowRight className="size-4" aria-hidden />
+              </LeadButton>
+            </div>
+          </article>
+  );
+}
+
 function Counselling() {
   const steps = [
     { t: "Tell us about you", d: "A 10-minute call about your marks, entrance scores, budget and preferred cities." },
@@ -134,17 +170,18 @@ function Counselling() {
     { t: "Secure your seat", d: "We stay with you until the seat fee is paid and the letter is in your hand." },
   ];
   return (
-    <section className="bg-brand py-8 text-white sm:py-10">
-      <Container>
-        <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
+    <section className="bg-brand py-8 text-white sm:py-10 lg:flex lg:min-h-[calc(100svh-5rem)] lg:items-center lg:py-6">
+      <Container className="w-full">
+        <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-10">
           <div>
             <SectionHeading
               tone="dark"
               compact
               title="One counsellor, from first call to final seat"
               intro="One person, assigned to you, who knows your marks, your budget and your parents' worries."
+              introClass="max-lg:hidden"
             />
-            <ol className="mt-5 grid gap-3">
+            <ol className="mt-5 grid gap-3 max-lg:hidden">
               {steps.map((s, i) => (
                 <li
                   key={s.t}
@@ -158,13 +195,13 @@ function Counselling() {
                   </span>
                   {i < steps.length - 1 && <span className="absolute top-[3.25rem] left-[2rem] h-[calc(100%-2.25rem+0.75rem)] w-px bg-teal/40 sm:left-[2.25rem]" aria-hidden />}
                   <div>
-                    <h3 className="text-[1.125rem] font-semibold">{s.t}</h3>
+                    <h3 className="t-h4">{s.t}</h3>
                     <p className="mt-0.5 text-[0.9375rem] leading-snug text-white/70">{s.d}</p>
                   </div>
                 </li>
               ))}
             </ol>
-            <div className="mt-5 flex flex-wrap gap-3">
+            <div className="mt-5 flex flex-wrap gap-3 max-lg:hidden">
               <LeadButton
                 source="how-it-works"
                 className="inline-flex items-center justify-center rounded-full bg-teal px-6 py-3.5 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
@@ -177,43 +214,30 @@ function Counselling() {
             </div>
           </div>
           {COUNSELLORS.length > 0 ? (
-            <ul className="grid grid-cols-2 content-start items-start gap-4 sm:grid-cols-3">
-              {COUNSELLORS.map((c, i) => {
-                const first = c.name.startsWith("Dr.") ? c.name : c.name.split(" ")[0];
-                return (
-                  <li
-                    key={c.name}
-                    data-reveal
-                    style={{ "--d": `${(i % 3) * 120 + Math.floor(i / 3) * 60}ms` } as React.CSSProperties}
-                    className={i % 3 === 1 ? "sm:mt-6" : ""}
-                  >
-                    <article className={`rounded-3xl bg-white p-2.5 text-ink shadow-[0_1rem_2rem_-1rem_rgb(0_0_0/0.5)] ${i % 2 === 0 ? "animate-float" : "animate-float-late"}`}>
-                      <div className="relative aspect-[5/4] overflow-hidden rounded-2xl bg-sand">
-                        <Image src={c.photo} alt={c.name} fill quality={90} sizes="(min-width:1024px) 200px, 45vw" className="object-cover object-top" />
-                        <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-xs font-bold text-white backdrop-blur-sm">
-                          <Star className="size-3 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
-                        </span>
-                      </div>
-                      <div className="px-1.5 pt-2.5 pb-1">
-                        <p className="flex items-center gap-1.5 text-[1.0625rem] leading-tight font-bold">
-                          <span className="truncate">{c.name}</span>
-                          <BadgeCheck className="size-4 shrink-0 fill-teal text-white" aria-label="Verified" />
-                        </p>
-                        <p className="mt-0.5 truncate text-sm text-muted">{c.focus.join(", ")}</p>
-                        <span className="mt-1.5 inline-block text-sm font-semibold text-marigold-600">{c.years} years experience</span>
-                        <LeadButton
-                          source="home-counsellor"
-                          title={`Book a free session with ${first}`}
-                          className="mt-2.5 inline-flex w-full items-center justify-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white"
-                        >
-                          Talk now <ArrowRight className="size-4" aria-hidden />
-                        </LeadButton>
-                      </div>
-                    </article>
-                  </li>
-                );
-              })}
+            <>
+            <ul className="hidden grid-cols-2 content-start items-start gap-4 lg:grid lg:grid-cols-3">
+              {COUNSELLORS.map((c, i) => (
+                <li
+                  key={c.name}
+                  data-reveal
+                  style={{ "--d": `${(i % 3) * 120 + Math.floor(i / 3) * 60}ms` } as React.CSSProperties}
+                  className={i % 3 === 1 ? "lg:mt-6" : ""}
+                >
+                  <CounsellorCard c={c} i={i} float />
+                </li>
+              ))}
             </ul>
+            {/* Phones: one row that keeps scrolling on its own. The list is there twice so the loop has no gap. */}
+            <div className="-mx-4 overflow-hidden py-2 sm:-mx-6 lg:hidden">
+              <ul className="scroll-left flex w-max gap-4 pl-4 sm:pl-6 [--dur:45s] hover:[animation-play-state:paused]">
+                {[...COUNSELLORS, ...COUNSELLORS].map((c, i) => (
+                  <li key={i} className="w-[11.5rem] shrink-0 sm:w-[13.5rem]" aria-hidden={i >= COUNSELLORS.length} inert={i >= COUNSELLORS.length}>
+                    <CounsellorCard c={c} i={i} float={false} />
+                  </li>
+                ))}
+              </ul>
+            </div>
+            </>
           ) : (
             <div className="relative min-h-[20rem] overflow-hidden rounded-xl lg:min-h-full">
               <Image src="/images/study-table.jpg" alt="" fill sizes="(min-width:1024px) 520px, 100vw" className="object-cover" />
@@ -301,21 +325,21 @@ function ComparePairs() {
   ].map(([a, b]) => [getCollege(a)!, getCollege(b)!] as const);
 
   return (
-    <section className="bg-sand py-10 sm:py-14">
+    <section className="bg-sand section-y">
       <Container>
         <SectionHeading
           title="Compare before you commit"
           intro="Fees, placements, rankings and campus side by side. These are the comparisons students open most."
           action={<TextLink href="/compare">Compare any colleges</TextLink>}
         />
-        <div className="grid gap-6 lg:grid-cols-3">
+        <div className="h-scroll no-scrollbar grid gap-6 sm:-mx-6 sm:flex sm:snap-x sm:snap-mandatory sm:gap-5 sm:overflow-x-auto sm:overflow-y-hidden sm:scroll-px-6 sm:px-6 sm:pt-1 sm:pb-3 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0 lg:pb-0">
           {pairs.map(([a, b], i) => (
             <Link
               key={a.slug}
               href={`/compare?c=${a.slug},${b.slug}`}
               data-reveal
               style={{ "--d": `${i * 100}ms` } as React.CSSProperties}
-              className="group flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-lift ring-1 ring-line transition hover:-translate-y-1.5 hover:shadow-float"
+              className="group flex flex-col overflow-hidden rounded-[var(--radius-card)] bg-white shadow-lift ring-1 ring-line transition hover:-translate-y-1.5 hover:shadow-float sm:w-[46%] sm:shrink-0 sm:snap-start lg:w-auto"
             >
               <div className="relative grid h-40 grid-cols-2 gap-1">
                 {[a, b].map((c) => (
@@ -332,10 +356,12 @@ function ComparePairs() {
                   <div key={c.slug}>
                     <p className="leading-snug font-semibold">{c.name}</p>
                     <p className="mt-0.5 text-xs text-muted">{c.city}</p>
-                    <p className="mt-3 text-sm">
-                      <span className="font-display font-bold">{formatLakh(feeRange(c)[0])}+</span>
-                      <span className="text-muted"> / yr</span>
-                    </p>
+                    {feeRange(c)[0] > 0 && (
+                      <p className="mt-3 text-sm">
+                        <span className="font-display font-bold">{formatLakh(feeRange(c)[0])}+</span>
+                        <span className="text-muted"> / yr</span>
+                      </p>
+                    )}
                     {packageStat(c) && (
                       <p className="text-sm">
                         <span className="font-display font-bold">{packageStat(c)!.value}</span>

@@ -21,7 +21,7 @@ export function TopColleges() {
             role="tab"
             aria-selected={tab === t}
             onClick={() => setTab(t)}
-            className={`shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition ${
+            className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-semibold transition lg:py-2 ${
               tab === t ? "bg-ink text-white" : "bg-white text-ink-80 ring-1 ring-line hover:ring-ink"
             }`}
           >
@@ -29,9 +29,11 @@ export function TopColleges() {
           </button>
         ))}
       </div>
-      <div role="tabpanel" className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      <div role="tabpanel" className="h-scroll no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto overflow-y-hidden scroll-px-4 px-4 pt-1 pb-3 sm:-mx-6 sm:scroll-px-6 sm:gap-5 sm:px-6 lg:mx-0 lg:grid lg:snap-none lg:grid-cols-3 lg:overflow-visible lg:px-0 lg:pb-0">
         {list.map((c, i) => (
-          <CollegeCard key={c.slug} college={c} index={i} />
+          <div key={c.slug} className="flex w-[84%] max-w-[22rem] shrink-0 snap-start *:w-full sm:w-[46%] sm:max-w-none lg:w-auto">
+            <CollegeCard college={c} index={i} />
+          </div>
         ))}
       </div>
     </>

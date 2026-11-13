@@ -54,7 +54,7 @@ export function CollegeCard({ college, index = 0 }: { college: College; index?: 
           aria-pressed={added}
           aria-label={added ? `Remove ${college.name} from compare` : `Add ${college.name} to compare`}
           title={added ? "Added to compare" : "Add to compare"}
-          className={`absolute top-3 right-3 z-10 grid size-9 place-items-center rounded-full shadow-sm transition disabled:opacity-40 ${
+          className={`absolute top-3 right-3 z-10 grid size-11 place-items-center lg:size-9 rounded-full shadow-sm transition disabled:opacity-40 ${
             added ? "bg-mint text-white" : "bg-white text-ink hover:bg-sun"
           }`}
         >
@@ -63,7 +63,7 @@ export function CollegeCard({ college, index = 0 }: { college: College; index?: 
       </div>
 
       <div className="flex flex-1 flex-col px-5 pt-4 pb-5">
-        <h3 className="min-h-[2.75em] font-sans text-[1.0625rem] leading-snug font-bold tracking-normal">
+        <h3 className="t-h4 min-h-[2.75em] font-sans leading-snug tracking-normal">
           <Link href={`/colleges/${college.slug}`} className="after:absolute after:inset-0 after:content-['']">
             {college.name}
           </Link>
@@ -89,14 +89,14 @@ export function CollegeCard({ college, index = 0 }: { college: College; index?: 
           <button
             type="button"
             onClick={() => open({ source: "card-apply", title: "Apply with a counsellor's help", college: college.name })}
-            className="rounded-full bg-ink px-4 py-2 text-sm font-semibold text-white transition hover:bg-royal"
+            className="rounded-full bg-ink px-5 py-3 text-sm font-semibold text-white transition hover:bg-royal lg:px-4 lg:py-2"
           >
             Apply now
           </button>
           <button
             type="button"
             onClick={() => open({ source: "card-brochure", title: "Get the brochure", college: college.name })}
-            className="text-sm font-semibold text-royal underline decoration-royal/30 underline-offset-4 hover:decoration-royal"
+            className="inline-flex min-h-11 items-center text-sm font-semibold text-royal underline decoration-royal/30 underline-offset-4 hover:decoration-royal lg:min-h-0"
           >
             Get brochure
           </button>

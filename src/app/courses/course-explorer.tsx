@@ -88,11 +88,11 @@ export function CourseExplorer() {
             return (
               <li
                 key={c.slug}
-                className="group flex flex-col rounded-xl bg-white p-6 shadow-lift ring-1 ring-line transition duration-300 hover:-translate-y-1 hover:shadow-float sm:p-7"
+                className="group flex flex-col rounded-xl bg-white p-6 shadow-lift ring-1 ring-line transition duration-300 hover:-translate-y-1 hover:shadow-float max-lg:p-4 lg:p-7"
               >
                 <div className="flex items-start gap-4">
-                  <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-royal to-brand text-white shadow-lift transition duration-300 group-hover:scale-105 group-hover:-rotate-3">
-                    <StreamIcon stream={c.stream} className="size-7" />
+                  <span className="grid size-11 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-royal to-brand lg:size-14 text-white shadow-lift transition duration-300 group-hover:scale-105 group-hover:-rotate-3">
+                    <StreamIcon stream={c.stream} className="size-5 lg:size-7" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
@@ -101,45 +101,45 @@ export function CourseExplorer() {
                       </span>
                       <span className="text-xs font-semibold text-muted">{c.stream}</span>
                     </div>
-                    <h2 className="mt-1.5 text-2xl font-bold">{c.name}</h2>
-                    <p className="text-muted">{c.full}</p>
+                    <h2 className="t-h3 mt-1 lg:mt-1.5">{c.name}</h2>
+                    <p className="text-sm text-muted lg:text-base">{c.full}</p>
                   </div>
                 </div>
 
-                <dl className="mt-6 grid grid-cols-2 gap-3 text-sm">
+                <dl className="mt-4 grid grid-cols-2 gap-2 text-sm lg:mt-6 lg:gap-3">
                   <Info icon={Clock} label="Duration" value={c.duration} />
                   <Info icon={IndianRupee} label="Fees per year" value={`${formatLakh(c.feeFrom)} to ${formatLakh(c.feeTo)}`} />
                   <Info icon={GraduationCap} label="Eligibility" value={c.eligibility} />
                   <Info icon={Briefcase} label="Starting salary" value={c.avgSalary} />
                 </dl>
 
-                <div className="mt-5">
+                <div className="mt-3 lg:mt-5">
                   <p className="flex items-center gap-2 text-xs font-bold tracking-wide text-muted uppercase">
                     <FileText className="size-4" aria-hidden /> Entrance exams
                   </p>
-                  <ul className="mt-2 flex flex-wrap gap-2">
+                  <ul className="mt-1.5 flex flex-wrap gap-1.5 lg:mt-2 lg:gap-2">
                     {c.exams.map((e) => (
-                      <li key={e} className="rounded-full bg-white px-3 py-1 text-sm font-semibold text-brand ring-1 ring-royal-100">
+                      <li key={e} className="rounded-full bg-white px-3 py-0.5 text-sm font-semibold text-brand ring-1 ring-royal-100 lg:py-1">
                         {e}
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <p className="mt-4 text-sm text-muted">
+                <p className="mt-3 line-clamp-2 text-sm text-muted lg:mt-4 lg:line-clamp-none">
                   <span className="font-semibold text-ink-80">Career options:</span> {c.careers.join(", ")}
                 </p>
 
-                <div className="mt-auto flex flex-wrap gap-2.5 pt-6">
+                <div className="mt-auto flex gap-2 pt-4 lg:flex-wrap lg:gap-2.5 lg:pt-6">
                   <Link
                     href={`/courses/${c.slug}`}
-                    className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-royal"
+                    className="inline-flex items-center justify-center gap-2 rounded-full bg-brand px-3 py-3 text-sm font-semibold text-white transition hover:bg-royal max-lg:flex-1 lg:px-5 lg:py-2.5"
                   >
-                    {count > 0 ? `See ${count} ${count === 1 ? "college" : "colleges"}` : "Find colleges"} <ArrowRight className="size-4" aria-hidden />
+                    {count > 0 ? `See ${count} ${count === 1 ? "college" : "colleges"}` : "Find colleges"} <ArrowRight className="size-4 max-lg:hidden" aria-hidden />
                   </Link>
                   <button
                     onClick={() => open({ source: "course-card", title: `Is ${c.name} right for you?`, course: c.name })}
-                    className="rounded-full px-5 py-2.5 text-sm font-semibold ring-1 ring-line transition hover:bg-royal-50 hover:text-royal hover:ring-royal-100"
+                    className="rounded-full px-3 py-3 text-sm font-semibold ring-1 ring-line transition max-lg:flex-1 lg:px-5 lg:py-2.5 hover:bg-royal-50 hover:text-royal hover:ring-royal-100"
                   >
                     Ask a counsellor
                   </button>
@@ -155,8 +155,8 @@ export function CourseExplorer() {
 
 function Info({ icon: Icon, label, value }: { icon: React.ComponentType<{ className?: string }>; label: string; value: string }) {
   return (
-    <div className="flex items-start gap-3 rounded-xl bg-royal-50/70 p-3.5">
-      <span className="grid size-8 shrink-0 place-items-center rounded-full bg-white text-royal shadow-sm">
+    <div className="flex items-start gap-3 rounded-xl bg-royal-50/70 p-2.5 lg:p-3.5">
+      <span className="grid size-8 shrink-0 max-lg:hidden place-items-center rounded-full bg-white text-royal shadow-sm">
         <Icon className="size-4" />
       </span>
       <div className="min-w-0">

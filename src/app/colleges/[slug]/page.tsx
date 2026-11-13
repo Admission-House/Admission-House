@@ -2,13 +2,16 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight, MapPin } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { COLLEGES, EXAMS, feeLabel, placeLabel } from "@/lib/data";
 import { getAnyCollege, similarTo } from "@/lib/directory";
 import { CollegeCard, CompareToggle } from "@/components/college-card";
 import { LeadButton } from "@/components/lead-button";
 import { JsonLd } from "@/components/json-ld";
-import { CollegeCover } from "@/components/college-cover";
+import fs from "node:fs";
+import path from "node:path";
+import Image from "next/image";
+import { CollegeCover, Monogram } from "@/components/college-cover";
 import { SectionNav } from "./section-nav";
 import { SITE, telHref } from "@/lib/site";
 
@@ -43,6 +46,13 @@ export default function CollegePage({ params }: PageProps<"/colleges/[slug]">) {
   );
 }
 
+function findLogo(slug: string): string | null {
+  for (const ext of ["svg", "png", "webp", "jpg", "jpeg"]) {
+    if (fs.existsSync(path.join(process.cwd(), "public", "logos", `${slug}.${ext}`))) return `/logos/${slug}.${ext}`;
+  }
+  return null;
+}
+
 async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]">["params"] }) {
   const { slug } = await params;
   const c = getAnyCollege(slug);
@@ -50,6 +60,13 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
 
   const similar = c.basic ? similarTo(c) : COLLEGES.filter((x) => x.slug !== c.slug && x.streams.includes(c.streams[0])).slice(0, 3);
   const exams = EXAMS.filter((e) => c.exams.includes(e.name));
+  const logo = findLogo(c.slug);
+  const headFacts = [
+    { label: "Location", value: placeLabel(c) || "India" },
+    c.type ? { label: "Type", value: c.type } : null,
+    c.established > 0 ? { label: "Established", value: String(c.established) } : null,
+    c.rankNote ? { label: "NIRF 2025", value: c.nirf ? `#${c.nirf} ${c.rankNote.replace(/^NIRF \d{4},? ?/, "")}` : c.rankNote } : null,
+  ].filter((x): x is { label: string; value: string } => !!x);
   const hasPlacement = !!(c.avgPackage || c.medianPackage || c.highestPackage || c.placementNote || c.recruiters.length);
   const facts = [
     c.established ? { label: "Established", value: String(c.established) } : null,
@@ -95,29 +112,40 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
       {/* Header */}
       <section className="bg-white">
         <div className="mx-auto w-full max-w-[90rem] px-4 pb-5 pt-6 sm:px-6 lg:px-8">
-          <nav aria-label="Breadcrumb" className="mb-4 flex items-center gap-1 text-sm text-muted">
-            <Link href="/" className="hover:text-ink">Home</Link>
+          <nav aria-label="Breadcrumb" className="-mt-2 mb-2 flex items-center gap-1 text-sm text-muted sm:mt-0 sm:mb-4">
+            <Link href="/" className="inline-flex min-h-11 items-center hover:text-ink lg:min-h-0">Home</Link>
             <ChevronRight className="size-3.5" />
-            <Link href="/colleges" className="hover:text-ink">Colleges</Link>
+            <Link href="/colleges" className="inline-flex min-h-11 items-center hover:text-ink lg:min-h-0">Colleges</Link>
             <ChevronRight className="size-3.5" />
             <span className="truncate text-ink">{c.short}</span>
           </nav>
 
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-            <div className="min-w-0">
-              <h1 className="text-[2rem] font-extrabold sm:text-[2.625rem]">{c.name}</h1>
-              <p className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-muted">
-                <span className="inline-flex items-center gap-1">
-                  <MapPin className="size-4" /> {placeLabel(c) || "India"}
+            <div className="flex min-w-0 items-start gap-3 sm:gap-5">
+              {logo ? (
+                <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-white p-1.5 ring-1 ring-line sm:size-[4.5rem] sm:rounded-2xl sm:p-2">
+                  <Image src={logo} alt={`${c.name} logo`} width={72} height={72} unoptimized={logo.endsWith(".svg")} className="max-h-full w-auto max-w-full object-contain" />
                 </span>
-                {!c.basic && <span>{c.type} college, est. {c.established}</span>}
-                {c.rankNote && (
-                  <span className="font-semibold text-ink">{c.nirf ? `#${c.nirf} ${c.rankNote}` : c.rankNote}</span>
-                )}
-              </p>
-              {!c.basic && <p className="mt-3 text-[0.9375rem] text-ink-80">
-                {[c.accreditation, ...c.approvals.map((a) => `${a} approved`), c.scholarship ? "Scholarships available" : ""].filter(Boolean).join(" · ")}
-              </p>}
+              ) : (
+                <>
+                  <span className="shrink-0 sm:hidden"><Monogram college={c} size="md" /></span>
+                  <span className="hidden shrink-0 sm:block"><Monogram college={c} size="lg" /></span>
+                </>
+              )}
+              <div className="min-w-0">
+                <h1 className="t-h1">{c.name}</h1>
+                <dl className="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 text-sm sm:flex sm:flex-wrap sm:gap-x-0 sm:divide-x sm:divide-line">
+                  {headFacts.map((h) => (
+                    <div key={h.label} className="min-w-0 sm:px-5 sm:first:pl-0">
+                      <dt className="text-xs text-muted">{h.label}</dt>
+                      <dd className="mt-0.5 font-semibold text-ink">{h.value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                {!c.basic && <p className="mt-3 text-[0.9375rem] text-ink-80">
+                  {[c.accreditation, ...c.approvals.map((a) => `${a} approved`), c.scholarship ? "Scholarships available" : ""].filter(Boolean).join(" · ")}
+                </p>}
+              </div>
             </div>
             <div className="flex shrink-0 flex-wrap items-center gap-2">
               <CompareToggle college={c} />
@@ -140,9 +168,11 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
             </div>
           </div>
 
-          <div className="mt-6 overflow-hidden rounded-xl">
-            <CollegeCover college={c} className="h-[15rem] sm:h-[21.25rem]" priority sizes="(min-width: 1240px) 1176px, 100vw" />
-          </div>
+          {!c.basic && (
+            <div className="mt-6 overflow-hidden rounded-xl">
+              <CollegeCover college={c} className="h-[13rem] sm:h-[17rem] lg:h-[19rem]" priority sizes="(min-width: 1240px) 1176px, 100vw" />
+            </div>
+          )}
         </div>
         <SectionNav sections={SECTIONS} />
       </section>
@@ -159,7 +189,7 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
             </dl>
             {c.highlights.length > 0 && (
               <>
-                <h3 className="mt-8 text-lg font-semibold">Why students choose {c.short}</h3>
+                <h3 className="t-h4 mt-8">Why students choose {c.short}</h3>
                 <ul className="mt-2 grid gap-x-8 sm:grid-cols-2">
                   {c.highlights.map((h) => (
                     <li key={h} className="border-b border-line py-3 text-[0.9375rem] text-ink">
@@ -188,7 +218,7 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
                     title="Apply for this course"
                     college={c.name}
                     course={p.name}
-                    className="shrink-0 rounded-full bg-royal-50 px-4 py-2 text-sm font-semibold text-royal hover:bg-royal hover:text-white"
+                    className="inline-flex min-h-11 shrink-0 items-center rounded-full bg-royal-50 px-4 py-2 text-sm font-semibold text-royal hover:bg-royal hover:text-white lg:min-h-0"
                   >
                     Apply
                   </LeadButton>
@@ -249,7 +279,7 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
               {c.placementNote && <p className="mt-4 text-ink-80">{c.placementNote}.</p>}
               {c.recruiters.length > 0 && (
                 <>
-                  <h3 className="mt-7 text-lg font-semibold">Top recruiters</h3>
+                  <h3 className="t-h4 mt-7">Top recruiters</h3>
                   <ul className="mt-3 flex flex-wrap gap-2">
                     {c.recruiters.map((r) => (
                       <li key={r} className="rounded-full px-4 py-1.5 text-sm text-ink-80 ring-1 ring-line">
@@ -282,7 +312,7 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
             </ol>
             {exams.length > 0 && (
               <>
-                <h3 className="mt-7 text-lg font-semibold">Upcoming exam dates</h3>
+                <h3 className="t-h4 mt-7">Upcoming exam dates</h3>
                 <ul className="mt-3 divide-y divide-line rounded-xl ring-1 ring-line">
                   {exams.map((e) => (
                     <li key={e.slug} className="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
@@ -330,7 +360,7 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
       {similar.length > 0 && (
         <section className="pb-20">
           <div className="mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-8">
-            <h2 className="mb-6 text-[1.75rem] font-semibold">Students also looked at</h2>
+            <h2 className="t-h2 mb-5 sm:mb-6">Students also looked at</h2>
             <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {similar.map((s, i) => (
                 <CollegeCard key={s.slug} college={s} index={i} />
@@ -346,7 +376,7 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
 function Panel({ id, title, intro, children }: { id: string; title: string; intro?: string; children: React.ReactNode }) {
   return (
     <section id={id} aria-labelledby={`${id}-h`} className="scroll-mt-32 border-t border-line py-8 first:border-t-0 first:pt-0 last:pb-0">
-      <h2 id={`${id}-h`} className="text-2xl font-semibold">{title}</h2>
+      <h2 id={`${id}-h`} className="t-h3">{title}</h2>
       {intro && <p className="mt-1 text-sm text-muted">{intro}</p>}
       <div className="mt-5">{children}</div>
     </section>

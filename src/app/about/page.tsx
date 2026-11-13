@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { Compass, HeartHandshake, Scale } from "lucide-react";
+import Image from "next/image";
 import { Container, SectionHeading } from "@/components/ui";
 
 export const metadata: Metadata = {
@@ -19,7 +19,7 @@ export default function AboutPage() {
     <>
       <section className="bg-white">
         <Container className="pt-10 pb-5 sm:pt-10 sm:pb-5">
-          <h1 className="max-w-3xl text-[2.25rem] font-extrabold sm:text-[3.625rem]">
+          <h1 className="t-h1 max-w-3xl">
             Choosing a college shouldn&apos;t depend on who you happen to know.
           </h1>
           <div className="mt-6 grid gap-6 text-lg text-ink-80 lg:grid-cols-2 lg:gap-12">
@@ -46,13 +46,13 @@ export default function AboutPage() {
         </Container>
       </section>
 
-      <section className="py-20 sm:py-24">
+      <section className="section-y">
         <Container>
           <SectionHeading title="What we stand for" />
           <ul className="grid gap-10 md:grid-cols-3">
             {VALUES.map((v) => (
               <li key={v.t} className="border-t-2 border-ink pt-5">
-                <h3 className="font-sans text-lg font-bold tracking-normal">{v.t}</h3>
+                <h3 className="t-h4 font-sans tracking-normal">{v.t}</h3>
                 <p className="mt-1.5 text-muted">{v.d}</p>
               </li>
             ))}

@@ -42,7 +42,7 @@ function Chips({ items }: { items: string[] }) {
   return (
     <ul className="flex flex-wrap gap-1.5">
       {items.map((i) => (
-        <li key={i} className="rounded-full bg-paper px-2.5 py-1 text-[0.8125rem] leading-none font-medium text-ink-80 ring-1 ring-line">
+        <li key={i} className="rounded-full bg-paper px-2 py-1 text-xs leading-none font-medium text-ink-80 ring-1 ring-line lg:px-2.5 lg:text-[0.8125rem]">
           {i}
         </li>
       ))}
@@ -121,7 +121,7 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
             {c.programs.map((p) => (
               <li key={p.name} className="leading-snug">
                 <span className="block font-semibold">{p.name}</span>
-                <span className="text-[0.8125rem] text-muted">
+                <span className="text-xs text-muted lg:text-[0.8125rem]">
                   {p.duration} · {p.feeText}
                 </span>
               </li>
@@ -140,8 +140,8 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
         value: (c) => (
           <ul className="grid gap-2.5">
             {c.highlights.map((h) => (
-              <li key={h} className="flex gap-2 text-[0.875rem] leading-snug text-ink-80">
-                <BadgeCheck className="mt-px size-4 shrink-0 text-royal" aria-hidden /> {h}
+              <li key={h} className="flex gap-1.5 text-xs leading-snug text-ink-80 lg:gap-2 lg:text-[0.875rem]">
+                <BadgeCheck className="mt-px size-3.5 shrink-0 text-royal lg:size-4" aria-hidden /> <span className="min-w-0">{h}</span>
               </li>
             ))}
           </ul>
@@ -153,7 +153,7 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
 
 // Three equal college columns, shared by the cards and every row, so each college's details sit
 // directly under its own card. Row labels go above their values.
-const COLS_VAR = "[--cmp-cols:repeat(3,minmax(150px,1fr))] lg:[--cmp-cols:repeat(3,minmax(0,1fr))]";
+const COLS_VAR = "[--cmp-cols:repeat(3,minmax(0,1fr))]";
 
 export function CompareView() {
   const sp = useSearchParams();
@@ -196,52 +196,52 @@ export function CompareView() {
       />
 
       <Container className="py-8 sm:py-10">
-        {colleges.length > 1 && <p className="mb-2 text-sm text-muted sm:hidden">Swipe sideways to see all colleges.</p>}
-        <div className="-mx-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:px-0 lg:overflow-visible">
-          <div className={`min-w-[32.5rem] lg:min-w-0 ${COLS_VAR}`}>
+        <div>
+          <div className={COLS_VAR}>
             {/* College cards */}
             <div className="grid gap-2 lg:gap-4" style={gridStyle}>
               {slots.map((i) => {
                 const c = colleges[i];
                 if (!c)
                   return (
-                    <div key={i} className="flex flex-col justify-center gap-3 rounded-[var(--radius-card)] border-2 border-dashed border-line bg-white/60 p-5">
-                      <span className="grid size-10 place-items-center rounded-full bg-paper text-muted ring-1 ring-line">
-                        <Plus className="size-5" aria-hidden />
+                    <div key={i} className="flex flex-col items-center justify-center gap-2 rounded-[var(--radius-card)] border-2 border-dashed border-line bg-white/60 p-2 text-center lg:items-stretch lg:gap-3 lg:p-5 lg:text-left">
+                      <span className="grid size-8 place-items-center rounded-full bg-paper text-muted ring-1 ring-line lg:size-10">
+                        <Plus className="size-4 lg:size-5" aria-hidden />
                       </span>
-                      <div className="text-sm font-semibold">
+                      <p className="text-xs font-semibold text-muted lg:hidden">Add a college</p>
+                      <div className="hidden text-sm font-semibold lg:block">
                         <p className="mb-2">Add a college</p>
                         <CollegePicker exclude={slugs} onPick={(v) => setSlugs([...slugs, v])} />
                       </div>
                     </div>
                   );
                 return (
-                  <div key={c.slug} className="relative flex flex-col rounded-[var(--radius-card)] bg-white p-3 shadow-lift ring-1 ring-line">
+                  <div key={c.slug} className="relative flex flex-col rounded-[var(--radius-card)] bg-white p-1.5 shadow-lift ring-1 ring-line lg:p-3">
                     <button
                       onClick={() => setSlugs(slugs.filter((s) => s !== c.slug))}
                       aria-label={`Remove ${c.name}`}
-                      className="absolute top-5 right-5 z-10 grid size-8 place-items-center rounded-full bg-white text-ink shadow-lift hover:bg-sun"
+                      className="absolute top-2.5 right-2.5 z-10 grid size-7 place-items-center rounded-full bg-white text-ink shadow-lift hover:bg-sun lg:top-5 lg:right-5 lg:size-8"
                     >
-                      <X className="size-4" />
+                      <X className="size-3.5 lg:size-4" />
                     </button>
-                    <div className="relative h-32 overflow-hidden rounded-xl">
+                    <div className="relative h-20 overflow-hidden rounded-lg lg:h-32 lg:rounded-xl">
                       <Image src={c.image} alt="" fill sizes="300px" className="object-cover" style={{ objectPosition: c.imagePosition }} />
                       {c.nirf && (
-                        <span className="absolute bottom-2 left-2 rounded-full bg-ink/85 px-2.5 py-1 text-xs font-semibold text-white backdrop-blur">
+                        <span className="absolute bottom-1.5 left-1.5 rounded-full bg-ink/85 px-2 py-0.5 text-[0.6875rem] font-semibold text-white backdrop-blur lg:bottom-2 lg:left-2 lg:px-2.5 lg:py-1 lg:text-xs">
                           Rank #{c.nirf}
                         </span>
                       )}
                     </div>
-                    <div className="flex flex-1 flex-col px-2 pt-3 pb-1">
-                      <Link href={`/colleges/${c.slug}`} className="font-display text-[1.0625rem] leading-snug font-semibold hover:text-royal">
+                    <div className="flex flex-1 flex-col px-1 pt-2 pb-0.5 lg:px-2 lg:pt-3 lg:pb-1">
+                      <Link href={`/colleges/${c.slug}`} className="line-clamp-4 font-display text-[0.8125rem] leading-snug font-semibold break-words hover:text-royal lg:line-clamp-none lg:text-[1.0625rem]">
                         {c.name}
                       </Link>
-                      <p className="mt-1 inline-flex items-center gap-1 text-sm text-muted">
-                        <MapPin className="size-3.5" aria-hidden /> {c.city || "India"}
+                      <p className="mt-1 inline-flex items-start gap-1 text-xs text-muted lg:items-center lg:text-sm">
+                        <MapPin className="mt-px size-3 shrink-0 lg:mt-0 lg:size-3.5" aria-hidden /> <span className="min-w-0">{c.city || "India"}</span>
                       </p>
                       <button
                         onClick={() => open({ source: "compare-apply", title: "Apply with a counsellor's help", college: c.name })}
-                        className="mt-4 rounded-full bg-royal py-2.5 text-sm font-semibold text-white transition hover:bg-royal-600"
+                        className="mt-3 rounded-full bg-royal py-2 text-xs font-semibold text-white transition hover:bg-royal-600 lg:mt-4 lg:py-2.5 lg:text-sm"
                       >
                         Apply now
                       </button>
@@ -250,6 +250,12 @@ export function CompareView() {
                 );
               })}
             </div>
+
+            {colleges.length < 3 && (
+              <div className="mt-3 lg:hidden">
+                <CollegePicker exclude={slugs} onPick={(v) => setSlugs([...slugs, v])} />
+              </div>
+            )}
 
             {colleges.length < 2 ? (
               <div className="mt-6 rounded-[var(--radius-card)] bg-white p-8 text-center ring-1 ring-line">
@@ -270,10 +276,18 @@ export function CompareView() {
                 </ul>
               </div>
             ) : (
-              <div className="mt-6 rounded-[var(--radius-card)] bg-white ring-1 ring-line">
+              <div className="mt-5 rounded-[var(--radius-card)] bg-white ring-1 ring-line lg:mt-6">
+                {/* Phones: college names stay pinned under the site header while the table scrolls */}
+                <div className="sticky top-[4.875rem] z-20 grid gap-1 rounded-t-[var(--radius-card)] border-b border-line bg-white/95 px-1.5 py-2 backdrop-blur lg:hidden" style={gridStyle}>
+                  {slots.map((i) => (
+                    <p key={i} className="line-clamp-2 px-1.5 text-[0.6875rem] leading-tight font-bold text-brand">
+                      {colleges[i]?.short ?? ""}
+                    </p>
+                  ))}
+                </div>
                 {ROWS.map((g, gi) => (
                   <section key={g.group} aria-labelledby={`cmp-${g.group}`} className={gi > 0 ? "border-t border-line" : ""}>
-                    <h2 id={`cmp-${g.group}`} className="px-4 pt-5 pb-1 font-sans text-[1.0625rem] font-bold tracking-normal text-ink lg:px-5">
+                    <h2 id={`cmp-${g.group}`} className="px-3 pt-4 pb-1 font-sans text-base font-bold tracking-normal text-ink lg:px-5 lg:pt-5 lg:text-[1.0625rem]">
                       {g.group}
                     </h2>
                     {g.rows.map((row) => {
@@ -282,14 +296,14 @@ export function CompareView() {
                       const unique = best !== null && scores.filter((s) => s === best).length === 1;
                       return (
                         <div key={row.label} className="border-t border-line first:border-t-0">
-                          <p className="px-4 pt-3 text-[0.8125rem] text-muted lg:px-5">{row.label}</p>
-                          <div className="grid items-start gap-2 pb-3 lg:gap-4" style={gridStyle}>
+                          <p className="px-3 pt-3 text-xs text-muted lg:px-5 lg:text-[0.8125rem]">{row.label}</p>
+                          <div className="grid items-start gap-1 px-1.5 pb-2 lg:gap-4 lg:px-0 lg:pb-3" style={gridStyle}>
                             {slots.map((i) => {
                               const c = colleges[i];
                               if (!c) return <div key={i} />;
                               const isBest = unique && row.score && row.score(c) === best;
                               return (
-                                <div key={i} className={`px-4 py-2 text-[0.875rem] lg:px-5 lg:text-[0.9375rem] ${isBest ? "font-bold text-[#0a7a3d]" : "text-ink"}`}>
+                                <div key={i} className={`min-w-0 px-1.5 py-1 text-[0.8125rem] leading-snug break-words lg:px-5 lg:py-2 lg:text-[0.9375rem] ${isBest ? "font-bold text-[#0a7a3d]" : "text-ink"}`}>
                                   {row.value(c)}
                                 </div>
                               );
@@ -301,14 +315,14 @@ export function CompareView() {
                   </section>
                 ))}
                 <div className="border-t border-line">
-                  <p className="px-4 pt-3 text-[0.8125rem] text-muted lg:px-5">More details</p>
-                  <div className="grid items-start gap-2 pb-4 lg:gap-4" style={gridStyle}>
+                  <p className="px-3 pt-3 text-xs text-muted lg:px-5 lg:text-[0.8125rem]">More details</p>
+                  <div className="grid items-start gap-1 px-1.5 pb-4 lg:gap-4 lg:px-0" style={gridStyle}>
                     {slots.map((i) => {
                       const c = colleges[i];
                       if (!c) return <div key={i} />;
                       return (
-                        <div key={i} className="px-4 py-1.5 lg:px-5">
-                          <Link href={`/colleges/${c.slug}`} className="inline-flex items-center gap-1 text-sm font-semibold text-royal underline underline-offset-4">
+                        <div key={i} className="px-1.5 py-1.5 lg:px-5">
+                          <Link href={`/colleges/${c.slug}`} className="inline-flex items-center gap-0.5 text-xs font-semibold text-royal underline underline-offset-4 lg:gap-1 lg:text-sm">
                             Full details <ArrowUpRight className="size-4" aria-hidden />
                           </Link>
                         </div>

@@ -106,7 +106,7 @@ async function Results({ params, searchParams }: { params: Promise<{ slug: strin
         <section className="pt-4">
           <div className="mx-auto w-full max-w-[84rem] px-4 sm:px-6 lg:px-8">
             <div className="rounded-xl bg-white p-5 ring-1 ring-line sm:p-7">
-              <h2 className="text-xl font-bold">Specialisations in {c.name}</h2>
+              <h2 className="t-h3">Specialisations in {c.name}</h2>
               <SpecList items={specs.map((x) => ({ slug: x.slug, label: x.label.replace(`${c.name} in `, "") }))} />
             </div>
           </div>

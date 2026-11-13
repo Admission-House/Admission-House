@@ -28,7 +28,7 @@ export function ExamList() {
         intro="Tentative dates based on previous years. Official dates are confirmed by each exam body. We'll remind you before every deadline if you sign up."
         image="/images/hero-books.jpg"
       >
-          <div className="mt-6 flex flex-wrap gap-3">
+          <div className="mt-5 grid gap-2.5 sm:mt-6 sm:flex sm:flex-wrap sm:gap-3">
             <Segment
               label="Level"
               value={level}
@@ -52,17 +52,17 @@ export function ExamList() {
           </div>
       </PageHero>
 
-      <Container wide className="grid gap-8 py-8 sm:py-10 lg:grid-cols-[1fr_20rem]">
+      <Container wide className="grid grid-cols-[minmax(0,1fr)] gap-5 py-6 sm:gap-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <ul className="grid content-start gap-4">
           {list.map((e) => (
-            <li key={e.slug} className="rounded-[var(--radius-card)] bg-white p-5 ring-1 ring-line sm:p-6">
+            <li key={e.slug} className="rounded-[var(--radius-card)] bg-white p-4 ring-1 ring-line sm:p-6">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-2xl font-semibold">{e.name}</h2>
+                    <h2 className="t-h3">{e.name}</h2>
                     <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS_STYLE[e.status]}`}>{e.status}</span>
                   </div>
-                  <p className="text-muted">
+                  <p className="text-sm text-muted sm:text-base">
                     {e.full}, conducted by {e.body}
                   </p>
                 </div>
@@ -70,24 +70,24 @@ export function ExamList() {
                   {e.level === "UG" ? "After 12th" : "After graduation"}, {e.stream}
                 </span>
               </div>
-              <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-4">
+              <dl className="mt-4 grid grid-cols-2 gap-x-3 gap-y-3.5 text-sm sm:mt-5 sm:grid-cols-4 lg:grid-cols-2 xl:grid-cols-4">
                 <Item icon={CalendarDays} label="Exam date" value={e.examDate} strong />
                 <Item icon={Clock} label="Apply by" value={e.applyBy} strong={e.status === "Applications open"} />
                 <Item icon={Monitor} label="Mode" value={e.mode} />
                 <Item icon={School} label="Accepted by" value={e.colleges} />
               </dl>
-              <div className="mt-5 flex flex-wrap gap-2 border-t border-line pt-4">
+              <div className="mt-4 grid grid-cols-2 gap-2 border-t border-line pt-4 sm:mt-5 sm:flex sm:flex-wrap">
                 <button
                   onClick={() => open({ source: "exam-reminder", title: `Get ${e.name} reminders and guidance`, course: e.name })}
-                  className="inline-flex items-center gap-2 rounded-full bg-royal-50 px-4 py-2.5 text-sm font-semibold text-royal hover:bg-royal hover:text-white"
+                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-royal-50 px-3 text-sm font-semibold text-royal hover:bg-royal hover:text-white sm:px-4"
                 >
-                  <BellRing className="size-4" /> Remind me before deadlines
+                  <BellRing className="size-4 shrink-0" /> <span className="sm:hidden">Remind me</span><span className="max-sm:hidden">Remind me before deadlines</span>
                 </button>
                 <button
                   onClick={() => open({ source: "exam-colleges", title: `Colleges you can get with ${e.name}`, course: e.name })}
-                  className="rounded-full px-4 py-2.5 text-sm font-semibold ring-1 ring-line hover:ring-ink"
+                  className="inline-flex min-h-11 items-center justify-center rounded-full px-3 text-sm font-semibold ring-1 ring-line hover:ring-ink sm:px-4"
                 >
-                  Which colleges can I get?
+                  <span className="sm:hidden">Which colleges?</span><span className="max-sm:hidden">Which colleges can I get?</span>
                 </button>
               </div>
             </li>
@@ -102,16 +102,16 @@ export function ExamList() {
           )}
         </ul>
 
-        <aside>
-          <div className="rounded-[var(--radius-card)] bg-ink p-6 text-white">
-            <BellRing className="size-8 text-marigold" />
-            <p className="mt-4 font-display text-2xl font-semibold">Never miss a form deadline</p>
-            <p className="mt-2 text-white/70">
+        <aside className="max-lg:order-first">
+          <div className="rounded-[var(--radius-card)] bg-ink p-4 text-white lg:p-6">
+            <BellRing className="size-6 text-marigold lg:size-8" />
+            <p className="mt-2 font-display text-xl font-semibold lg:mt-4 lg:text-2xl">Never miss a form deadline</p>
+            <p className="mt-2 text-white/70 max-lg:hidden">
               Get WhatsApp reminders for the exams you choose, plus a counsellor call when results are out.
             </p>
             <button
               onClick={() => open({ source: "exam-side", title: "Get exam reminders on WhatsApp" })}
-              className="mt-5 w-full rounded-full bg-marigold py-3.5 font-semibold text-ink hover:bg-sun"
+              className="mt-4 w-full rounded-full bg-marigold py-3.5 font-semibold text-ink hover:bg-sun lg:mt-5"
             >
               Set up reminders
             </button>
@@ -134,13 +134,13 @@ function Segment({
   options: [string, string][];
 }) {
   return (
-    <div role="group" aria-label={label} className="inline-flex flex-wrap gap-1 rounded-full bg-white p-1 ring-1 ring-line">
+    <div role="group" aria-label={label} className="flex gap-1 rounded-full bg-white p-1 ring-1 ring-line sm:inline-flex sm:flex-wrap">
       {options.map(([v, l]) => (
         <button
           key={v}
           aria-pressed={value === v}
           onClick={() => onChange(v)}
-          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${value === v ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
+          className={`min-h-10 rounded-full px-2 text-[0.8125rem] font-semibold transition max-sm:flex-1 sm:px-4 sm:py-2 sm:text-sm ${value === v ? "bg-ink text-white" : "text-muted hover:text-ink"}`}
         >
           {l}
         </button>
