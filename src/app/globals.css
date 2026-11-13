@@ -99,6 +99,8 @@
   html, body { overflow-x: clip; }
   html {
     scroll-behavior: smooth;
+    /* A page that loads in after a click must not be pushed down to the footer by scroll anchoring. */
+    overflow-anchor: none;
     -webkit-tap-highlight-color: transparent;
   }
   /* Everything is sized in rem, so raising the root size on big monitors scales the whole layout

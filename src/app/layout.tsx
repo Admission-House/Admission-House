@@ -6,6 +6,7 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { WhatsAppButton } from "@/components/whatsapp";
 import { RevealObserver } from "@/components/reveal-observer";
+import { ScrollTop } from "@/components/scroll-top";
 import { JsonLd } from "@/components/json-ld";
 import { SITE, SOCIAL } from "@/lib/site";
 
@@ -125,6 +126,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Footer />
           <WhatsAppButton />
           <RevealObserver />
+          <ScrollTop />
         </Providers>
       </body>
     </html>
