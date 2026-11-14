@@ -833,7 +833,13 @@ export const FAQS = [
   { q: "Can my parents join the counselling call?", a: "Please bring them. Most of our sessions include parents, and counsellors speak Hindi, English and 8 regional languages." },
 ];
 
-export const LANGUAGES = Array.from(new Set(COUNSELLORS.flatMap((c) => c.languages))).sort();
+// Internal pages show one extra counsellor that the home page does not.
+export const TEAM: Counsellor[] = [
+  ...COUNSELLORS,
+  { name: "Pushpendra", initials: "P", focus: [], languages: ["Hindi", "English"], years: 1, tone: "#0F766E", photo: "/images/c-pushpendra-card.jpg", photoFull: "/images/c-pushpendra.jpg" },
+];
+
+export const LANGUAGES = Array.from(new Set(TEAM.flatMap((c) => c.languages))).sort();
 
 export const STREAM_IMAGES: Record<Stream, string> = {
   Engineering: "/images/campus-eng.jpg",

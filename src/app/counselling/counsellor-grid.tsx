@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { COUNSELLORS, LANGUAGES } from "@/lib/data";
+import { TEAM, LANGUAGES } from "@/lib/data";
 import { CounsellorCard } from "@/components/counsellor-card";
 
 export function CounsellorGrid() {
   const [lang, setLang] = useState("");
-  const list = COUNSELLORS.filter((c) => !lang || c.languages.includes(lang));
+  const list = TEAM.filter((c) => !lang || c.languages.includes(lang));
   return (
     <>
       <div className="no-scrollbar -mx-4 mb-6 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label="Filter by language">
