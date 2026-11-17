@@ -102,7 +102,7 @@ export const GalleryContainer = ({ children, className, style, ...props }: HTMLM
 
   return (
     <motion.div
-      className={cn("relative grid size-full grid-cols-3 gap-2 rounded-2xl", className)}
+      className={cn("relative grid size-full rounded-2xl", className)}
       style={{
         rotateX,
         scale,

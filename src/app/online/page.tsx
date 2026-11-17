@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { OnlineCard } from "./online-card";
 import { OnlineScroll } from "./online-scroll";
 import { Container } from "@/components/ui";
 import { LeadButton } from "@/components/lead-button";
@@ -72,47 +70,7 @@ const CERTIFICATES = [
 export default function OnlinePage() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative flex items-center overflow-hidden bg-neutral-900 lg:hidden">
-        {/* Full-width campus photo, shaded on the text side like the home page banner */}
-        <Image src="/images/hero/blue-sky-campus.jpg" alt="" fill priority quality={82} sizes="100vw" className="object-cover object-[center_75%]" />
-        <div className="absolute inset-0 bg-black/55 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#031f1e]/90 lg:via-black/60 lg:to-black/15" aria-hidden />
-        <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/35 to-transparent" aria-hidden />
-        <Container className="relative z-10 grid grid-cols-[minmax(0,1fr)] items-center gap-8 py-10 sm:gap-9 sm:py-12 lg:gap-12 lg:py-[clamp(1rem,6svh,5rem)]">
-          <div className="animate-rise">
-            <p className="text-sm font-bold tracking-widest text-sun uppercase">Online courses</p>
-            <h1 className="t-h1 mt-3 text-white sm:mt-4">
-              Your degree,{" "}
-              <span className="relative whitespace-nowrap">
-                on your own time
-                <Underline />
-              </span>
-              .
-            </h1>
-            <p className="mt-4 max-w-lg text-base leading-relaxed text-white/85 sm:mt-6 sm:text-[1.125rem]">
-              Studying online means you do not have to leave your job or your city. Pick a course, tell us your marks and what you want to do next, and we will help you choose a university and finish the admission.
-            </p>
-            <div className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 sm:mt-8">
-              <LeadButton
-                source="online-hero"
-                title="Talk to an online admissions counsellor"
-                className="rounded-full bg-teal px-7 py-4 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
-              >
-                Talk to a counsellor
-              </LeadButton>
-              <a
-                href="#courses"
-                className="inline-flex items-center gap-2 rounded-full py-4 text-[0.9375rem] font-semibold text-white underline max-sm:px-0 sm:px-5 decoration-white/40 underline-offset-4 hover:decoration-white"
-              >
-                See online courses <ArrowRight className="size-4" aria-hidden />
-              </a>
-            </div>
-          </div>
-          <OnlineCard />
-        </Container>
-      </section>
-
-      {/* Large screens: the hero is a pinned stage and the courses scroll across it */}
+      {/* The hero is a pinned stage and the courses scroll across it, on phones and large screens alike */}
       <OnlineScroll
         intro={
           <div className="max-w-[44rem]">
@@ -124,7 +82,7 @@ export default function OnlinePage() {
               </span>
               .
             </h1>
-            <p className="mt-4 max-w-md text-base leading-snug text-white/85">Pick a course, tell us your marks and what you want to do next. We help with the rest.</p>
+            <p className="mt-3 max-w-md text-[0.9375rem] leading-snug text-white/85 max-lg:hidden lg:mt-4 lg:text-base">Pick a course, tell us your marks and what you want to do next. We help with the rest.</p>
             <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1">
               <LeadButton
                 source="online-hero"

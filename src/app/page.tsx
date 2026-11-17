@@ -134,37 +134,6 @@ function Streams() {
   );
 }
 
-function CounsellorCard({ c, i, float }: { c: (typeof COUNSELLORS)[number]; i: number; float: boolean }) {
-  const first = c.name.startsWith("Dr.") ? c.name : c.name.split(" ")[0];
-  return (
-          <article className={`rounded-3xl bg-white p-1.5 text-ink shadow-[0_1rem_2rem_-1rem_rgb(0_0_0/0.5)] ${float ? (i % 2 === 0 ? "animate-float" : "animate-float-late") : ""}`}>
-            <div className="relative aspect-[5/4] overflow-hidden rounded-[1.1rem] bg-sand">
-              <Image src={c.photo} alt={c.name} fill quality={90} sizes="(min-width:1024px) 200px, 45vw" className="object-cover object-top" />
-              {c.rating && (
-                <span className="absolute top-2 left-2 inline-flex items-center gap-1 rounded-full bg-black/55 px-2 py-1 text-xs font-bold text-white backdrop-blur-sm">
-                  <Star className="size-3 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
-                </span>
-              )}
-            </div>
-            <div className="px-1.5 pt-2 pb-0.5">
-              <p className="flex items-center gap-1.5 text-[1.0625rem] leading-tight font-bold">
-                <span className="truncate">{c.name}</span>
-                <BadgeCheck className="size-4 shrink-0 fill-teal text-white" aria-label="Verified" />
-              </p>
-              <p className="mt-0.5 truncate text-sm text-muted">{c.focus.length ? c.focus.join(", ") : (c.role ?? "Admission counsellor")}</p>
-              <span className="mt-1.5 inline-block text-sm font-semibold text-marigold-600">{c.years} years experience</span>
-              <LeadButton
-                source="home-counsellor"
-                title={`Book a free session with ${first}`}
-                className="mt-2.5 inline-flex min-h-11 w-full items-center justify-center gap-1.5 rounded-xl bg-brand px-3 py-2 text-sm font-semibold text-white"
-              >
-                Talk now <ArrowRight className="size-4" aria-hidden />
-              </LeadButton>
-            </div>
-          </article>
-  );
-}
-
 function Counselling() {
   const steps = [
     { t: "Tell us about you", d: "A 10-minute call about your marks, entrance scores, budget and preferred cities." },
@@ -173,99 +142,23 @@ function Counselling() {
     { t: "Secure your seat", d: "We stay with you until the seat fee is paid and the letter is in your hand." },
   ];
   return (
-    <>
     <CounsellingScroll steps={steps} />
-    <section className="bg-brand py-8 text-white sm:py-10 lg:hidden">
-      <Container className="w-full">
-        <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-10">
-          <div>
-            <SectionHeading
-              tone="dark"
-              compact
-              title="One counsellor, from first call to final seat"
-              intro="One person, assigned to you, who knows your marks, your budget and your parents' worries."
-              introClass="max-lg:hidden"
-            />
-            <ol className="mt-5 grid gap-3 max-lg:hidden">
-              {steps.map((s, i) => (
-                <li
-                  key={s.t}
-                  data-reveal
-                  style={{ "--d": `${i * 110}ms` } as React.CSSProperties}
-                  className="relative flex gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-3.5 sm:p-4"
-                >
-                  <span className="relative grid size-10 shrink-0 place-items-center rounded-full bg-teal font-display text-lg font-extrabold text-brand">
-                    <span className="absolute inset-0 animate-ping rounded-full bg-teal/40 [animation-duration:2.8s]" aria-hidden />
-                    <span className="relative">{String(i + 1).padStart(2, "0")}</span>
-                  </span>
-                  {i < steps.length - 1 && <span className="absolute top-[3.25rem] left-[2rem] h-[calc(100%-2.25rem+0.75rem)] w-px bg-teal/40 sm:left-[2.25rem]" aria-hidden />}
-                  <div>
-                    <h3 className="t-h4">{s.t}</h3>
-                    <p className="mt-0.5 text-[0.9375rem] leading-snug text-white/70">{s.d}</p>
-                  </div>
-                </li>
-              ))}
-            </ol>
-            <div className="mt-5 flex flex-wrap gap-3 max-lg:hidden">
-              <LeadButton
-                source="how-it-works"
-                className="inline-flex items-center justify-center rounded-full bg-teal px-6 py-3.5 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
-              >
-                Book a free session
-              </LeadButton>
-              <Link href="/counselling" className={btn.ghostDark}>
-                Meet our counsellors
-              </Link>
-            </div>
-          </div>
-          {COUNSELLORS.length > 0 ? (
-            <>
-            <ul className="hidden grid-cols-2 content-start items-start gap-4 lg:grid lg:grid-cols-3">
-              {COUNSELLORS.map((c, i) => (
-                <li
-                  key={c.name}
-                  data-reveal
-                  style={{ "--d": `${(i % 3) * 120 + Math.floor(i / 3) * 60}ms` } as React.CSSProperties}
-                  className={i % 3 === 1 ? "lg:mt-6" : ""}
-                >
-                  <CounsellorCard c={c} i={i} float />
-                </li>
-              ))}
-            </ul>
-            {/* Phones: one row that keeps scrolling on its own. The list is there twice so the loop has no gap. */}
-            <div className="-mx-4 overflow-hidden py-2 sm:-mx-6 lg:hidden">
-              <ul className="scroll-left flex w-max gap-4 pl-4 sm:pl-6 [--dur:45s] hover:[animation-play-state:paused]">
-                {[...COUNSELLORS, ...COUNSELLORS].map((c, i) => (
-                  <li key={i} className="w-[11.5rem] shrink-0 sm:w-[13.5rem]" aria-hidden={i >= COUNSELLORS.length} inert={i >= COUNSELLORS.length}>
-                    <CounsellorCard c={c} i={i} float={false} />
-                  </li>
-                ))}
-              </ul>
-            </div>
-            </>
-          ) : (
-            <div className="relative min-h-[20rem] overflow-hidden rounded-xl lg:min-h-full">
-              <Image src="/images/study-table.jpg" alt="" fill sizes="(min-width:1024px) 520px, 100vw" className="object-cover" />
-            </div>
-          )}
-        </div>
-      </Container>
-    </section>
-    </>
   );
 }
 
 /**
  * Desktop: the headline and call to action show first, with the counsellor grid tilted back underneath.
  * Scrolling pins the section and the grid rises flat until it fills the screen.
- * Phones keep the simple auto-scrolling row.
+ * Phones get the same effect with two columns of photos.
  */
 function CounsellingScroll({ steps }: { steps: { t: string; d: string }[] }) {
   const cols = [0, 1, 2].map((c) => COUNSELLORS.map((x, i) => ({ x, i })).filter(({ i }) => i % 3 === c));
   const ranges = [["-3%", "0%"], ["5%", "0%"], ["-3%", "0%"]];
+  const cols2 = [0, 1].map((c) => COUNSELLORS.map((x, i) => ({ x, i })).filter(({ i }) => i % 2 === c));
+  const ranges2 = [["-2%", "0%"], ["4%", "0%"]];
   return (
-    <section className="relative hidden overflow-x-clip bg-brand text-white lg:block">
-      <div className="relative z-10 mx-auto max-w-[56rem] px-6 pt-20 pb-6 text-center">
+    <section className="relative overflow-x-clip bg-brand text-white">
+      <div className="relative z-10 mx-auto max-w-[56rem] px-5 pt-10 pb-4 text-center sm:px-6 lg:pt-20 lg:pb-6">
         <div>
           <h2 className="t-h2 text-white">
             <span className="text-teal">One counsellor,</span>
@@ -273,12 +166,12 @@ function CounsellingScroll({ steps }: { steps: { t: string; d: string }[] }) {
             from first call to final seat
           </h2>
         </div>
-        <div className="mx-auto mt-4 max-w-[38rem]">
-          <p className="text-lg leading-snug text-white/70">
+        <div className="mx-auto mt-3 max-w-[38rem] lg:mt-4">
+          <p className="text-base leading-snug text-white/70 lg:text-lg">
             One person, assigned to you, who knows your marks, your budget and your parents&apos; worries.
           </p>
         </div>
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <div className="mt-5 flex flex-wrap items-center justify-center gap-3 lg:mt-6">
           <LeadButton
             source="how-it-works"
             className="inline-flex items-center justify-center rounded-full bg-teal px-7 py-3.5 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
@@ -290,7 +183,7 @@ function CounsellingScroll({ steps }: { steps: { t: string; d: string }[] }) {
           </Link>
         </div>
         <div>
-          <ol className="mt-7 flex flex-wrap items-center justify-center gap-2.5">
+          <ol className="mt-5 flex flex-wrap items-center lg:mt-7 justify-center gap-2.5">
             {steps.map((s, i) => (
               <li key={s.t} title={s.d} className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] py-1.5 pr-4 pl-1.5 text-sm font-semibold text-white/90 backdrop-blur-sm">
                 <span className="grid size-7 place-items-center rounded-full bg-teal font-display text-xs font-extrabold text-brand">{String(i + 1).padStart(2, "0")}</span>
@@ -303,7 +196,18 @@ function CounsellingScroll({ steps }: { steps: { t: string; d: string }[] }) {
 
       <ContainerScroll className="relative z-[1] -mt-14 h-[190vh] min-h-0">
         <ContainerSticky className="h-svh min-h-[34rem]">
-          <GalleryContainer className="mx-auto max-w-[60rem] content-center gap-4 rounded-none px-5 pt-[5.5rem] pb-6">
+          {/* Phones: two columns */}
+          <GalleryContainer className="mx-auto max-w-[34rem] grid-cols-2 content-center gap-3 rounded-none px-4 pt-[5.5rem] pb-6 lg:hidden">
+            {cols2.map((col, c) => (
+              <GalleryCol key={c} yRange={ranges2[c]} className="h-full min-h-0 justify-center gap-3">
+                {col.map(({ x, i }) => (
+                  <CounsellorTile key={x.name} c={x} i={i} compact />
+                ))}
+              </GalleryCol>
+            ))}
+          </GalleryContainer>
+          {/* Large screens: three columns */}
+          <GalleryContainer className="mx-auto max-w-[60rem] grid-cols-3 content-center gap-4 rounded-none px-5 pt-[5.5rem] pb-6 max-lg:hidden">
             {cols.map((col, c) => (
               <GalleryCol key={c} yRange={ranges[c]} className="h-full min-h-0 justify-center gap-4">
                 {col.map(({ x, i }) => (
@@ -319,7 +223,7 @@ function CounsellingScroll({ steps }: { steps: { t: string; d: string }[] }) {
 }
 
 /** Tile for the scroll gallery: the whole photo fills the tile, with a small solid panel for the details. */
-function CounsellorTile({ c, i }: { c: (typeof COUNSELLORS)[number]; i: number }) {
+function CounsellorTile({ c, i, compact = false }: { c: (typeof COUNSELLORS)[number]; i: number; compact?: boolean }) {
   const first = c.name.startsWith("Dr.") ? c.name : c.name.split(" ")[0];
   return (
     <article className="group relative aspect-square flex-none overflow-hidden rounded-2xl bg-[#0b4a47] shadow-float ring-1 ring-white/15">
@@ -328,8 +232,8 @@ function CounsellorTile({ c, i }: { c: (typeof COUNSELLORS)[number]; i: number }
         alt={c.name}
         fill
         quality={90}
-        priority={i < 3}
-        sizes="(min-width:1024px) 22vw, 100vw"
+        priority={!compact && i < 3}
+        sizes="(min-width:1024px) 22vw, 50vw"
         className="object-cover object-[50%_12%] transition-transform duration-700 group-hover:scale-[1.03]"
       />
       {c.rating && (
@@ -337,13 +241,13 @@ function CounsellorTile({ c, i }: { c: (typeof COUNSELLORS)[number]; i: number }
           <Star className="size-3 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
         </span>
       )}
-      <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between gap-3 rounded-xl bg-[#0b4a47] px-3.5 py-3 ring-1 ring-white/10">
+      <div className="absolute inset-x-2 bottom-2 flex flex-col items-stretch gap-2 rounded-xl bg-[#0b4a47] px-3 py-2.5 ring-1 ring-white/10 sm:inset-x-2.5 sm:bottom-2.5 lg:flex-row lg:items-center lg:justify-between lg:gap-3 lg:px-3.5 lg:py-3">
         <div className="min-w-0">
           <p className="flex items-center gap-1.5 font-display text-base leading-tight font-extrabold text-white">
             <span className="truncate">{c.name}</span>
             <BadgeCheck className="size-4 shrink-0 fill-teal text-[#0b4a47]" aria-label="Verified" />
           </p>
-          <p className="mt-0.5 truncate text-[0.8125rem] text-white/70">
+          <p className="mt-0.5 truncate text-[0.8125rem] text-white/70 max-lg:hidden">
             {c.focus.length ? c.focus.join(", ") : "Admission counsellor"} <span className="text-white/35">|</span>{" "}
             <span className="font-semibold text-marigold">{c.years} yrs</span>
           </p>
@@ -351,7 +255,7 @@ function CounsellorTile({ c, i }: { c: (typeof COUNSELLORS)[number]; i: number }
         <LeadButton
           source="home-counsellor"
           title={`Book a free session with ${first}`}
-          className="inline-flex shrink-0 items-center gap-1 rounded-full bg-teal px-3.5 py-2 text-sm font-semibold text-brand transition hover:bg-white"
+          className="inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-teal px-3.5 py-1.5 text-sm font-semibold text-brand transition hover:bg-white lg:py-2"
         >
           Talk <ArrowRight className="size-4" aria-hidden />
         </LeadButton>
