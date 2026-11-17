@@ -4,10 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Award, BookOpen, Briefcase, Check, GraduationCap, Layers } from "lucide-react";
 import { LeadButton } from "@/components/lead-button";
 
-type Level = "After 12th" | "After graduation" | "Diploma" | "Executive" | "Certificate";
-type Slide = { name: string; full: string; level: Level; points: [string, string, string] };
+export type Level = "After 12th" | "After graduation" | "Diploma" | "Executive" | "Certificate";
+export type Slide = { name: string; full: string; level: Level; points: [string, string, string] };
 
-const SLIDES: Slide[] = [
+export const SLIDES: Slide[] = [
   { name: "BBA", full: "Bachelor of Business Administration", level: "After 12th", points: ["3 year degree", "Study from home", "Weekend and evening classes"] },
   { name: "MBA", full: "Master of Business Administration", level: "After graduation", points: ["2 year degree", "Learn while you work", "Finance, HR, Marketing and more"] },
   { name: "BCA", full: "Bachelor of Computer Applications", level: "After 12th", points: ["3 year degree", "Coding and software basics", "Recorded and live classes"] },
@@ -23,7 +23,7 @@ const SLIDES: Slide[] = [
 ];
 
 // One colour and icon per level.
-const STYLE: Record<Level, { tag: string; bar: string; mark: string; Icon: typeof GraduationCap }> = {
+export const STYLE: Record<Level, { tag: string; bar: string; mark: string; Icon: typeof GraduationCap }> = {
   "After 12th": { tag: "bg-teal/20 text-brand", bar: "bg-teal", mark: "text-brand", Icon: BookOpen },
   "After graduation": { tag: "bg-marigold/20 text-marigold-600", bar: "bg-marigold", mark: "text-marigold-600", Icon: GraduationCap },
   Diploma: { tag: "bg-sun/50 text-ink-80", bar: "bg-sun", mark: "text-ink-80", Icon: Layers },

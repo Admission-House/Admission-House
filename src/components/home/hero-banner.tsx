@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { getCollege } from "@/lib/data";
 
@@ -24,40 +24,132 @@ const SLIDES: Slide[] = [
   { src: "/images/hero/blue-sky-campus.jpg", position: "center 100%" },
 ];
 
-const INTERVAL = 5500;
+const INTERVAL = 4500;
+const STRIPS = 12;
+const STRIP_MS = 300;
+// Fixed, uneven order so the blinds open like a glitch rather than a tidy wave.
+const ORDER = [0, 5, 2, 9, 4, 11, 1, 7, 3, 10, 6, 8];
+const STEP_MS = 14;
+const TOTAL_MS = STRIP_MS + STEP_MS * (STRIPS - 1);
+const SCROLL_STEP = 140; // px of scrolling that flips to the next photo
+const GLITCH = [
+  { top: "17%", delay: 30 },
+  { top: "41%", delay: 80 },
+  { top: "63%", delay: 20 },
+  { top: "82%", delay: 120 },
+];
 
 /**
- * Full-bleed background that slowly rotates through real campus photos. The caption names
- * the college on screen and links to its page. Sits behind the hero content.
+ * Full-bleed banner that rotates through real campus photos. The next photo opens over the current one
+ * in horizontal blinds with a few thin glitch lines flickering across. It changes on a timer, from the
+ * dots, and as you scroll (down for the next photo, up for the previous one).
+ * The caption names the college on screen and links to its page. Sits behind the hero content.
  */
 export function HeroBanner() {
   const [index, setIndex] = useState(0);
-
+  const [next, setNext] = useState<number | null>(null);
+  const reduced = useRef(false);
+  const busy = useRef(false);
+  const live = useRef({ index: 0 });
   useEffect(() => {
-    const id = setInterval(() => setIndex((i) => (i + 1) % SLIDES.length), INTERVAL);
-    return () => clearInterval(id);
+    live.current.index = index;
   }, [index]);
 
-  const current = SLIDES[index].slug ? getCollege(SLIDES[index].slug!) : undefined;
+  useEffect(() => {
+    reduced.current = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  }, []);
+
+  const goTo = useCallback((to: number) => {
+    if (busy.current || to === live.current.index) return;
+    if (reduced.current) {
+      setIndex(to);
+      return;
+    }
+    busy.current = true;
+    setNext(to);
+    window.setTimeout(() => {
+      setIndex(to);
+      setNext(null);
+      busy.current = false;
+    }, TOTAL_MS + 60);
+  }, []);
+
+  // Timer. Restarts after every change so a scroll flip doesn't get a second flip right behind it.
+  useEffect(() => {
+    const id = setTimeout(() => goTo((index + 1) % SLIDES.length), INTERVAL);
+    return () => clearTimeout(id);
+  }, [index, goTo]);
+
+  // Scrolling flips the photo too
+  useEffect(() => {
+    let anchor = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      if (y > window.innerHeight) return; // banner is off screen
+      const d = y - anchor;
+      if (Math.abs(d) < SCROLL_STEP) return;
+      anchor = y;
+      const i = live.current.index;
+      goTo(d > 0 ? (i + 1) % SLIDES.length : (i - 1 + SLIDES.length) % SLIDES.length);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [goTo]);
+
+  const shown = next ?? index;
+  const current = SLIDES[shown].slug ? getCollege(SLIDES[shown].slug!) : undefined;
+  const photo = (i: number, priority = false) => (
+    <Image
+      src={SLIDES[i].src}
+      style={{ objectPosition: SLIDES[i].position }}
+      alt=""
+      fill
+      priority={priority}
+      quality={82}
+      sizes="100vw"
+      className="object-cover"
+    />
+  );
 
   return (
     <>
-      <div className="absolute inset-0 bg-neutral-900" aria-hidden>
+      <div className="absolute inset-0 overflow-hidden bg-neutral-900" aria-hidden>
+        {/* Base photo. The others sit here too, hidden, so each one is already loaded when its turn comes. */}
         {SLIDES.map((c, i) => (
-          <Image
-            key={c.src}
-            src={c.src}
-            style={{ objectPosition: c.position }}
-            alt=""
-            fill
-            priority={i === 0}
-            quality={82}
-            sizes="100vw"
-            className={`object-cover transition-[opacity,transform] ease-out ${
-              i === index ? "scale-100 opacity-100 duration-[1200ms,7000ms]" : "scale-[1.07] opacity-0 duration-[1200ms,0ms]"
-            }`}
-          />
+          <div key={c.src} className={`absolute inset-0 ${i === index ? "opacity-100" : "opacity-0"}`}>
+            {photo(i, i === 0)}
+          </div>
         ))}
+
+        {/* The incoming photo, cut into horizontal strips that each open from their middle line */}
+        {next !== null && (
+          <div key={next} className="absolute inset-0">
+            {ORDER.map((order, i) => (
+              // Each strip is only as tall as its own slice; the photo inside is stretched to the full banner and shifted up.
+              <div
+                key={i}
+                className="absolute inset-x-0 overflow-hidden will-change-[clip-path]"
+                style={{
+                  top: `${(i * 100) / STRIPS}%`,
+                  height: `${100 / STRIPS + 0.25}%`,
+                  animation: `strip-in ${STRIP_MS}ms cubic-bezier(0.7, 0, 0.2, 1) ${order * STEP_MS}ms both`,
+                }}
+              >
+                <div className="absolute inset-x-0" style={{ height: `${STRIPS * 100}%`, top: `${-i * 100}%` }}>
+                  {photo(next)}
+                </div>
+              </div>
+            ))}
+            {GLITCH.map((g) => (
+              <span
+                key={g.top}
+                className="absolute inset-x-0 h-[2px] bg-white/80 mix-blend-screen"
+                style={{ top: g.top, animation: `glitch-line 260ms steps(3) ${g.delay}ms both` }}
+              />
+            ))}
+          </div>
+        )}
+
         {/* Neutral dark shade, only strong enough behind the text, so the photo keeps its own colours */}
         <div className="absolute inset-0 max-lg:bg-black/30 bg-black/55 lg:bg-transparent lg:bg-gradient-to-r lg:from-[#031f1e]/90 lg:via-black/62 lg:to-black/5" />
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-black/45 to-transparent" />
@@ -71,12 +163,12 @@ export function HeroBanner() {
               <button
                 key={c.src}
                 role="tab"
-                aria-selected={i === index}
+                aria-selected={i === shown}
                 aria-label={`Photo ${i + 1}`}
-                onClick={() => setIndex(i)}
+                onClick={() => goTo(i)}
                 className="group pointer-events-auto px-0.5 py-3 lg:py-2"
               >
-                <span className={`block h-1 rounded-full transition-all duration-300 ${i === index ? "w-9 bg-teal" : "w-4 bg-white/45 group-hover:bg-white/75"}`} />
+                <span className={`block h-1 rounded-full transition-all duration-300 ${i === shown ? "w-9 bg-teal" : "w-4 bg-white/45 group-hover:bg-white/75"}`} />
               </button>
             ))}
           </div>

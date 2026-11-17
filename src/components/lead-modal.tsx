@@ -26,7 +26,7 @@ export function LeadModal({ context, onClose }: { context: LeadContext | null; o
         if (e.target === ref.current) onClose();
       }}
       aria-labelledby="lead-title"
-      className="m-auto w-[min(35rem,calc(100vw-1.5rem))] max-h-[calc(100dvh-1.5rem)] overflow-hidden rounded-[var(--radius-panel)] max-lg:m-0 max-lg:h-dvh max-lg:max-h-none max-lg:w-screen max-lg:max-w-none max-lg:rounded-none bg-white p-0 text-ink shadow-float backdrop:bg-ink/55 backdrop:backdrop-blur-sm"
+      className="lead-dialog m-auto w-[min(35rem,calc(100vw-1.5rem))] max-h-[calc(100dvh-1.5rem)] overflow-hidden rounded-[var(--radius-panel)] max-lg:m-0 max-lg:h-dvh max-lg:max-h-none max-lg:w-screen max-lg:max-w-none max-lg:rounded-none bg-white p-0 text-ink shadow-float backdrop:bg-ink/55 backdrop:backdrop-blur-sm"
     >
       <div key={context?.source} className="max-h-[calc(100dvh-1.5rem)] thin-scroll overflow-y-auto max-lg:flex max-lg:h-dvh max-lg:max-h-none">
         <div className="relative p-5 pb-10 max-lg:mx-auto max-lg:my-auto max-lg:w-full max-lg:max-w-xl sm:p-8 max-lg:sm:py-12">

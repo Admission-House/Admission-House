@@ -5,6 +5,7 @@ import { COUNSELLORS, EXAMS, FAQS, TESTIMONIALS, getCollege, feeRange, formatLak
 import { Container, SectionHeading, TextLink, btn } from "@/components/ui";
 import { HeroFinder } from "@/components/home/hero-finder";
 import { HeroBanner } from "@/components/home/hero-banner";
+import { ContainerScroll, ContainerSticky, GalleryCol, GalleryContainer } from "@/components/ui/animated-gallery";
 import { FieldMarquee } from "@/components/home/field-marquee";
 import { TopColleges } from "@/components/home/top-colleges";
 import { Universities } from "@/components/home/universities";
@@ -172,7 +173,9 @@ function Counselling() {
     { t: "Secure your seat", d: "We stay with you until the seat fee is paid and the letter is in your hand." },
   ];
   return (
-    <section className="bg-brand py-8 text-white sm:py-10 lg:flex lg:min-h-[calc(100svh-5rem)] lg:items-center lg:py-6">
+    <>
+    <CounsellingScroll steps={steps} />
+    <section className="bg-brand py-8 text-white sm:py-10 lg:hidden">
       <Container className="w-full">
         <div className="grid gap-8 lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-10">
           <div>
@@ -248,6 +251,112 @@ function Counselling() {
         </div>
       </Container>
     </section>
+    </>
+  );
+}
+
+/**
+ * Desktop: the headline and call to action show first, with the counsellor grid tilted back underneath.
+ * Scrolling pins the section and the grid rises flat until it fills the screen.
+ * Phones keep the simple auto-scrolling row.
+ */
+function CounsellingScroll({ steps }: { steps: { t: string; d: string }[] }) {
+  const cols = [0, 1, 2].map((c) => COUNSELLORS.map((x, i) => ({ x, i })).filter(({ i }) => i % 3 === c));
+  const ranges = [["-3%", "0%"], ["5%", "0%"], ["-3%", "0%"]];
+  return (
+    <section className="relative hidden overflow-x-clip bg-brand text-white lg:block">
+      <div className="relative z-10 mx-auto max-w-[56rem] px-6 pt-20 pb-6 text-center">
+        <div>
+          <h2 className="t-h2 text-white">
+            <span className="text-teal">One counsellor,</span>
+            <br />
+            from first call to final seat
+          </h2>
+        </div>
+        <div className="mx-auto mt-4 max-w-[38rem]">
+          <p className="text-lg leading-snug text-white/70">
+            One person, assigned to you, who knows your marks, your budget and your parents&apos; worries.
+          </p>
+        </div>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <LeadButton
+            source="how-it-works"
+            className="inline-flex items-center justify-center rounded-full bg-teal px-7 py-3.5 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
+          >
+            Book a free session
+          </LeadButton>
+          <Link href="/counselling" className={btn.ghostDark}>
+            Meet our counsellors
+          </Link>
+        </div>
+        <div>
+          <ol className="mt-7 flex flex-wrap items-center justify-center gap-2.5">
+            {steps.map((s, i) => (
+              <li key={s.t} title={s.d} className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] py-1.5 pr-4 pl-1.5 text-sm font-semibold text-white/90 backdrop-blur-sm">
+                <span className="grid size-7 place-items-center rounded-full bg-teal font-display text-xs font-extrabold text-brand">{String(i + 1).padStart(2, "0")}</span>
+                {s.t}
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+
+      <ContainerScroll className="relative z-[1] -mt-14 h-[190vh] min-h-0">
+        <ContainerSticky className="h-svh min-h-[34rem]">
+          <GalleryContainer className="mx-auto max-w-[60rem] content-center gap-4 rounded-none px-5 pt-[5.5rem] pb-6">
+            {cols.map((col, c) => (
+              <GalleryCol key={c} yRange={ranges[c]} className="h-full min-h-0 justify-center gap-4">
+                {col.map(({ x, i }) => (
+                  <CounsellorTile key={x.name} c={x} i={i} />
+                ))}
+              </GalleryCol>
+            ))}
+          </GalleryContainer>
+        </ContainerSticky>
+      </ContainerScroll>
+    </section>
+  );
+}
+
+/** Tile for the scroll gallery: the whole photo fills the tile, with a small solid panel for the details. */
+function CounsellorTile({ c, i }: { c: (typeof COUNSELLORS)[number]; i: number }) {
+  const first = c.name.startsWith("Dr.") ? c.name : c.name.split(" ")[0];
+  return (
+    <article className="group relative aspect-square flex-none overflow-hidden rounded-2xl bg-[#0b4a47] shadow-float ring-1 ring-white/15">
+      <Image
+        src={c.photoFull ?? c.photo}
+        alt={c.name}
+        fill
+        quality={90}
+        priority={i < 3}
+        sizes="(min-width:1024px) 22vw, 100vw"
+        className="object-cover object-[50%_12%] transition-transform duration-700 group-hover:scale-[1.03]"
+      />
+      {c.rating && (
+        <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm">
+          <Star className="size-3 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
+        </span>
+      )}
+      <div className="absolute inset-x-2.5 bottom-2.5 flex items-center justify-between gap-3 rounded-xl bg-[#0b4a47] px-3.5 py-3 ring-1 ring-white/10">
+        <div className="min-w-0">
+          <p className="flex items-center gap-1.5 font-display text-base leading-tight font-extrabold text-white">
+            <span className="truncate">{c.name}</span>
+            <BadgeCheck className="size-4 shrink-0 fill-teal text-[#0b4a47]" aria-label="Verified" />
+          </p>
+          <p className="mt-0.5 truncate text-[0.8125rem] text-white/70">
+            {c.focus.length ? c.focus.join(", ") : "Admission counsellor"} <span className="text-white/35">|</span>{" "}
+            <span className="font-semibold text-marigold">{c.years} yrs</span>
+          </p>
+        </div>
+        <LeadButton
+          source="home-counsellor"
+          title={`Book a free session with ${first}`}
+          className="inline-flex shrink-0 items-center gap-1 rounded-full bg-teal px-3.5 py-2 text-sm font-semibold text-brand transition hover:bg-white"
+        >
+          Talk <ArrowRight className="size-4" aria-hidden />
+        </LeadButton>
+      </div>
+    </article>
   );
 }
 

@@ -144,7 +144,7 @@ export function Header() {
 
           <nav aria-label="Main" className="hidden h-full lg:block">
             <ul className="flex h-full items-stretch">
-              {NAV.map((item) => {
+              {[{ href: "/", label: "Home" } as (typeof NAV)[number], ...NAV].map((item) => {
                 const active = isActive(item.href);
                 const expanded = item.menu ? mega === item.menu : false;
                 return (
