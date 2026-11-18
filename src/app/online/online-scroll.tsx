@@ -47,7 +47,7 @@ export function OnlineScroll({ intro }: { intro: ReactNode }) {
   return (
     <section aria-label="Online courses" className="relative bg-neutral-900 text-white">
       <div ref={wrap} style={{ height: `calc(${N} * var(--per))` }} className="relative [--per:30vh] sm:[--per:36vh] lg:[--per:42vh]">
-        <div className="sticky overflow-hidden" style={{ top: HEADER, height: `calc(100svh - ${HEADER}px)` }}>
+        <div className="sticky overflow-hidden [--intro:21rem] short:[--intro:15.5rem]" style={{ top: HEADER, height: `calc(100svh - ${HEADER}px)` }}>
           {/* Campus photo, shaded on the text side */}
           <Image src="/images/hero/blue-sky-campus.jpg" alt="" fill priority quality={82} sizes="100vw" className="object-cover object-[center_75%]" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#031f1e]/90 via-black/55 to-black/25" aria-hidden />
@@ -94,7 +94,7 @@ function ScrollCard({ slide: s, i, progress, narrow, reduced }: { slide: Slide; 
   return (
     <motion.article
       style={{ x, y, rotateY, scale, opacity, zIndex, transformStyle: "preserve-3d" }}
-      className={`absolute top-[58%] left-1/2 -mt-[9.25rem] ml-[max(-11rem,-39vw)] flex h-[18.5rem] w-[78vw] max-w-[22rem] overflow-hidden sm:top-[60%] lg:top-[63%] lg:-mt-[9.5rem] lg:ml-[max(-18.5rem,-19vw)] lg:h-[19rem] lg:w-[min(37rem,38vw)] lg:max-w-none rounded-2xl bg-gradient-to-br ${face.bg} text-white shadow-[0_40px_90px_-30px_rgb(0_0_0/0.85)] ring-1 ${face.rim} will-change-transform`}
+      className={`absolute top-[max(calc(58%_-_9.25rem),13rem)] left-1/2 ml-[max(-11rem,-39vw)] flex h-[18.5rem] w-[78vw] max-w-[22rem] overflow-hidden sm:top-[max(calc(60%_-_9.25rem),13rem)] lg:top-auto lg:bottom-8 lg:mt-0 lg:ml-[max(-18.5rem,-19vw)] lg:h-[clamp(13rem,calc(100svh-4.875rem-var(--intro)),19rem)] lg:w-[min(37rem,38vw)] lg:max-w-none rounded-2xl bg-gradient-to-br ${face.bg} text-white shadow-[0_40px_90px_-30px_rgb(0_0_0/0.85)] ring-1 ${face.rim} will-change-transform`}
     >
       <span className={`pointer-events-none absolute -top-20 -right-16 size-72 rounded-full blur-3xl ${face.glow}`} aria-hidden />
       <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/50" aria-hidden />

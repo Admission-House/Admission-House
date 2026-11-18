@@ -74,7 +74,7 @@ export default function OnlinePage() {
       <OnlineScroll
         intro={
           <div className="max-w-[44rem]">
-            <h1 className="t-h1 text-white">
+            <h1 className="t-h1 text-white short:lg:text-[2.5rem]">
               Your degree,{" "}
               <span className="relative whitespace-nowrap">
                 on your own time
@@ -82,7 +82,7 @@ export default function OnlinePage() {
               </span>
               .
             </h1>
-            <p className="mt-3 max-w-md text-[0.9375rem] leading-snug text-white/85 max-lg:hidden lg:mt-4 lg:text-base">Pick a course, tell us your marks and what you want to do next. We help with the rest.</p>
+            <p className="mt-3 max-w-md text-[0.9375rem] leading-snug text-white/85 max-lg:hidden short:hidden lg:mt-4 lg:text-base">Pick a course, tell us your marks and what you want to do next. We help with the rest.</p>
             <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1">
               <LeadButton
                 source="online-hero"

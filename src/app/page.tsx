@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, BadgeCheck, Star } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { COUNSELLORS, EXAMS, FAQS, TESTIMONIALS, getCollege, feeRange, formatLakh, packageStat } from "@/lib/data";
-import { Container, SectionHeading, TextLink, btn } from "@/components/ui";
+import { Container, SectionHeading, TextLink } from "@/components/ui";
 import { HeroFinder } from "@/components/home/hero-finder";
 import { HeroBanner } from "@/components/home/hero-banner";
-import { ContainerScroll, ContainerSticky, GalleryCol, GalleryContainer } from "@/components/ui/animated-gallery";
+import { PinnedPhotoScroll } from "@/components/home/pinned-photo-scroll";
 import { FieldMarquee } from "@/components/home/field-marquee";
 import { TopColleges } from "@/components/home/top-colleges";
 import { Universities } from "@/components/home/universities";
@@ -134,133 +134,45 @@ function Streams() {
   );
 }
 
-function Counselling() {
-  const steps = [
-    { t: "Tell us about you", d: "A 10-minute call about your marks, entrance scores, budget and preferred cities." },
-    { t: "Get a shortlist", d: "A balanced list of dream, target and safe colleges, with fees and cut-offs." },
-    { t: "Apply with help", d: "We do the forms, documents, scholarships and counselling rounds together." },
-    { t: "Secure your seat", d: "We stay with you until the seat fee is paid and the letter is in your hand." },
-  ];
-  return (
-    <CounsellingScroll steps={steps} />
-  );
-}
-
 /**
- * Desktop: the headline and call to action show first, with the counsellor grid tilted back underneath.
- * Scrolling pins the section and the grid rises flat until it fills the screen.
- * Phones get the same effect with two columns of photos.
+ * The counsellor section is pinned while you scroll. A photo on the left changes from one counsellor to the next, and
+ * that counsellor's name and details rise into place on the right. Only the person in the photo is shown.
  */
-function CounsellingScroll({ steps }: { steps: { t: string; d: string }[] }) {
-  const cols = [0, 1, 2].map((c) => COUNSELLORS.map((x, i) => ({ x, i })).filter(({ i }) => i % 3 === c));
-  const ranges = [["-3%", "0%"], ["5%", "0%"], ["-3%", "0%"]];
-  const cols2 = [0, 1].map((c) => COUNSELLORS.map((x, i) => ({ x, i })).filter(({ i }) => i % 2 === c));
-  const ranges2 = [["-2%", "0%"], ["4%", "0%"]];
-  return (
-    <section className="relative overflow-x-clip bg-brand text-white">
-      <div className="relative z-10 mx-auto max-w-[56rem] px-5 pt-10 pb-4 text-center sm:px-6 lg:pt-20 lg:pb-6">
-        <div>
-          <h2 className="t-h2 text-white">
-            <span className="text-teal">One counsellor,</span>
-            <br />
-            from first call to final seat
-          </h2>
-        </div>
-        <div className="mx-auto mt-3 max-w-[38rem] lg:mt-4">
-          <p className="text-base leading-snug text-white/70 lg:text-lg">
-            One person, assigned to you, who knows your marks, your budget and your parents&apos; worries.
-          </p>
-        </div>
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-3 lg:mt-6">
+function Counselling() {
+  const steps = COUNSELLORS.slice(0, 6).map((c) => {
+    const first = c.name.startsWith("Dr.") ? c.name : c.name.split(" ")[0];
+    return {
+      t: c.name,
+      subtitle: `${c.role ?? "Admission counsellor"} · ${c.years} years experience`,
+      tags: c.languages,
+      img: c.photoFull ?? c.photo,
+      pos: "50% 15%",
+      extra: (
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
           <LeadButton
-            source="how-it-works"
-            className="inline-flex items-center justify-center rounded-full bg-teal px-7 py-3.5 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
+            source="home-counsellor"
+            title={`Book a free session with ${first}`}
+            className="inline-flex w-fit items-center justify-center gap-1.5 rounded-full bg-white px-6 py-3 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-sun"
           >
-            Book a free session
+            Talk to {first} <ArrowRight className="size-4" aria-hidden />
           </LeadButton>
-          <Link href="/counselling" className={btn.ghostDark}>
-            Meet our counsellors
+          <Link href="/counselling" className="text-[0.9375rem] font-semibold text-white/80 underline decoration-white/30 underline-offset-4 transition hover:text-white hover:decoration-white">
+            Meet all counsellors
           </Link>
         </div>
-        <div>
-          <ol className="mt-5 flex flex-wrap items-center lg:mt-7 justify-center gap-2.5">
-            {steps.map((s, i) => (
-              <li key={s.t} title={s.d} className="flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] py-1.5 pr-4 pl-1.5 text-sm font-semibold text-white/90 backdrop-blur-sm">
-                <span className="grid size-7 place-items-center rounded-full bg-teal font-display text-xs font-extrabold text-brand">{String(i + 1).padStart(2, "0")}</span>
-                {s.t}
-              </li>
-            ))}
-          </ol>
-        </div>
-      </div>
-
-      <ContainerScroll className="relative z-[1] -mt-14 h-[190vh] min-h-0">
-        <ContainerSticky className="h-svh min-h-[34rem]">
-          {/* Phones: two columns */}
-          <GalleryContainer className="mx-auto max-w-[34rem] grid-cols-2 content-center gap-3 rounded-none px-4 pt-[5.5rem] pb-6 lg:hidden">
-            {cols2.map((col, c) => (
-              <GalleryCol key={c} yRange={ranges2[c]} className="h-full min-h-0 justify-center gap-3">
-                {col.map(({ x, i }) => (
-                  <CounsellorTile key={x.name} c={x} i={i} compact />
-                ))}
-              </GalleryCol>
-            ))}
-          </GalleryContainer>
-          {/* Large screens: three columns */}
-          <GalleryContainer className="mx-auto max-w-[60rem] grid-cols-3 content-center gap-4 rounded-none px-5 pt-[5.5rem] pb-6 max-lg:hidden">
-            {cols.map((col, c) => (
-              <GalleryCol key={c} yRange={ranges[c]} className="h-full min-h-0 justify-center gap-4">
-                {col.map(({ x, i }) => (
-                  <CounsellorTile key={x.name} c={x} i={i} />
-                ))}
-              </GalleryCol>
-            ))}
-          </GalleryContainer>
-        </ContainerSticky>
-      </ContainerScroll>
-    </section>
-  );
-}
-
-/** Tile for the scroll gallery: the whole photo fills the tile, with a small solid panel for the details. */
-function CounsellorTile({ c, i, compact = false }: { c: (typeof COUNSELLORS)[number]; i: number; compact?: boolean }) {
-  const first = c.name.startsWith("Dr.") ? c.name : c.name.split(" ")[0];
+      ),
+    };
+  });
   return (
-    <article className="group relative aspect-square flex-none overflow-hidden rounded-2xl bg-[#0b4a47] shadow-float ring-1 ring-white/15">
-      <Image
-        src={c.photoFull ?? c.photo}
-        alt={c.name}
-        fill
-        quality={90}
-        priority={!compact && i < 3}
-        sizes="(min-width:1024px) 22vw, 50vw"
-        className="object-cover object-[50%_12%] transition-transform duration-700 group-hover:scale-[1.03]"
-      />
-      {c.rating && (
-        <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-black/60 px-2.5 py-1 text-xs font-bold text-white backdrop-blur-sm">
-          <Star className="size-3 fill-sun text-sun" aria-hidden /> {c.rating.toFixed(1)}
-        </span>
-      )}
-      <div className="absolute inset-x-2 bottom-2 flex flex-col items-stretch gap-2 rounded-xl bg-[#0b4a47] px-3 py-2.5 ring-1 ring-white/10 sm:inset-x-2.5 sm:bottom-2.5 lg:flex-row lg:items-center lg:justify-between lg:gap-3 lg:px-3.5 lg:py-3">
-        <div className="min-w-0">
-          <p className="flex items-center gap-1.5 font-display text-base leading-tight font-extrabold text-white">
-            <span className="truncate">{c.name}</span>
-            <BadgeCheck className="size-4 shrink-0 fill-teal text-[#0b4a47]" aria-label="Verified" />
-          </p>
-          <p className="mt-0.5 truncate text-[0.8125rem] text-white/70 max-lg:hidden">
-            {c.focus.length ? c.focus.join(", ") : "Admission counsellor"} <span className="text-white/35">|</span>{" "}
-            <span className="font-semibold text-marigold">{c.years} yrs</span>
-          </p>
-        </div>
-        <LeadButton
-          source="home-counsellor"
-          title={`Book a free session with ${first}`}
-          className="inline-flex shrink-0 items-center justify-center gap-1 rounded-full bg-teal px-3.5 py-1.5 text-sm font-semibold text-brand transition hover:bg-white lg:py-2"
-        >
-          Talk <ArrowRight className="size-4" aria-hidden />
-        </LeadButton>
-      </div>
-    </article>
+    <PinnedPhotoScroll
+      steps={steps}
+      eyebrow="Our counsellors"
+      title={
+        <>
+          <span className="text-teal">One counsellor,</span> from first call to final seat
+        </>
+      }
+    />
   );
 }
 

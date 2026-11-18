@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, ArrowUpRight, ChevronDown, Clock, Mail, Menu, Phone, Search, X } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ChevronDown, Menu, Phone, Search, X } from "lucide-react";
 import { CITIES, COLLEGES, COURSES, STREAMS } from "@/lib/data";
 import stats from "@/lib/directory-stats.json";
 import { Logo } from "./ui";
@@ -250,14 +250,6 @@ export function Header() {
                 );
               })}
             </ul>
-            <div className="mt-auto grid gap-2.5 px-5 py-5 text-sm text-muted">
-              <p className="flex items-center gap-2.5">
-                <Clock className="size-4 shrink-0 text-royal" aria-hidden /> {SITE.hours}
-              </p>
-              <a href={`mailto:${SITE.email}`} tabIndex={menu ? 0 : -1} className="flex items-center gap-2.5">
-                <Mail className="size-4 shrink-0 text-royal" aria-hidden /> {SITE.email}
-              </a>
-            </div>
           </nav>
           <div className="grid shrink-0 gap-2 border-t border-line p-4">
             <button
