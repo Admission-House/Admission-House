@@ -310,3 +310,18 @@
   .lead-dialog[open] form > *,
   .lead-dialog[open] h2 + p { animation: none; }
 }
+
+/* Saved-password autofill paints inputs pale blue and ignores a transparent background. On the glass login
+   inputs, cover it with a solid dark fill that matches the glass instead. */
+.glass-input:-webkit-autofill,
+.glass-input:-webkit-autofill:hover,
+.glass-input:-webkit-autofill:focus,
+.glass-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #f5f5f5;
+  caret-color: #f5f5f5;
+  -webkit-box-shadow: 0 0 0 1000px #0a1019 inset;
+  box-shadow: 0 0 0 1000px #0a1019 inset;
+  border-radius: 12px;
+  transition: background-color 600000s 0s, color 600000s 0s;
+}
+

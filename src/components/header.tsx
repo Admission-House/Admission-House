@@ -20,6 +20,7 @@ const NAV: { href: string; label: string; menu?: MenuKey }[] = [
   { href: "/exams", label: "Exams" },
   { href: "/compare", label: "Compare" },
   { href: "/counselling", label: "Counselling" },
+  { href: "/rewards", label: "Rewards" },
   { href: "/about", label: "About" },
 ];
 
@@ -102,7 +103,7 @@ export function Header() {
 
   return (
     <>
-      <div className="bg-brand text-[0.8125rem] text-white/80">
+      <div className={`bg-brand text-[0.8125rem] text-white/80 ${pathname === "/" ? "" : "hidden"}`}>
         <div className="mx-auto flex max-w-[84rem] items-center justify-between gap-4 px-4 py-2 sm:px-6 lg:px-8">
           {/* Phones and tablets: one line that scrolls by itself. Desktop: plain text. */}
           <div className="min-w-0 flex-1 overflow-hidden lg:hidden">
