@@ -95,11 +95,18 @@ export function OnlineStrip() {
       clearTimeout(resume);
       resume = setTimeout(() => (paused = false), delay);
     };
-    const onEnter = () => pause();
-    const onLeave = () => play(0);
+    const onEnter = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") pause();
+    };
+    const onLeave = (e: PointerEvent) => {
+      if (e.pointerType === "mouse") play(0);
+    };
     const onTouchStart = () => pause();
     const onTouchEnd = () => play(2500);
-    const onFocusIn = () => pause();
+    // Only keyboard focus pauses it; a tap on a phone leaves focus behind and must not stop the drift for good.
+    const onFocusIn = (e: FocusEvent) => {
+      if ((e.target as HTMLElement).matches?.(":focus-visible")) pause();
+    };
     const onFocusOut = () => play(0);
 
     el.addEventListener("scroll", onScroll, { passive: true });
@@ -107,10 +114,11 @@ export function OnlineStrip() {
     window.addEventListener("pointermove", onMove);
     window.addEventListener("pointerup", onUp);
     el.addEventListener("click", onClickCapture, true);
-    el.addEventListener("mouseenter", onEnter);
-    el.addEventListener("mouseleave", onLeave);
+    el.addEventListener("pointerenter", onEnter);
+    el.addEventListener("pointerleave", onLeave);
     el.addEventListener("touchstart", onTouchStart, { passive: true });
     el.addEventListener("touchend", onTouchEnd, { passive: true });
+    el.addEventListener("touchcancel", onTouchEnd, { passive: true });
     el.addEventListener("focusin", onFocusIn);
     el.addEventListener("focusout", onFocusOut);
     raf = requestAnimationFrame(tick);
@@ -123,10 +131,11 @@ export function OnlineStrip() {
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
       el.removeEventListener("click", onClickCapture, true);
-      el.removeEventListener("mouseenter", onEnter);
-      el.removeEventListener("mouseleave", onLeave);
+      el.removeEventListener("pointerenter", onEnter);
+      el.removeEventListener("pointerleave", onLeave);
       el.removeEventListener("touchstart", onTouchStart);
       el.removeEventListener("touchend", onTouchEnd);
+      el.removeEventListener("touchcancel", onTouchEnd);
       el.removeEventListener("focusin", onFocusIn);
       el.removeEventListener("focusout", onFocusOut);
     };

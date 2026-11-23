@@ -10,6 +10,7 @@ import { SLIDES, STYLE, type Slide } from "./online-card";
 const N = SLIDES.length;
 const PITCH = 42; // vw between the middles of two neighbouring cards on large screens
 const PITCH_SM = 70; // the same on phones, where each card is almost as wide as the screen
+const PITCH_MD = 48; // and on tablets, where the cards are narrower than the screen
 const HEADER = 78; // px, the sticky site header the stage sits under
 
 // Card faces: a deep gradient, a soft glow colour, and the rim colour. White text sits on all of them.
@@ -36,10 +37,15 @@ export function OnlineScroll({ intro }: { intro: ReactNode }) {
   const narrow = useMotionValue(0);
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 1023px)");
-    const sync = () => narrow.set(mq.matches ? 1 : 0);
+    const tq = window.matchMedia("(min-width: 640px)");
+    const sync = () => narrow.set(mq.matches ? (tq.matches ? 2 : 1) : 0);
     sync();
     mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
+    tq.addEventListener("change", sync);
+    return () => {
+      mq.removeEventListener("change", sync);
+      tq.removeEventListener("change", sync);
+    };
   }, [narrow]);
   const { scrollYProgress } = useScroll({ target: wrap, offset: ["start start", "end end"] });
   const count = useTransform(scrollYProgress, (v) => String(Math.round(clamp((v - 0.04) / 0.92, 0, 1) * (N - 1)) + 1).padStart(2, "0"));
@@ -49,16 +55,15 @@ export function OnlineScroll({ intro }: { intro: ReactNode }) {
       <div ref={wrap} style={{ height: `calc(${N} * var(--per))` }} className="relative [--per:30vh] sm:[--per:36vh] lg:[--per:42vh]">
         <div className="sticky overflow-hidden [--intro:21rem] short:[--intro:15.5rem]" style={{ top: HEADER, height: `calc(100svh - ${HEADER}px)` }}>
           {/* Campus photo, shaded on the text side */}
-          {/* The photo is shown whole (contain). A blurred copy fills any space left at the sides. */}
-          <Image src="/images/hero/rushford-dusk-v2.jpg" alt="" fill quality={60} sizes="50vw" aria-hidden className="scale-110 object-cover object-center blur-2xl" />
-          <Image src="/images/hero/rushford-dusk-v2.jpg" alt="" fill priority quality={90} sizes="100vw" className="object-contain object-center" />
+          {/* The photo covers the whole stage on every screen */}
+          <Image src="/images/hero/rushford-dusk-v2.jpg" alt="" fill priority quality={90} sizes="100vw" className="object-cover object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#031f1e]/90 via-black/55 to-black/25" aria-hidden />
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" aria-hidden />
 
           {/* Headline and buttons */}
           <div className="absolute top-5 left-0 z-20 w-full px-4 sm:px-8 lg:top-8 lg:px-[max(2.5rem,calc((100vw-84rem)/2+2rem))]">{intro}</div>
 
-          <p className="absolute right-5 bottom-4 z-20 font-display lg:top-8 lg:right-[max(2.5rem,calc((100vw-84rem)/2+2rem))] lg:bottom-auto text-sm font-bold tracking-wider text-white/70">
+          <p className="absolute bottom-3 left-1/2 z-20 -translate-x-1/2 font-display sm:left-8 sm:translate-x-0 lg:left-auto lg:top-8 lg:right-[max(2.5rem,calc((100vw-84rem)/2+2rem))] lg:bottom-auto text-sm font-bold tracking-wider text-white/70">
             <motion.span className="text-2xl text-white">{count}</motion.span> / {String(N).padStart(2, "0")}
           </p>
 
@@ -78,7 +83,7 @@ function ScrollCard({ slide: s, i, progress, narrow, reduced }: { slide: Slide; 
   const face = FACES[i % FACES.length];
   // d is how many cards away from the middle this one is: 0 in the middle, negative on the left, positive on the right.
   const d = useTransform(progress, (v) => i - clamp((v - 0.04) / 0.92, 0, 1) * (N - 1));
-  const x = useTransform([d, narrow], ([v, n]: number[]) => `${v * (n ? PITCH_SM : PITCH)}vw`);
+  const x = useTransform([d, narrow], ([v, n]: number[]) => `${v * (n === 2 ? PITCH_MD : n ? PITCH_SM : PITCH)}vw`);
   // The slope of the path flips half way through, as in the reference: early cards arrive from the upper right and leave
   // toward the lower left; later cards arrive from the lower right and leave toward the upper left. In between the row is level.
   const y = useTransform([progress, narrow], ([p, n]: number[]) => {
@@ -86,7 +91,7 @@ function ScrollCard({ slide: s, i, progress, narrow, reduced }: { slide: Slide; 
     const pos = clamp((p - 0.04) / 0.92, 0, 1) * (N - 1);
     const slope = clamp((5.6 - pos) / 2.2, -1, 1);
     const k = n ? 0.4 : 1; // phones are tall and narrow, so the cards stagger much less
-    return `${clamp(-(i - pos) * 16 * slope * k, -26 * k, 26 * k)}vh`;
+    return `${clamp(-(i - pos) * 16 * slope * k, -26 * k, 8 * k)}vh`;
   });
   const rotateY = useTransform(d, (v) => (reduced ? 0 : clamp(-v * 30, -52, 52)));
   const scale = useTransform(d, (v) => 1 - 0.2 * Math.min(1, Math.abs(v)));
@@ -96,7 +101,7 @@ function ScrollCard({ slide: s, i, progress, narrow, reduced }: { slide: Slide; 
   return (
     <motion.article
       style={{ x, y, rotateY, scale, opacity, zIndex, transformStyle: "preserve-3d" }}
-      className={`absolute top-[max(calc(58%_-_9.25rem),13rem)] left-1/2 ml-[max(-11rem,-39vw)] flex h-[18.5rem] w-[78vw] max-w-[22rem] overflow-hidden sm:top-[max(calc(60%_-_9.25rem),13rem)] lg:top-auto lg:bottom-8 lg:mt-0 lg:ml-[max(-18.5rem,-19vw)] lg:h-[clamp(13rem,calc(100svh-4.875rem-var(--intro)),19rem)] lg:w-[min(37rem,38vw)] lg:max-w-none rounded-2xl bg-gradient-to-br ${face.bg} text-white shadow-[0_40px_90px_-30px_rgb(0_0_0/0.85)] ring-1 ${face.rim} will-change-transform`}
+      className={`absolute top-[max(calc(58%_-_9.25rem),13rem)] left-1/2 ml-[max(-11rem,-39vw)] flex h-[18.5rem] max-sm:[--h:clamp(16rem,calc(100svh-78px-17rem),18.5rem)] max-sm:h-[var(--h)] max-sm:top-[calc(11rem+(100svh-78px-14rem-var(--h))/2)] w-[78vw] max-w-[22rem] overflow-hidden sm:top-[max(calc(60%_-_9.25rem),13rem)] lg:top-auto lg:bottom-[calc(1.5rem+8vh)] lg:mt-0 lg:ml-[max(-18.5rem,-19vw)] lg:h-[clamp(13rem,calc(100svh-4.875rem-var(--intro)-8vh),19rem)] lg:w-[min(37rem,38vw)] lg:max-w-none rounded-2xl bg-gradient-to-br ${face.bg} text-white shadow-[0_40px_90px_-30px_rgb(0_0_0/0.85)] ring-1 ${face.rim} will-change-transform`}
     >
       <span className={`pointer-events-none absolute -top-20 -right-16 size-72 rounded-full blur-3xl ${face.glow}`} aria-hidden />
       <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/50" aria-hidden />

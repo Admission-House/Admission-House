@@ -77,24 +77,23 @@ export default function OnlinePage() {
           <div className="max-w-[44rem]">
             <h1 className="t-h1 text-white short:lg:text-[2.5rem]">
               Your degree,{" "}
-              <span className="relative whitespace-nowrap">
+              <span className="whitespace-nowrap">
                 on your own time
-                <Underline />
               </span>
               .
             </h1>
             <p className="mt-3 max-w-md text-[0.9375rem] leading-snug text-white/85 max-lg:hidden short:hidden lg:mt-4 lg:text-base">Pick a course, tell us your marks and what you want to do next. We help with the rest.</p>
-            <div className="mt-5 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-0 sm:mt-5 sm:gap-x-3">
               <LeadButton
                 source="online-hero"
                 title="Talk to an online admissions counsellor"
-                className="rounded-full bg-teal px-6 py-3.5 text-[0.9375rem] font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
+                className="rounded-full bg-teal px-5 py-3 text-[0.9375rem] sm:px-6 sm:py-3.5 font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-white"
               >
                 Talk to a counsellor
               </LeadButton>
               <a
                 href="#courses"
-                className="inline-flex items-center gap-2 rounded-full px-4 py-3.5 text-[0.9375rem] font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
+                className="inline-flex items-center gap-1.5 rounded-full px-1 py-3 text-sm sm:gap-2 sm:px-4 sm:py-3.5 sm:text-[0.9375rem] font-semibold text-white underline decoration-white/40 underline-offset-4 hover:decoration-white"
               >
                 See online courses <ArrowRight className="size-4" aria-hidden />
               </a>
@@ -196,11 +195,3 @@ function CourseList({ heading, note, items }: { heading: string; note: string; i
   );
 }
 
-/** A hand-drawn style underline for the headline. */
-function Underline() {
-  return (
-    <svg viewBox="0 0 300 14" preserveAspectRatio="none" className="absolute inset-x-0 -bottom-2 h-3 w-full text-marigold" aria-hidden>
-      <path d="M3 9 C 60 2, 120 12, 180 6 S 270 4, 297 8" fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round" />
-    </svg>
-  );
-}
