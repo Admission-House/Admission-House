@@ -82,7 +82,7 @@ export default function OnlinePage() {
               </span>
               .
             </h1>
-            <p className="mt-3 max-w-md text-[0.9375rem] leading-snug text-white/85 max-lg:hidden short:hidden lg:mt-4 lg:text-base">Pick a course, tell us your marks and what you want to do next. We help with the rest.</p>
+            <p className="mt-3 max-w-md text-[0.9375rem] leading-snug text-white/85 max-lg:text-sm [@media(max-height:37.5rem)]:max-lg:hidden short:lg:hidden lg:mt-4 lg:text-base">Pick a course, tell us your marks and what you want to do next. We help with the rest.</p>
             <div className="mt-4 flex flex-wrap items-center gap-x-2 gap-y-0 sm:mt-5 sm:gap-x-3">
               <LeadButton
                 source="online-hero"

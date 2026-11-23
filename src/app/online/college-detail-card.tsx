@@ -18,14 +18,14 @@ export function CollegeDetailCard({ college: c }: { college: OnlineCollege }) {
 
   return (
     <article className="group relative flex h-full flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-line transition duration-300 hover:-translate-y-1 hover:ring-brand/40">
-      <div className="relative aspect-[16/10] overflow-hidden bg-sand">
+      <div className="relative aspect-[16/10] overflow-hidden bg-sand max-sm:aspect-[2/1]">
         {photo && <Image src={photo} alt="" fill sizes="(min-width: 1280px) 20rem, (min-width: 1024px) 28vw, (min-width: 640px) 45vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" />}
         <span className="absolute top-3 right-3 grid size-9 place-items-center rounded-full bg-white text-ink transition group-hover:bg-marigold">
           <ArrowRight className="size-5 transition group-hover:translate-x-0.5" aria-hidden />
         </span>
       </div>
 
-      <div className="flex flex-1 flex-col px-4 pt-3.5 pb-4">
+      <div className="flex flex-1 flex-col px-3.5 pt-3 pb-3.5 sm:px-4 sm:pt-3.5 sm:pb-4">
         <h3 className="text-center text-base leading-snug font-bold text-ink">
           <Link href={`/online/${c.slug}`} className="transition group-hover:text-royal after:absolute after:inset-0">
             {name}
@@ -65,7 +65,7 @@ export function CollegeDetailCard({ college: c }: { college: OnlineCollege }) {
           </p>
         )}
 
-        <div className="relative z-10 mt-auto grid grid-cols-2 gap-2 pt-4">
+        <div className="relative z-10 mt-auto grid grid-cols-2 gap-2 pt-3 sm:pt-4">
           <Link href={`/online/${c.slug}`} className="rounded-full px-3 py-2.5 text-center text-[0.8125rem] font-semibold text-brand ring-1 ring-brand/30 transition hover:ring-brand">
             View courses
           </Link>

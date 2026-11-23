@@ -101,7 +101,7 @@ function ScrollCard({ slide: s, i, progress, narrow, reduced }: { slide: Slide; 
   return (
     <motion.article
       style={{ x, y, rotateY, scale, opacity, zIndex, transformStyle: "preserve-3d" }}
-      className={`absolute top-[max(calc(58%_-_9.25rem),13rem)] left-1/2 ml-[max(-11rem,-39vw)] flex h-[18.5rem] max-sm:[--h:clamp(16rem,calc(100svh-78px-17rem),18.5rem)] max-sm:h-[var(--h)] max-sm:top-[calc(11rem+(100svh-78px-14rem-var(--h))/2)] w-[78vw] max-w-[22rem] overflow-hidden sm:top-[max(calc(60%_-_9.25rem),13rem)] lg:top-auto lg:bottom-[calc(1.5rem+8vh)] lg:mt-0 lg:ml-[max(-18.5rem,-19vw)] lg:h-[clamp(13rem,calc(100svh-4.875rem-var(--intro)-8vh),19rem)] lg:w-[min(37rem,38vw)] lg:max-w-none rounded-2xl bg-gradient-to-br ${face.bg} text-white shadow-[0_40px_90px_-30px_rgb(0_0_0/0.85)] ring-1 ${face.rim} will-change-transform`}
+      className={`absolute top-[max(calc(58%_-_9.25rem),13rem)] left-1/2 ml-[max(-11rem,-39vw)] flex h-[18.5rem] max-sm:[--h:clamp(16rem,calc(100svh-78px-20.5rem),18.5rem)] max-sm:h-[var(--h)] max-sm:top-[calc(14.5rem+(100svh-78px-17.5rem-var(--h))/2)] w-[78vw] max-w-[22rem] overflow-hidden sm:top-[max(calc(60%_-_9.25rem),13rem)] lg:top-auto lg:bottom-[calc(1.5rem+8vh)] lg:mt-0 lg:ml-[max(-18.5rem,-19vw)] lg:h-[clamp(13rem,calc(100svh-4.875rem-var(--intro)-8vh),19rem)] lg:w-[min(37rem,38vw)] lg:max-w-none rounded-2xl bg-gradient-to-br ${face.bg} text-white shadow-[0_40px_90px_-30px_rgb(0_0_0/0.85)] ring-1 ${face.rim} will-change-transform`}
     >
       <span className={`pointer-events-none absolute -top-20 -right-16 size-72 rounded-full blur-3xl ${face.glow}`} aria-hidden />
       <span className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/50" aria-hidden />
