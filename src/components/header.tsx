@@ -143,7 +143,7 @@ export function Header() {
             <Logo />
           </Link>
 
-          <nav aria-label="Main" className="hidden h-full lg:block">
+          <nav aria-label="Main" className="header-nav hidden h-full transition-opacity duration-200 lg:block">
             <ul className="flex h-full items-stretch">
               {[{ href: "/", label: "Home" } as (typeof NAV)[number], ...NAV].map((item) => {
                 const active = isActive(item.href);

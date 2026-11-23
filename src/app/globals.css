@@ -325,3 +325,9 @@
   transition: background-color 600000s 0s, color 600000s 0s;
 }
 
+
+/* While the search box is open it grows over the menu, so the menu steps aside. */
+@media (min-width: 1024px) {
+  .header-nav { transition: opacity 0.2s; }
+  header div:has(input:focus) > .header-nav { opacity: 0; pointer-events: none; }
+}

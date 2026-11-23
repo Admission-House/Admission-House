@@ -103,9 +103,9 @@ export default function OnlinePage() {
       />
 
       {/* Colleges: a simple sideways scroll, the full list lives on its own page */}
-      <section id="colleges" className="section-y scroll-mt-24">
+      <section id="colleges" className="scroll-mt-24 pt-6 pb-2 sm:py-12 lg:py-14">
         <Container>
-          <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+          <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
             <div>
               <h2 className="t-h2">Online colleges you can join</h2>
             </div>
@@ -115,13 +115,13 @@ export default function OnlinePage() {
           </div>
         </Container>
         {/* Full width: the strip runs edge to edge, outside the page container */}
-        <div className="mt-6">
+        <div className="mt-4 sm:mt-6">
           <OnlineStrip />
         </div>
       </section>
 
       {/* Courses */}
-      <section id="courses" className="section-y scroll-mt-24">
+      <section id="courses" className="scroll-mt-24 pt-6 pb-10 sm:py-12 lg:py-14">
         <Container>
           <h2 className="t-h2 max-w-2xl">Online courses we offer</h2>
 

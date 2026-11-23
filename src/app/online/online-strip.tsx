@@ -102,7 +102,7 @@ export function OnlineStrip() {
       if (e.pointerType === "mouse") play(0);
     };
     const onTouchStart = () => pause();
-    const onTouchEnd = () => play(2500);
+    const onTouchEnd = () => play(150);
     // Only keyboard focus pauses it; a tap on a phone leaves focus behind and must not stop the drift for good.
     const onFocusIn = (e: FocusEvent) => {
       if ((e.target as HTMLElement).matches?.(":focus-visible")) pause();
@@ -142,7 +142,7 @@ export function OnlineStrip() {
   }, []);
 
   return (
-    <div ref={box} className="no-scrollbar cursor-grab overflow-x-auto overscroll-x-contain pt-2 pb-3 select-none active:cursor-grabbing" aria-label="Online colleges">
+    <div ref={box} className="no-scrollbar cursor-grab overflow-x-auto overscroll-x-contain pt-1 pb-1 select-none active:cursor-grabbing" aria-label="Online colleges">
       <ul className="flex w-max">
         {[0, 1].map((copy) =>
           TILES.map((c) => (
