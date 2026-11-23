@@ -49,7 +49,9 @@ export function OnlineScroll({ intro }: { intro: ReactNode }) {
       <div ref={wrap} style={{ height: `calc(${N} * var(--per))` }} className="relative [--per:30vh] sm:[--per:36vh] lg:[--per:42vh]">
         <div className="sticky overflow-hidden [--intro:21rem] short:[--intro:15.5rem]" style={{ top: HEADER, height: `calc(100svh - ${HEADER}px)` }}>
           {/* Campus photo, shaded on the text side */}
-          <Image src="/images/hero/blue-sky-campus.jpg" alt="" fill priority quality={82} sizes="100vw" className="object-cover object-[center_75%]" />
+          {/* The photo is shown whole (contain). A blurred copy fills any space left at the sides. */}
+          <Image src="/images/hero/rushford-dusk-v2.jpg" alt="" fill quality={60} sizes="50vw" aria-hidden className="scale-110 object-cover object-center blur-2xl" />
+          <Image src="/images/hero/rushford-dusk-v2.jpg" alt="" fill priority quality={90} sizes="100vw" className="object-contain object-center" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#031f1e]/90 via-black/55 to-black/25" aria-hidden />
           <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" aria-hidden />
 

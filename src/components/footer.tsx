@@ -32,7 +32,7 @@ export function Footer() {
         ["UG courses", "/courses?level=UG"],
         ["PG courses", "/courses?level=PG"],
         ["Entrance exams", "/exams"],
-        ["Online colleges", "/colleges?mode=online"],
+        ["Online colleges", "/online/universities"],
         ["Compare colleges", "/compare"],
       ],
     },

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { OnlineScroll } from "./online-scroll";
+import { OnlineStrip } from "./online-strip";
 import { Container } from "@/components/ui";
 import { LeadButton } from "@/components/lead-button";
-import { SITE, telHref } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Online courses: degrees you can study from home",
@@ -102,6 +103,24 @@ export default function OnlinePage() {
         }
       />
 
+      {/* Colleges: a simple sideways scroll, the full list lives on its own page */}
+      <section id="colleges" className="section-y scroll-mt-24">
+        <Container>
+          <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-2">
+            <div>
+              <h2 className="t-h2">Online colleges you can join</h2>
+            </div>
+            <Link href="/online/universities" className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-royal">
+              View all universities <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          </div>
+        </Container>
+        {/* Full width: the strip runs edge to edge, outside the page container */}
+        <div className="mt-6">
+          <OnlineStrip />
+        </div>
+      </section>
+
       {/* Courses */}
       <section id="courses" className="section-y scroll-mt-24">
         <Container>
@@ -116,30 +135,6 @@ export default function OnlinePage() {
             <PillGroup heading="Executive programmes" items={EXECUTIVE} />
             <PillGroup heading="Diploma courses" items={DIPLOMA} />
             <PillGroup heading="Certificate courses" items={CERTIFICATES} />
-          </div>
-        </Container>
-      </section>
-
-      {/* CTA */}
-      <section className="section-pb">
-        <Container>
-          <div className="flex flex-col items-start justify-between gap-6 rounded-2xl bg-[#fff6ea] p-6 ring-1 ring-marigold-100 sm:flex-row sm:items-center sm:p-12">
-            <div>
-              <h2 className="t-h3 text-brand">Ready to pick your online course?</h2>
-              <p className="mt-2 text-ink-80">Leave your number and a counsellor will call you back.</p>
-            </div>
-            <div className="flex w-full flex-wrap items-center gap-3 sm:w-auto">
-              <LeadButton
-                source="online-cta"
-                title="Talk to an online admissions counsellor"
-                className="rounded-full bg-brand px-7 py-4 font-semibold whitespace-nowrap text-white transition hover:bg-royal max-sm:w-full"
-              >
-                Talk to a counsellor
-              </LeadButton>
-              <a href={telHref} className="rounded-full px-5 py-4 text-center font-semibold text-brand ring-1 ring-brand/30 hover:ring-brand max-sm:w-full">
-                Call {SITE.phoneDisplay}
-              </a>
-            </div>
           </div>
         </Container>
       </section>

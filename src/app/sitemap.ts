@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { COLLEGES } from "@/lib/data";
 import { ALL_COURSES } from "@/lib/courses";
+import { ONLINE_COLLEGES } from "@/lib/online";
 import { DIRECTORY } from "@/lib/directory";
 import { ALL_SPECIALISATIONS } from "@/lib/specialisations";
 import { CONTENT_UPDATED, SITE } from "@/lib/site";
@@ -11,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/", 1],
     ["/colleges", 0.9],
     ["/online", 0.8],
+    ["/online/universities", 0.8],
     ["/universities", 0.8],
     ["/courses", 0.8],
     ["/exams", 0.8],
@@ -45,6 +47,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified,
       changeFrequency: "monthly" as const,
       priority: 0.3,
+    })),
+    ...ONLINE_COLLEGES.map((c) => ({
+      url: `${SITE.url}/online/${c.slug}`,
+      lastModified,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
     })),
     ...DIRECTORY.map((d) => ({
       url: `${SITE.url}/colleges/${d.s}`,
