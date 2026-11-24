@@ -4,6 +4,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import { COLLEGES, EXAMS, feeLabel, placeLabel } from "@/lib/data";
+import { RewardsChances } from "@/components/rewards-chances";
+import { PREDICTOR } from "@/lib/predictor-data";
 import { getAnyCollege, similarTo } from "@/lib/directory";
 import { CollegeCard, CompareToggle } from "@/components/college-card";
 import { LeadButton } from "@/components/lead-button";
@@ -335,14 +337,12 @@ async function CollegeDetails({ params }: { params: PageProps<"/colleges/[slug]"
               <p className="mt-4 text-[0.9375rem] text-ink-80">
                 Talk to a counsellor about cut-offs, scholarships and your chances at {c.short}.
               </p>
-              <LeadButton
-                source="detail-side"
-                title={`Get admission help for ${c.short}`}
-                college={c.name}
+              <RewardsChances
+                benchmark={PREDICTOR[c.slug] ?? null}
                 className="mt-5 w-full rounded-full bg-brand py-3.5 font-semibold text-white hover:bg-royal"
               >
                 Check my chances
-              </LeadButton>
+              </RewardsChances>
               <a href={telHref} className="mt-2 block w-full rounded-full py-3 text-center text-sm font-semibold text-ink ring-1 ring-ink/20 hover:ring-ink">
                 Call {SITE.phoneDisplay}
               </a>

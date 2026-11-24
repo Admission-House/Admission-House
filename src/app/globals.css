@@ -331,3 +331,8 @@
   .header-nav { transition: opacity 0.2s; }
   header div:has(input:focus) > .header-nav { opacity: 0; pointer-events: none; }
 }
+
+/* The page scroll lock while a popup is open lives in components/providers.tsx (useDialogScrollLock). */
+dialog {
+  overscroll-behavior: contain;
+}

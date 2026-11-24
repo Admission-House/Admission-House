@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useMemo, useState, useSyncExternalStore } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { LeadModal } from "./lead-modal";
 import { CompareTray } from "./compare-tray";
 
@@ -79,7 +79,32 @@ export function useCompare() {
   return ctx;
 }
 
+/**
+ * While any <dialog> is open (the lead form, the rewards popup) the page behind it must not scroll. This watches for
+ * dialogs opening and closing and locks the page itself. The scrollbar space stays reserved so nothing shifts sideways.
+ * It never moves or restores the scroll position, so every page still opens at the top.
+ */
+function useDialogScrollLock() {
+  useEffect(() => {
+    const root = document.documentElement;
+    const sync = () => {
+      const locked = !!document.querySelector("dialog[open]");
+      root.style.overflow = locked ? "hidden" : "";
+      root.style.scrollbarGutter = locked ? "stable" : "";
+    };
+    const watcher = new MutationObserver(sync);
+    watcher.observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ["open"] });
+    sync();
+    return () => {
+      watcher.disconnect();
+      root.style.overflow = "";
+      root.style.scrollbarGutter = "";
+    };
+  }, []);
+}
+
 export function Providers({ children }: { children: React.ReactNode }) {
+  useDialogScrollLock();
   const [lead, setLead] = useState<LeadContext | null>(null);
   const items = useSyncExternalStore(subscribeCompare, readCompare, () => EMPTY);
 

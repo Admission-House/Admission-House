@@ -33,7 +33,7 @@ export function LeadModal({ context, onClose }: { context: LeadContext | null; o
           <button
             onClick={onClose}
             aria-label="Close"
-            className="absolute top-4 right-4 grid size-10 place-items-center rounded-full text-muted transition hover:bg-paper hover:text-ink max-lg:fixed max-lg:top-4 max-lg:right-4 max-lg:z-10 max-lg:bg-paper"
+            className="absolute top-4 right-4 z-20 grid size-10 place-items-center rounded-full text-muted transition hover:bg-paper hover:text-ink max-lg:fixed max-lg:top-4 max-lg:right-4 max-lg:bg-paper"
           >
             <X className="size-5" />
           </button>
