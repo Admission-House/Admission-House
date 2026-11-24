@@ -34,7 +34,6 @@ export function CourseExplorer() {
     <>
       <PageHero
         title={level === "UG" ? "Courses after 12th" : "Courses after graduation"}
-        intro="What each course involves, what it costs, which exams you need and where it can take you."
         image={level === "UG" ? "/images/classroom.jpg" : "/images/hero-grads.jpg"}
       >
           <div role="tablist" aria-label="Level" className="mt-7 inline-grid grid-cols-2 gap-1 rounded-full border border-line bg-white p-1">
