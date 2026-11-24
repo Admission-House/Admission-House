@@ -36,7 +36,7 @@ export function LegalPage({
 }: {
   title: string;
   updated: string;
-  intro: string;
+  intro?: string;
   sections: LegalSection[];
   other: { href: string; label: string };
 }) {
@@ -45,7 +45,7 @@ export function LegalPage({
       <header className="border-b border-line pb-8">
         <h1 className="t-h1">{title}</h1>
         <p className="mt-2 text-sm text-muted">Last updated: {updated}</p>
-        <p className="mt-5 max-w-3xl text-lg leading-relaxed text-ink-80">{intro}</p>
+        {intro && <p className="mt-5 max-w-3xl text-lg leading-relaxed text-ink-80">{intro}</p>}
       </header>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[17rem_1fr] lg:gap-14">

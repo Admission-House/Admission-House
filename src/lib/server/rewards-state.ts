@@ -1,5 +1,6 @@
 import { randomBytes } from "node:crypto";
 import { db as redis } from "@/lib/server/redis";
+import { DAILY_CAP, GAME_MAX, TIERS, VOUCHER_DAYS } from "@/lib/rewards-config";
 
 /**
  * The student's points, streak, daily limit and vouchers, kept on the server (Upstash Redis) so they follow the
@@ -9,16 +10,6 @@ import { db as redis } from "@/lib/server/redis";
  * It only enforces the rules that matter: a game pays once per day, never more than its maximum, never past the
  * daily limit, and a voucher is only issued when the saved balance covers it.
  */
-export const DAILY_CAP = 120;
-export const TIERS = [
-  { pts: 250, pct: 2 },
-  { pts: 500, pct: 5 },
-  { pts: 1000, pct: 10 },
-  { pts: 2000, pct: 15 },
-];
-/** The most one round of each game can pay before the streak bonus. */
-export const GAME_MAX: Record<string, number> = { quiz: 70, match: 50, myth: 30, career: 40 };
-
 export type Voucher = { pct: number; code: string; till: string };
 export type RewardsState = {
   points: number;
@@ -117,7 +108,7 @@ export async function redeemTier(email: string, tierIndex: number) {
     if (s.points < tier.pts) return null;
     s.points -= tier.pts;
     const code = "AH-" + randomBytes(3).toString("hex").slice(0, 4).toUpperCase() + "-" + (10 + (randomBytes(1)[0] % 90));
-    const till = new Date(Date.now() + 30 * 864e5).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" });
+    const till = new Date(Date.now() + VOUCHER_DAYS * 864e5).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" });
     const v: Voucher = { pct: tier.pct, code, till };
     s.vouchers.unshift(v);
     return v;

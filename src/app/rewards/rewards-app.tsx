@@ -96,7 +96,9 @@ export function RewardsApp() {
     };
   }, [router]);
 
-  if (!ready) return <div className="min-h-[60svh] bg-[#eaf7f5]" aria-busy />;
+  // Same colour as the games background and tall enough to fill the window under the header, so the page body
+  // (beige) never shows underneath while the games load.
+  if (!ready) return <div className="min-h-[calc(100svh-5rem)] bg-[#eaf7f5]" aria-busy />;
 
   return (
     <div className="relative">

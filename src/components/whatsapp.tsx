@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { CircleHelp } from "lucide-react";
 import { useCompare } from "./providers";
 import { whatsappHref } from "@/lib/site";
 
@@ -8,6 +10,17 @@ export function WhatsAppButton() {
   const { items } = useCompare();
   const pathname = usePathname();
   const trayVisible = items.length > 0 && !pathname.startsWith("/compare");
+  const spot = `fixed right-4 z-30 grid size-14 place-items-center rounded-full text-white shadow-float transition-all hover:scale-105 sm:right-6 ${
+    trayVisible ? "bottom-36 sm:bottom-24" : "bottom-5 sm:bottom-6"
+  }`;
+  // On the games page the corner button explains the rewards instead of opening WhatsApp.
+  if (pathname === "/rewards") {
+    return (
+      <Link href="/rewards/rules" aria-label="How rewards work" title="How rewards work" className={`${spot} bg-brand`}>
+        <CircleHelp className="size-7" aria-hidden />
+      </Link>
+    );
+  }
   return (
     <a
       href={whatsappHref()}

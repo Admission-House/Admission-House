@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { markJoined } from "@/lib/server/referrals";
 import { SESSION_COOKIE, SESSION_MAX_AGE, createSessionValue, getVerifiedUser, verifyGoogleAccessToken } from "@/lib/server/rewards-auth";
 
 // Same best-effort throttle as /api/leads. Real throttling belongs in the Vercel firewall.
@@ -43,6 +44,7 @@ export async function POST(request: Request) {
     const user = await verifyGoogleAccessToken(accessToken);
     if (!user) return NextResponse.json({ ok: false, error: "Google sign in could not be verified. Please try again." }, { status: 401 });
 
+    await markJoined(user.email).catch((err) => console.error("could not record first sign in", err));
     const res = NextResponse.json({ ok: true, user }, { headers: { "Cache-Control": "no-store" } });
     res.cookies.set(SESSION_COOKIE, createSessionValue(user), { ...cookieOptions, maxAge: SESSION_MAX_AGE });
     return res;

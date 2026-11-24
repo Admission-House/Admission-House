@@ -92,7 +92,7 @@ const ICONS = {
 };
 
 const GAMES = [
-  { id: "quiz",   title: "Daily quiz",            blurb: "5 questions, about 2 minutes", points: 90 },
+  { id: "quiz",   title: "Daily quiz",            blurb: "5 questions, about 2 minutes", points: 70 },
   { id: "match",  title: "Exam match",            blurb: "Pair each exam with its use",  points: 50 },
   { id: "myth",   title: "Myth or fact",          blurb: "6 quick admission rumours",    points: 30 },
   { id: "career", title: "Which course fits you?", blurb: "6 questions, counts once",     points: 40 },
@@ -124,20 +124,20 @@ function landingView() {
   const options = ["JEE Main", "NEET UG", "CLAT", "CAT"].map((o, i) => `<button class="answer" data-sample="${i}"><span class="answer__key">${"ABCD"[i]}</span>${o}</button>`).join("");
   return `<div class="container landing">
     <section class="hero"><div>
-      <h1>Play a little.<br>Pay <span class="highlight">less</span> for counselling.</h1>
-      <p class="hero__lead">Quizzes and games for your course. Points turn into money off your counselling fee.</p>
+      <h1>Play a little.<br>Pay <span class="highlight">less</span> to apply.</h1>
+      <p class="hero__lead">Quizzes and games for your course. Points turn into a voucher on a college's application form fee. Counselling is always free.</p>
       <button class="btn btn--primary" data-act="login">Start earning points</button>
     </div>
     <div class="sample-q"><span class="sample-q__tag">Try one question</span><h3>Which exam decides MBBS admission in India?</h3>
       <div class="answers" id="sample-answers">${options}</div><p class="sample-q__note" id="sample-note">Pick an answer.</p></div></section>
-    <div class="steps"><span>Sign in with email</span><i></i><span>Play a game</span><i></i><span>Redeem on your fee</span></div>
-    <p class="footnote">Preview for the Admissions House team. Fee, rates and questions are placeholders.</p>
+    <div class="steps"><span>Sign in with email</span><i></i><span>Play a game</span><i></i><span>Redeem on a form fee</span></div>
+    <p class="footnote"><a class="rules-link" href="/rewards/rules" target="_top">How rewards work</a><span> Rules, who can play and how vouchers work.</span></p>
   </div>`;
 }
 
 function homeView() {
   const next = TIERS.find((t) => t.pts > S.points), current = bestTier(S.points);
-  const saving = (t) => inr(FEE * t.pct / 100);
+  const saving = (t) => t.pct + "%";
   const goalLine = next
     ? `<span><b class="num">${(next.pts - S.points).toLocaleString("en-IN")}</b> points to <b>${saving(next)} off</b></span>`
     : `<span>Top tier reached, <b>${saving(current)} off</b></span>`;
@@ -165,8 +165,8 @@ function homeView() {
       <div class="today"><h2>Play today</h2><div class="today__meta"><span>${S.todayPoints} of ${DAILY_CAP} points today</span><span class="streak-dots" aria-hidden="true">${dots}</span><span>${days} day streak</span></div></div>
       <div class="home__grid"><div class="games">${tiles}</div>
         <aside class="invite"><div class="invite__head"><span class="invite__icon">${ICONS.people}</span>Invite a friend</div>
-          <div class="invite__body"><b class="invite__amount">+100</b><span class="invite__unit">points for you and for your friend</span><p>Share your link. When your friend signs in, you both get the points.</p></div>
-          <div class="invite__action">${inviteLink() ? `<div class="invite__link" id="invite-link">${esc(inviteLink())}</div><button class="btn" data-act="copy-invite">Copy link</button><button class="btn" data-act="share-invite">Share</button>` : `<div class="invite__link" id="invite-link">Sign in with Google to get your invite link</div>`}</div></aside>
+          <div class="invite__body"><b class="invite__amount">+100</b><span class="invite__unit">points for you and for your friend</span><p>Share your link. When a new friend signs in with Google, you both get the points.</p></div>
+          <div class="invite__action">${inviteLink() ? `<div class="invite__link" id="invite-link">${esc(inviteLink())}</div><button class="btn" data-act="copy-invite">Copy link</button><button class="btn" data-act="share-invite">Share</button>` : `<div class="invite__link" id="invite-link">Google sign in needed</div>`}</div></aside>
       </div></div>`;
 }
 
@@ -174,7 +174,7 @@ function redeemView() {
   const rows = TIERS.map((t, i) => {
     const can = S.points >= t.pts;
     return `<div class="tier"><span class="tier__pct">${t.pct}%</span>
-      <div><b>${inr(FEE - FEE * t.pct / 100)} <small>instead of ${inr(FEE)}</small></b><small>${t.pts.toLocaleString("en-IN")} points</small></div>
+      <div><b>${t.pct}% off <small>application form fee</small></b><small>${t.pts.toLocaleString("en-IN")} points</small></div>
       ${can ? `<button class="btn btn--primary btn--sm" data-act="redeem" data-tier="${i}">Redeem</button>` : `<span class="tier__need">${(t.pts - S.points).toLocaleString("en-IN")} more</span>`}</div>`;
   }).join("");
   const vouchers = S.vouchers.map((v) => `<div class="voucher"><div class="voucher__main"><b>${v.pct}% off</b><span class="voucher__code">${v.code}</span><small>Valid till ${v.till}</small></div>
@@ -182,7 +182,7 @@ function redeemView() {
   return `<div class="redeem"><button class="back" data-go="hub">← Back to rewards</button><h1>Rewards</h1>
     <p class="redeem__balance"><b class="num">${S.points}</b> points to spend</p><div class="tiers">${rows}</div>
     ${S.vouchers.length ? `<h2>Your vouchers</h2>${vouchers}` : ""}
-    <p class="redeem__note">Vouchers do not stack and last 30 days. Your counsellor applies the code to your fee.</p></div>`;
+    <p class="redeem__note">Vouchers do not stack and last 30 days. Your counsellor applies the code to your application form fee. Not valid on online courses. <a class="rules-link" href="/rewards/rules" target="_top">Full rules</a></p></div>`;
 }
 
 const STAGE_TITLES = { quiz: "Daily quiz", match: "Exam match", myth: "Myth or fact", career: "Which course fits you?" };
@@ -257,7 +257,7 @@ function resultView({ title, sub, r, again, ring, marks, stats, review }) {
       <small>Your answer: <b>${q.pick ? esc(q.pick) : "No answer, time ran out"}</b></small>${q.ok ? "" : `<small>Correct answer: <b>${esc(q.right)}</b></small>`}</li>`).join("")}</ol></details>` : "";
   if (r.earned > 0 && (!ring || ring.score / ring.total >= 0.5)) setTimeout(confetti, 150);
   return `<div class="result"><div class="result__top">${ringHtml}
-      <div class="result__head"><span class="result__tag ${r.practice ? "is-practice" : ""}">${r.practice ? "Practice" : "Round complete"}</span><h2>${title}</h2><p>${sub}</p></div></div>
+      <div class="result__head"><h2>${title}</h2><p>${sub}</p></div></div>
     ${marksHtml}
     <div class="stats"><div><b>${r.practice ? "0" : "+" + r.earned}</b><span>${r.practice ? "points, practice" : "points earned"}</span></div>${stats.map((s) => `<div><b>${s[0]}</b><span>${s[1]}</span></div>`).join("")}</div>
     ${bonusNote || capNote ? `<p class="result__note">${bonusNote}${capNote}</p>` : ""}${reviewHtml}
@@ -630,7 +630,7 @@ const ACTIONS = {
   "copy-invite": () => inviteLink() && copyText(inviteLink(), "Link copied"),
   "share-invite": () => {
     if (!inviteLink()) return;
-    const text = "Play quick admission games on Admissions House and earn points towards college fee vouchers. Join with my link: " + inviteLink();
+    const text = "Play quick admission games on Admissions House and earn points towards application fee vouchers. Join with my link: " + inviteLink();
     if (navigator.share) navigator.share({ title: "Admissions House Rewards", text }).catch(() => {});
     else window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank", "noopener");
   },
