@@ -46,7 +46,7 @@ export default function ContactPage() {
             </p>
           )}
           <p className="flex items-center gap-2.5">
-            <Clock className="size-5 shrink-0 text-royal" /> {SITE.hours}
+            <Clock className="size-5 shrink-0 text-royal" /> {SITE.promise}
           </p>
         </div>
       </div>

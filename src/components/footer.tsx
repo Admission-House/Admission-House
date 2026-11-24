@@ -32,7 +32,7 @@ export function Footer() {
         ["UG courses", "/courses?level=UG"],
         ["PG courses", "/courses?level=PG"],
         ["Entrance exams", "/exams"],
-        ["Online colleges", "/online/universities"],
+        ["Online colleges", "/online#colleges"],
         ["Compare colleges", "/compare"],
       ],
     },
@@ -67,7 +67,7 @@ export function Footer() {
           <div className="max-w-xl">
             <h2 className="t-h3 text-white">Not sure which college is right for you?</h2>
             <p className="mt-1.5 text-white/70 short:sm:text-[0.9375rem]">
-              Share your marks and budget. A counsellor will call you within 30 minutes. It&apos;s free.
+              Get a free college shortlist from a counsellor, based on your marks and budget.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -113,7 +113,7 @@ export function Footer() {
                 </li>
               )}
               <li className="inline-flex items-center gap-3">
-                <span className={iconChip}><Clock className="size-4" aria-hidden /></span> {SITE.hours}
+                <span className={iconChip}><Clock className="size-4" aria-hidden /></span> {SITE.promise}
               </li>
             </ul>
 

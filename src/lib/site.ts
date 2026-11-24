@@ -10,7 +10,10 @@ export const SITE = {
   whatsapp: "918796648777",
   email: "info@admissionshouse.com",
   address: "B-1207, Tower 4, NX One, Greater Noida West, Uttar Pradesh",
+  /** Working hours. Kept for the privacy policy and terms contact lines; the footer and contact page show `promise` instead. */
   hours: "Open daily, 10 am to 8 pm",
+  /** The line next to the icon in the footer and on the contact page. */
+  promise: "Counselling hours: 10 am to 8 pm",
 } as const;
 
 /** Profile URLs for the footer icons. Paste a link to make its icon clickable; empty ones render as plain icons. */
