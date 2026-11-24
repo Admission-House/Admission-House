@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { SpaceLogin } from "@/components/ui/space-login";
 import { getRewardsProfile, getRewardsSession, nameFromEmail, saveRewardsProfile, setRewardsSession } from "@/lib/rewards-session";
-import { signInWithGoogle } from "@/lib/google-signin";
+import { preloadGoogle, signInWithGoogle } from "@/lib/google-signin";
 
 /**
  * Login screen for the rewards section. Google sign in is real once NEXT_PUBLIC_GOOGLE_CLIENT_ID is set
@@ -19,6 +19,7 @@ export function RewardsLogin() {
 
   // Already signed in: go straight to the games.
   useEffect(() => {
+    preloadGoogle();
     if (getRewardsSession()) router.replace("/rewards");
     return () => setFormKey((k) => k + 1);
   }, [router]);

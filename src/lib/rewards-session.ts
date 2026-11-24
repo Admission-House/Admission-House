@@ -28,6 +28,8 @@ export function setRewardsSession(session: RewardsSession) {
 }
 
 export function clearRewardsSession() {
+  // Also drop the server's signed cookie (it is httpOnly, so only the server can remove it).
+  fetch("/api/rewards/session", { method: "DELETE" }).catch(() => {});
   try {
     localStorage.removeItem(KEY);
   } catch {

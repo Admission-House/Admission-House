@@ -2,7 +2,7 @@
  * "Continue with Google" using Google Identity Services (a popup, no server needed).
  * Needs NEXT_PUBLIC_GOOGLE_CLIENT_ID: a Web OAuth client from console.cloud.google.com, with this site's
  * address under "Authorized JavaScript origins". The result is a name and verified email for the browser;
- * when the rewards database is added, verify the token on the server before trusting it.
+ * the token is verified on the server (src/lib/server/rewards-auth.ts), which sets the session cookie.
  */
 interface TokenResponse {
   access_token?: string;
@@ -47,9 +47,16 @@ function loadScript(): Promise<void> {
 
 export const GOOGLE_CLIENT_ID = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "";
 
+/** Call when the login page opens, so the Google script is ready before the click. */
+export function preloadGoogle(): void {
+  if (GOOGLE_CLIENT_ID && typeof window !== "undefined") loadScript().catch(() => {});
+}
+
 export async function signInWithGoogle(): Promise<{ name: string; email: string }> {
   if (!GOOGLE_CLIENT_ID) throw new Error("Google sign in is not set up yet. Please use your email for now.");
-  await loadScript();
+  // Browsers only allow the popup straight after the click. Awaiting anything first (like loading the script)
+  // makes Chrome block it, so only wait here if preloadGoogle has not finished yet.
+  if (!window.google?.accounts?.oauth2) await loadScript();
   const oauth2 = window.google?.accounts?.oauth2;
   if (!oauth2) throw new Error("Google sign in could not start. Please try again.");
 
@@ -64,9 +71,14 @@ export async function signInWithGoogle(): Promise<{ name: string; email: string 
     client.requestAccessToken({ prompt: "select_account" });
   });
 
-  const res = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", { headers: { Authorization: `Bearer ${token}` } });
-  if (!res.ok) throw new Error("Could not read your Google profile. Please try again.");
-  const p = (await res.json()) as { email?: string; email_verified?: boolean; name?: string; given_name?: string };
-  if (!p.email || p.email_verified === false) throw new Error("Your Google account has no verified email.");
-  return { name: p.name || p.given_name || p.email.split("@")[0], email: p.email };
+  // The server checks the token with Google (it must be issued to our client id) and sets a signed
+  // httpOnly cookie. The name and email we show come from that verified answer, not from the browser.
+  const res = await fetch("/api/rewards/session", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ accessToken: token }),
+  }).catch(() => null);
+  const data = (await res?.json().catch(() => null)) as { ok?: boolean; error?: string; user?: { name: string; email: string } } | null;
+  if (!res?.ok || !data?.ok || !data.user) throw new Error(data?.error || "Could not verify your Google sign in. Please try again.");
+  return data.user;
 }
