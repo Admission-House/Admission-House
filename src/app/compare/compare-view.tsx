@@ -28,8 +28,13 @@ import { useCompare, useLead } from "@/components/providers";
 
 const NA = "Not listed";
 
+/** An online university has its own pages. */
+const pageOf = (c: College) => (c.online ? `/online/${c.slug}` : `/colleges/${c.slug}`);
+
 type Row = {
   label: string;
+  /** Does this college have a value for the row? A row nobody has a value for is left out. */
+  has: (c: College) => boolean;
   value: (c: College) => React.ReactNode;
   /** Returns a number where higher is better, used to highlight the best college */
   score?: (c: College) => number;
@@ -63,27 +68,31 @@ function YesNo({ on }: { on?: boolean }) {
   );
 }
 
+const hasMoney = (c: College) => feeLabel(c).includes("₹") || !!c.feeSummary;
+
 const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
   {
     group: "Basics",
     icon: Building2,
     rows: [
-      { label: "Location", value: (c) => placeLabel(c) || <Muted /> },
-      { label: "Type", value: (c) => c.type || <Muted /> },
-      { label: "Established", value: (c) => c.established || <Muted /> },
-      { label: "Management", value: (c) => c.management || <Muted /> },
-      { label: "Affiliated to", value: (c) => c.affiliatedTo || <Muted /> },
-      { label: "Website", value: (c) => c.website || <Muted /> },
-      { label: "Campus size", value: (c) => (c.campusAcres ? `${c.campusAcres} acres` : <Muted />), score: (c) => c.campusAcres ?? -1 },
+      { label: "Location", has: (c) => !!placeLabel(c), value: (c) => placeLabel(c) || <Muted /> },
+      { label: "Type", has: (c) => !!c.type, value: (c) => c.type || <Muted /> },
+      { label: "Fields of study", has: (c) => c.streams.length > 0, value: (c) => <Chips items={c.streams} /> },
+      { label: "Established", has: (c) => !!c.established, value: (c) => c.established || <Muted /> },
+      { label: "Management", has: (c) => !!c.management, value: (c) => c.management || <Muted /> },
+      { label: "Affiliated to", has: (c) => !!c.affiliatedTo, value: (c) => c.affiliatedTo || <Muted /> },
+      { label: "Website", has: (c) => !!c.website, value: (c) => c.website || <Muted /> },
+      { label: "AISHE code", has: (c) => !!c.aisheCode, value: (c) => c.aisheCode || <Muted /> },
+      { label: "Campus size", has: (c) => !!c.campusAcres, value: (c) => (c.campusAcres ? `${c.campusAcres} acres` : <Muted />), score: (c) => c.campusAcres ?? -1 },
     ],
   },
   {
     group: "Rankings and approvals",
     icon: Award,
     rows: [
-      { label: "Rank", value: (c) => (c.nirf ? `#${c.nirf}, ${c.rankNote}` : (c.rankNote ?? <Muted>Not ranked</Muted>)), score: (c) => (c.nirf ? -c.nirf : -999) },
-      { label: "Accreditation", value: (c) => c.accreditation || <Muted /> },
-      { label: "Approvals", value: (c) => <Chips items={c.approvals} /> },
+      { label: "Rank", has: (c) => !!(c.nirf || c.rankNote), value: (c) => (c.nirf ? `#${c.nirf}, ${c.rankNote}` : (c.rankNote ?? <Muted>Not ranked</Muted>)), score: (c) => (c.nirf ? -c.nirf : -999) },
+      { label: "Accreditation", has: (c) => !!c.accreditation, value: (c) => c.accreditation || <Muted /> },
+      { label: "Approvals", has: (c) => c.approvals.length > 0, value: (c) => <Chips items={c.approvals} /> },
     ],
   },
   {
@@ -91,23 +100,29 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
     icon: IndianRupee,
     rows: [
       {
-        label: "Fees per year",
-        value: (c) => feeLabel(c),
-        score: (c) => (c.basic || !feeRange(c)[0] ? -1e9 : -feeRange(c)[0]),
+        label: "Fees",
+        has: hasMoney,
+        value: (c) => {
+          const f = feeLabel(c);
+          return !f.includes("₹") ? f : c.online ? `${f} in total` : `${f} per year`;
+        },
+        score: (c) => (c.basic || c.online || !feeRange(c)[0] ? -1e9 : -feeRange(c)[0]),
       },
-      { label: "Average package", value: (c) => (c.avgPackage ? `₹${c.avgPackage} LPA` : <Muted />), score: (c) => c.avgPackage ?? -1 },
-      { label: "Median package", value: (c) => (c.medianPackage ? `₹${c.medianPackage} LPA` : <Muted />), score: (c) => c.medianPackage ?? -1 },
-      { label: "Highest package", value: (c) => (c.highestPackage ? `₹${c.highestPackage} LPA` : <Muted />), score: (c) => c.highestPackage ?? -1 },
-      { label: "Top recruiters", value: (c) => <Chips items={c.recruiters.slice(0, 5)} /> },
+      { label: "Average package", has: (c) => !!c.avgPackage, value: (c) => (c.avgPackage ? `₹${c.avgPackage} LPA` : <Muted />), score: (c) => c.avgPackage ?? -1 },
+      { label: "Median package", has: (c) => !!c.medianPackage, value: (c) => (c.medianPackage ? `₹${c.medianPackage} LPA` : <Muted />), score: (c) => c.medianPackage ?? -1 },
+      { label: "Highest package", has: (c) => !!c.highestPackage, value: (c) => (c.highestPackage ? `₹${c.highestPackage} LPA` : <Muted />), score: (c) => c.highestPackage ?? -1 },
+      { label: "Placement year", has: (c) => !!c.placementYear, value: (c) => c.placementYear || <Muted /> },
+      { label: "Placement details", has: (c) => !!c.placementNote, value: (c) => c.placementNote || <Muted /> },
+      { label: "Top recruiters", has: (c) => c.recruiters.length > 0, value: (c) => <Chips items={c.recruiters} /> },
     ],
   },
   {
     group: "Admission and campus",
     icon: GraduationCap,
     rows: [
-      { label: "Exams accepted", value: (c) => <Chips items={c.exams} /> },
-      { label: "Hostel", value: (c) => <YesNo on={c.hostel} /> },
-      { label: "Scholarships", value: (c) => <YesNo on={c.scholarship} /> },
+      { label: "Exams accepted", has: (c) => c.exams.length > 0, value: (c) => <Chips items={c.exams} /> },
+      { label: "Hostel", has: (c) => c.hostel !== undefined, value: (c) => <YesNo on={c.hostel} /> },
+      { label: "Scholarships", has: (c) => c.scholarship !== undefined, value: (c) => <YesNo on={c.scholarship} /> },
     ],
   },
   {
@@ -116,18 +131,22 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
     rows: [
       {
         label: "Courses offered",
-        value: (c) => (
-          <ul className="grid gap-3">
-            {c.programs.map((p) => (
-              <li key={p.name} className="leading-snug">
-                <span className="block font-semibold">{p.name}</span>
-                <span className="text-xs text-muted lg:text-[0.8125rem]">
-                  {p.duration} · {p.feeText}
-                </span>
-              </li>
-            ))}
-          </ul>
-        ),
+        has: (c) => c.programs.length > 0,
+        value: (c) =>
+          c.programs.length ? (
+            <ul className="grid gap-3">
+              {c.programs.map((p) => (
+                <li key={p.name} className="leading-snug">
+                  <span className="block font-semibold">{p.name}</span>
+                  <span className="text-xs text-muted lg:text-[0.8125rem]">
+                    {p.duration} · {p.feeText}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <Muted />
+          ),
       },
     ],
   },
@@ -137,15 +156,32 @@ const ROWS: { group: string; icon: LucideIcon; rows: Row[] }[] = [
     rows: [
       {
         label: "Highlights",
-        value: (c) => (
-          <ul className="grid gap-2.5">
-            {c.highlights.map((h) => (
-              <li key={h} className="flex gap-1.5 text-xs leading-snug text-ink-80 lg:gap-2 lg:text-[0.875rem]">
-                <BadgeCheck className="mt-px size-3.5 shrink-0 text-royal lg:size-4" aria-hidden /> <span className="min-w-0">{h}</span>
-              </li>
-            ))}
-          </ul>
-        ),
+        has: (c) => c.highlights.length > 0,
+        value: (c) =>
+          c.highlights.length ? (
+            <ul className="grid gap-2.5">
+              {c.highlights.map((h) => (
+                <li key={h} className="flex gap-1.5 text-xs leading-snug text-ink-80 lg:gap-2 lg:text-[0.875rem]">
+                  <BadgeCheck className="mt-px size-3.5 shrink-0 text-royal lg:size-4" aria-hidden /> <span className="min-w-0">{h}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <Muted />
+          ),
+      },
+      {
+        label: "About",
+        has: (c) => !!(c.about || c.tagline),
+        value: (c) =>
+          c.about || c.tagline ? (
+            <div className="grid gap-1.5">
+              {c.tagline && <p className="font-semibold">{c.tagline}</p>}
+              {c.about && <p className="text-xs leading-snug text-ink-80 lg:text-[0.875rem]">{c.about}</p>}
+            </div>
+          ) : (
+            <Muted />
+          ),
       },
     ],
   },
@@ -179,21 +215,29 @@ export function CompareView() {
     compare.set(next);
   }
 
+  // The + on an empty slot: focus its search box (on a phone, the one under the cards), which then lists popular colleges.
+  function openPicker(slot: number) {
+    const wide = window.matchMedia("(min-width: 1024px)").matches;
+    const input = document.getElementById(wide ? `cmp-picker-${slot}` : "cmp-picker-mobile") as HTMLInputElement | null;
+    input?.scrollIntoView({ block: "center", behavior: "smooth" });
+    input?.focus({ preventScroll: true });
+  }
+
+  const groups = ROWS.map((g) => ({ ...g, rows: g.rows.filter((r) => colleges.some(r.has)) })).filter((g) => g.rows.length > 0);
+
   const slots = [0, 1, 2];
   const QUICK_PAIRS = [
     ["iim-ahmedabad", "iim-bangalore"],
     ["iit-bombay", "iit-delhi"],
     ["nlsiu-bangalore", "nalsar-hyderabad"],
   ] as const;
+  const SUGGESTIONS = COLLEGES.slice(0, 6).map((c) => ({ slug: c.slug, name: c.name, city: c.city }));
   const shortName = (slug: string) => COLLEGES.find((c) => c.slug === slug)?.short ?? slug;
   const gridStyle = { gridTemplateColumns: "var(--cmp-cols)" };
 
   return (
     <>
-      <PageHero
-        title="Compare colleges"
-        intro="Pick up to three colleges. The best value in each row is shown in bold green so you can see trade-offs at a glance."
-      />
+      <PageHero title="Compare colleges" />
 
       <Container className="py-8 sm:py-10">
         <div>
@@ -205,13 +249,18 @@ export function CompareView() {
                 if (!c)
                   return (
                     <div key={i} className="flex flex-col items-center justify-center gap-2 rounded-[var(--radius-card)] border-2 border-dashed border-line bg-white/60 p-2 text-center lg:items-stretch lg:gap-3 lg:p-5 lg:text-left">
-                      <span className="grid size-8 place-items-center rounded-full bg-paper text-muted ring-1 ring-line lg:size-10">
+                      <button
+                        type="button"
+                        onClick={() => openPicker(i)}
+                        aria-label="Add a college"
+                        className="grid size-8 place-items-center rounded-full bg-paper text-muted ring-1 ring-line transition hover:bg-royal hover:text-white hover:ring-royal lg:size-10"
+                      >
                         <Plus className="size-4 lg:size-5" aria-hidden />
-                      </span>
+                      </button>
                       <p className="text-xs font-semibold text-muted lg:hidden">Add a college</p>
                       <div className="hidden text-sm font-semibold lg:block">
                         <p className="mb-2">Add a college</p>
-                        <CollegePicker exclude={slugs} onPick={(v) => setSlugs([...slugs, v])} />
+                        <CollegePicker id={`cmp-picker-${i}`} suggestions={SUGGESTIONS} exclude={slugs} onPick={(v) => setSlugs([...slugs, v])} />
                       </div>
                     </div>
                   );
@@ -233,7 +282,7 @@ export function CompareView() {
                       )}
                     </div>
                     <div className="flex flex-1 flex-col px-1 pt-2 pb-0.5 lg:px-2 lg:pt-3 lg:pb-1">
-                      <Link href={`/colleges/${c.slug}`} className="line-clamp-4 font-display text-[0.8125rem] leading-snug font-semibold break-words hover:text-royal lg:line-clamp-none lg:text-[1.0625rem]">
+                      <Link href={pageOf(c)} className="line-clamp-4 font-display text-[0.8125rem] leading-snug font-semibold break-words hover:text-royal lg:line-clamp-none lg:text-[1.0625rem]">
                         {c.name}
                       </Link>
                       <p className="mt-1 inline-flex items-start gap-1 text-xs text-muted lg:items-center lg:text-sm">
@@ -253,7 +302,7 @@ export function CompareView() {
 
             {colleges.length < 3 && (
               <div className="mt-3 lg:hidden">
-                <CollegePicker exclude={slugs} onPick={(v) => setSlugs([...slugs, v])} />
+                <CollegePicker id="cmp-picker-mobile" suggestions={SUGGESTIONS} exclude={slugs} onPick={(v) => setSlugs([...slugs, v])} />
               </div>
             )}
 
@@ -285,7 +334,7 @@ export function CompareView() {
                     </p>
                   ))}
                 </div>
-                {ROWS.map((g, gi) => (
+                {groups.map((g, gi) => (
                   <section key={g.group} aria-labelledby={`cmp-${g.group}`} className={gi > 0 ? "border-t border-line" : ""}>
                     <h2 id={`cmp-${g.group}`} className="px-3 pt-4 pb-1 font-sans text-base font-bold tracking-normal text-ink lg:px-5 lg:pt-5 lg:text-[1.0625rem]">
                       {g.group}
@@ -322,7 +371,7 @@ export function CompareView() {
                       if (!c) return <div key={i} />;
                       return (
                         <div key={i} className="px-1.5 py-1.5 lg:px-5">
-                          <Link href={`/colleges/${c.slug}`} className="inline-flex items-center gap-0.5 text-xs font-semibold text-royal underline underline-offset-4 lg:gap-1 lg:text-sm">
+                          <Link href={pageOf(c)} className="inline-flex items-center gap-0.5 text-xs font-semibold text-royal underline underline-offset-4 lg:gap-1 lg:text-sm">
                             Full details <ArrowUpRight className="size-4" aria-hidden />
                           </Link>
                         </div>
