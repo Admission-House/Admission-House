@@ -835,7 +835,7 @@ export const FAQS = [
   { q: "Can my parents join the counselling call?", a: "Please bring them. Most of our sessions include parents, and counsellors speak Hindi, English and 8 regional languages." },
 ];
 
-// Internal pages show one extra counsellor that the home page does not.
+// The whole counselling team: the counselling page and the home page counsellor section show all of them.
 export const TEAM: Counsellor[] = [
   ...COUNSELLORS,
   { name: "Pushpendra", initials: "P", focus: [], languages: ["Hindi", "English"], years: 1, tone: "#0F766E", photo: "/images/c-pushpendra-card.jpg", photoFull: "/images/c-pushpendra.jpg" },

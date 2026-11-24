@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { COUNSELLORS, EXAMS, FAQS, TESTIMONIALS, getCollege, feeRange, formatLakh, packageStat } from "@/lib/data";
+import { COUNSELLORS, EXAMS, FAQS, TEAM, TESTIMONIALS, getCollege, feeRange, formatLakh, packageStat } from "@/lib/data";
 import { Container, SectionHeading, TextLink } from "@/components/ui";
 import { HeroFinder } from "@/components/home/hero-finder";
 import { HeroBanner } from "@/components/home/hero-banner";
@@ -139,7 +139,7 @@ function Streams() {
  * that counsellor's name and details rise into place on the right. Only the person in the photo is shown.
  */
 function Counselling() {
-  const steps = COUNSELLORS.slice(0, 6).map((c) => {
+  const steps = TEAM.map((c) => {
     const first = c.name.startsWith("Dr.") ? c.name : c.name.split(" ")[0];
     return {
       t: c.name,
