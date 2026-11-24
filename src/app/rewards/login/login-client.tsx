@@ -20,6 +20,13 @@ export function RewardsLogin() {
   // Already signed in: go straight to the games.
   useEffect(() => {
     preloadGoogle();
+    // A friend's invite link (?ref=CODE): remember the code so the games can give the welcome points after sign up.
+    try {
+      const ref = new URLSearchParams(window.location.search).get("ref");
+      if (ref && /^[A-Z0-9]{4,12}$/i.test(ref)) localStorage.setItem("ah-rewards-ref", ref.toUpperCase());
+    } catch {
+      /* storage can be blocked */
+    }
     if (getRewardsSession()) router.replace("/rewards");
     return () => setFormKey((k) => k + 1);
   }, [router]);

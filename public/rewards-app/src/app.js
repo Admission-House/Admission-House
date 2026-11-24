@@ -7,7 +7,11 @@ try { SESSION = JSON.parse(localStorage.getItem("ah-rewards-session") || "null")
 if (SESSION && SESSION.email) document.documentElement.classList.add("embed");
 const STORAGE_KEY = "ah-rewards-v1:" + (SESSION && SESSION.email ? SESSION.email.toLowerCase() : "guest");
 const toTop = () => { window.scrollTo(0, 0); if (window.parent !== window) parent.postMessage({ type: "ah-rewards-top" }, location.origin); };
-const todayKey = () => new Date().toDateString();
+// "Today" is the server's date once the saved points have loaded, so every device agrees on when a day starts.
+let TODAY = new Date().toDateString();
+const todayKey = () => TODAY;
+// true once this student's points live on the server (Google sign in + Redis set up). Otherwise points stay in this browser.
+let SERVER = false;
 
 const freshState = () => ({
   user: SESSION && SESSION.email ? { name: SESSION.name || SESSION.email.split("@")[0], email: SESSION.email } : null,
@@ -21,6 +25,10 @@ const freshState = () => ({
   vouchers: [],
   view: "hub",
 });
+
+/* Invite links: /rewards/login?ref=CODE. The code and the bonus points come from the server (/api/rewards/referral). */
+const INVITE = { code: null, friends: 0 };
+const inviteLink = () => (INVITE.code ? location.origin + "/rewards/login?ref=" + INVITE.code : "");
 
 function loadState() {
   let s = freshState();
@@ -158,7 +166,7 @@ function homeView() {
       <div class="home__grid"><div class="games">${tiles}</div>
         <aside class="invite"><div class="invite__head"><span class="invite__icon">${ICONS.people}</span>Invite a friend</div>
           <div class="invite__body"><b class="invite__amount">+100</b><span class="invite__unit">points for you and for your friend</span><p>Share your link. When your friend signs in, you both get the points.</p></div>
-          <div class="invite__action"><div class="invite__link" id="invite-link">ah.demo/join/${(S.user.name[0] + "7K2Q").toUpperCase()}</div><button class="btn" data-act="copy-invite">Copy link</button></div></aside>
+          <div class="invite__action">${inviteLink() ? `<div class="invite__link" id="invite-link">${esc(inviteLink())}</div><button class="btn" data-act="copy-invite">Copy link</button><button class="btn" data-act="share-invite">Share</button>` : `<div class="invite__link" id="invite-link">Sign in with Google to get your invite link</div>`}</div></aside>
       </div></div>`;
 }
 
@@ -206,7 +214,31 @@ function award(gameId, base) {
   S.week[6] = true;
   ui.bumped = true;
   save();
+  if (SERVER) serverAward(gameId, base);
   return result;
+}
+
+/* Saved points: the server is the source of truth. The screen shows the local result at once, then takes the server's numbers. */
+function takeServerState(st) {
+  Object.assign(S, { points: st.points, todayPoints: st.todayPoints, day: st.day, played: st.played, week: st.week, vouchers: st.vouchers });
+  TODAY = st.day; save();
+  if (S.view === "hub" || S.view === "redeem") render(); else refreshPoints();
+}
+async function serverAward(gameId, base) {
+  try {
+    const r = await fetch("/api/rewards/state", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "award", game: gameId, base }) });
+    const d = await r.json();
+    if (d.state) takeServerState(d.state);
+  } catch (e) { toast("Could not save points. Check your connection."); }
+}
+async function syncState() {
+  try {
+    const r = await fetch("/api/rewards/state", { cache: "no-store" });
+    if (!r.ok) return;
+    const d = await r.json();
+    SERVER = true;
+    if (d.state) takeServerState(d.state);
+  } catch (e) { /* offline or not set up: points stay in this browser */ }
 }
 
 /* ==========================================================================
@@ -454,7 +486,7 @@ const showDialog = (modal) => { ui.modal = modal; $("#dialog-root").innerHTML = 
 
 const PROFILES = [["c12|eng", "Class 12, Engineering"], ["c12|med", "Class 12, Medical"], ["grad|mgt", "Graduate, Management"], ["c12|law", "Class 12, Law"], ["c12|des", "Class 12, Design"], ["c12|com", "Class 12, Commerce"], ["c10|eng", "Class 10, stream basics"]];
 function demoToolsView() {
-  if (!S.user) return "";
+  if (!S.user || SERVER) return "";
   const panel = ui.demoOpen ? `<div class="demo-tools__panel"><div><label for="profile">Preview as</label>
     <select id="profile">${PROFILES.map(([v, t]) => `<option value="${v}" ${v === S.level + "|" + S.field ? "selected" : ""}>${t}</option>`).join("")}</select></div>
     <button data-act="add-points">Add 100 points</button><button data-act="reset-demo">Reset the demo</button></div>` : "";
@@ -576,9 +608,18 @@ const ACTIONS = {
     else { try { localStorage.removeItem("ah-rewards-session"); } catch (e) { /* ignore */ } location.reload(); }
   },
   "show-landing": () => { ui.menuOpen = false; S.view = "landing"; render(); toTop(); },
-  redeem: (el) => {
-    const tier = TIERS[+el.dataset.tier];
+  redeem: async (el) => {
+    const idx = +el.dataset.tier, tier = TIERS[idx];
     if (S.points < tier.pts) return;
+    if (SERVER) {
+      try {
+        const r = await fetch("/api/rewards/state", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ action: "redeem", tier: idx }) });
+        const d = await r.json();
+        if (d.state) takeServerState(d.state);
+        if (d.ok) { confetti(); toast("Voucher ready. Show the code to your counsellor."); } else toast(d.error || "Could not redeem. Try again.");
+      } catch (e) { toast("Could not redeem. Check your connection."); }
+      return;
+    }
     S.points -= tier.pts;
     const code = "AH-" + Math.random().toString(36).slice(2, 6).toUpperCase() + "-" + (10 + Math.floor(Math.random() * 90));
     const till = new Date(Date.now() + 30 * 864e5).toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" });
@@ -586,7 +627,13 @@ const ACTIONS = {
     toast("Voucher ready. Show the code to your counsellor.");
   },
   "copy-code": (el) => copyText(el.dataset.code, "Code copied"),
-  "copy-invite": () => copyText($("#invite-link").textContent, "Link copied"),
+  "copy-invite": () => inviteLink() && copyText(inviteLink(), "Link copied"),
+  "share-invite": () => {
+    if (!inviteLink()) return;
+    const text = "Play quick admission games on Admissions House and earn points towards college fee vouchers. Join with my link: " + inviteLink();
+    if (navigator.share) navigator.share({ title: "Admissions House Rewards", text }).catch(() => {});
+    else window.open("https://wa.me/?text=" + encodeURIComponent(text), "_blank", "noopener");
+  },
   "toggle-demo": () => { ui.demoOpen = !ui.demoOpen; $("#demo-root").innerHTML = demoToolsView(); },
   "add-points": () => { S.points += 100; save(); render(); },
   "reset-demo": () => { try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ } S = loadState(); ui.modal = null; ui.sampleAnswered = false; render(); toTop(); },
@@ -650,6 +697,25 @@ window.addEventListener("hashchange", () => {
 });
 
 render();
+
+// Invites: register a friend's code if we arrived through a link, then add any waiting points. The server hands each point out once.
+async function syncInvites() {
+  if (!S.user) return;
+  try {
+    let ref = null;
+    try { ref = localStorage.getItem("ah-rewards-ref"); } catch (e) { /* ignore */ }
+    if (ref) {
+      const r = await fetch("/api/rewards/referral", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ref }) });
+      if (r.ok || r.status === 400) { try { localStorage.removeItem("ah-rewards-ref"); } catch (e) { /* ignore */ } }
+    }
+    const res = await fetch("/api/rewards/referral", { cache: "no-store" });
+    if (!res.ok) return;
+    const d = await res.json();
+    INVITE.code = d.code; INVITE.friends = d.friends;
+    if (S.view === "hub") render();
+  } catch (e) { /* offline or not set up: the games still work */ }
+}
+syncInvites().then(syncState);
 
 // First visit of a new student: ask class and course so the games match.
 if (S.user && !S.level) { ui.modal = { type: "onboard", level: null, field: null }; render(); }
