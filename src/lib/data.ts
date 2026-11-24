@@ -65,6 +65,8 @@ export interface College {
   aisheCode?: string;
   /** True for directory listings that only have a name, city and course list. */
   basic?: boolean;
+  /** True for an online university shown on the compare page. Its page lives under /online, and its fees are totals, not per year. */
+  online?: boolean;
   /** Rank within its category; lower is better. */
   nirf?: number;
   /** What the rank is for, e.g. "NIRF 2025, Management". */

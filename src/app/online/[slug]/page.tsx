@@ -8,7 +8,7 @@ import { LeadButton } from "@/components/lead-button";
 import { JsonLd } from "@/components/json-ld";
 import { SectionNav } from "../../colleges/[slug]/section-nav";
 import { SITE, telHref } from "@/lib/site";
-import { DEGREE_NAMES, ONLINE_COLLEGES, accreditationTags, cleanName, getOnlineCollege, minFee, placeText, rupees } from "@/lib/online";
+import { DEGREE_NAMES, ONLINE_COLLEGES, accreditationTags, cleanName, getOnlineCollege, minFee, placeText, placementRate, rupees } from "@/lib/online";
 
 export function generateStaticParams() {
   return ONLINE_COLLEGES.map((c) => ({ slug: c.slug }));
@@ -72,7 +72,7 @@ async function Details({ params }: { params: PageProps<"/online/[slug]">["params
     { label: "Programmes", value: String(c.courses.length) },
     fee ? { label: "Fees from", value: rupees(fee) } : null,
     { label: "Mode", value: "100% online" },
-    c.placement ? { label: "Placement rate", value: `${c.placement}%` } : null,
+    c.placement ? { label: "Placement rate", value: placementRate(c) } : null,
   ].filter((x): x is { label: string; value: string } => !!x);
 
   return (
@@ -106,7 +106,7 @@ async function Details({ params }: { params: PageProps<"/online/[slug]">["params
             <ChevronRight className="size-3.5" aria-hidden />
             <Link href="/online" className="inline-flex min-h-11 items-center hover:text-ink lg:min-h-0">Online</Link>
             <ChevronRight className="size-3.5" aria-hidden />
-            <Link href="/online/universities" className="inline-flex min-h-11 items-center hover:text-ink lg:min-h-0">Universities</Link>
+            <Link href="/online#colleges" className="inline-flex min-h-11 items-center hover:text-ink lg:min-h-0">Universities</Link>
             <ChevronRight className="size-3.5" aria-hidden />
             <span className="truncate text-ink">{name}</span>
           </nav>
@@ -263,7 +263,7 @@ async function Details({ params }: { params: PageProps<"/online/[slug]">["params
             <Panel id="placements" title="Placements" intro="Figures as published. Actual offers depend on your profile and the role.">
               {(c.placement || c.rating > 0 || c.nirf > 0) && (
                 <div className="grid gap-3 sm:grid-cols-3">
-                  {c.placement && <Stat label="Placement rate" value={`${c.placement}%`} />}
+                  {c.placement && <Stat label="Placement rate" value={placementRate(c)} />}
                   {c.rating > 0 && <Stat label="Student rating" value={`${c.rating.toFixed(1)} / 5`} />}
                   {c.nirf > 0 && <Stat label="NIRF rank" value={`#${c.nirf}`} />}
                 </div>
@@ -363,7 +363,7 @@ async function Details({ params }: { params: PageProps<"/online/[slug]">["params
           <div className="mx-auto w-full max-w-[90rem] px-4 sm:px-6 lg:px-8">
             <div className="mb-5 flex flex-wrap items-end justify-between gap-3 sm:mb-6">
               <h2 className="t-h2">Students also looked at</h2>
-              <Link href="/online/universities" className="text-sm font-semibold text-brand underline underline-offset-4">
+              <Link href="/online#colleges" className="text-sm font-semibold text-brand underline underline-offset-4">
                 View all universities
               </Link>
             </div>

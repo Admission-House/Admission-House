@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { OnlineScroll } from "./online-scroll";
-import { OnlineStrip } from "./online-strip";
+import Link from "next/link";
+import { OnlineColleges } from "./online-colleges";
+import { courseSlug } from "@/lib/online";
 import { Container } from "@/components/ui";
 import { LeadButton } from "@/components/lead-button";
 
@@ -27,45 +28,16 @@ const AFTER_GRADUATION: Course[] = [
   { name: "M.Com", full: "Master of Commerce" },
   { name: "M.Sc", full: "Master of Science" },
   { name: "MA", full: "Master of Arts" },
+  { name: "Doctorate", full: "Doctorate programme" },
 ];
 
-const EXECUTIVE = [
-  "Executive MBA",
-  "EPGD in Business Analytics",
-  "Operations & Supply Chain Management",
-  "Strategic Management",
-  "CFO Programme",
-  "Leadership & Management",
-  "General Management",
-  "Strategic HR Management",
-  "Project Management",
-  "Healthcare Service Management",
-];
-
-const DIPLOMA = [
-  "PGD Finance & Accounting",
-  "PGD Data Science",
-  "Digital Marketing",
-  "PGD Retail Management",
-  "PGD Marketing",
-  "PGD HR Management",
-  "Banking & Finance Management",
-  "International Trade Management",
-  "Cyber Law",
-  "PGD IT",
-];
-
-const CERTIFICATES = [
-  "Data Analytics",
-  "Digital Marketing",
-  "Cyber Security",
-  "MS Excel",
-  "AI & ML",
-  "Marketing",
-  "Leadership Skills",
-  "Project Management",
-  "Supply Chain Management",
-  "Financial Accounting",
+// Programmes that have no course page yet: these open the enquiry form.
+const OTHER_PROGRAMMES: Course[] = [
+  { name: "Data Analytics", full: "Certificate programme" },
+  { name: "Executive MBA", full: "Executive programme" },
+  { name: "PGD Data Science", full: "Post graduate diploma" },
+  { name: "Digital Marketing", full: "Post graduate diploma" },
+  { name: "Cyber Security", full: "Certificate programme" },
 ];
 
 export default function OnlinePage() {
@@ -102,22 +74,14 @@ export default function OnlinePage() {
         }
       />
 
-      {/* Colleges: a simple sideways scroll, the full list lives on its own page */}
+      {/* Colleges: the whole list is right here, with search, so nobody has to scroll sideways or open another page */}
       <section id="colleges" className="scroll-mt-24 pt-6 pb-2 sm:py-12 lg:py-14">
         <Container>
-          <div className="flex flex-wrap items-end justify-between gap-x-6 gap-y-3">
-            <div>
-              <h2 className="t-h2">Online colleges you can join</h2>
-            </div>
-            <Link href="/online/universities" className="inline-flex items-center gap-2 rounded-full bg-brand px-5 py-3 text-sm font-semibold text-white transition hover:bg-royal">
-              View all universities <ArrowRight className="size-4" aria-hidden />
-            </Link>
+          <h2 className="t-h2">Online colleges you can join</h2>
+          <div className="mt-5 sm:mt-6">
+            <OnlineColleges />
           </div>
         </Container>
-        {/* Full width: the strip runs edge to edge, outside the page container */}
-        <div className="mt-4 sm:mt-6">
-          <OnlineStrip />
-        </div>
       </section>
 
       {/* Courses */}
@@ -126,40 +90,15 @@ export default function OnlinePage() {
           <h2 className="t-h2 max-w-2xl">Online courses we offer</h2>
 
           <div className="mt-8 grid gap-10 sm:mt-10 sm:gap-12 lg:grid-cols-2 lg:gap-16">
-            <CourseList heading="After 12th" note="Bachelor's degrees" items={AFTER_12TH} />
-            <CourseList heading="After graduation" note="Master's degrees" items={AFTER_GRADUATION} />
-          </div>
-
-          <div className="mt-12 grid gap-8 sm:mt-14 sm:gap-10">
-            <PillGroup heading="Executive programmes" items={EXECUTIVE} />
-            <PillGroup heading="Diploma courses" items={DIPLOMA} />
-            <PillGroup heading="Certificate courses" items={CERTIFICATES} />
+            <div className="grid content-start gap-10 sm:gap-12">
+              <CourseList heading="After 12th" note="Bachelor's degrees" items={AFTER_12TH} />
+              <CourseList heading="Other programmes" note="Diploma, certificate, executive" items={OTHER_PROGRAMMES} />
+            </div>
+            <CourseList heading="After graduation" note="Master's and doctorate" items={AFTER_GRADUATION} />
           </div>
         </Container>
       </section>
     </>
-  );
-}
-
-function PillGroup({ heading, items }: { heading: string; items: string[] }) {
-  return (
-    <div>
-      <h3 className="text-sm font-bold tracking-widest text-muted uppercase">{heading}</h3>
-      <ul className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        {items.map((name) => (
-          <li key={name}>
-            <LeadButton
-              source="online-courses"
-              title={`Ask about ${name}`}
-              course={`${name} (online)`}
-              className="flex h-14 w-full items-center justify-center rounded-full bg-white px-4 text-center text-sm leading-snug font-semibold text-brand ring-1 ring-line transition hover:-translate-y-0.5 hover:bg-brand hover:text-white hover:ring-brand"
-            >
-              {name}
-            </LeadButton>
-          </li>
-        ))}
-      </ul>
-    </div>
   );
 }
 
@@ -173,12 +112,27 @@ function CourseList({ heading, note, items }: { heading: string; note: string; i
       <ul>
         {items.map((c, i) => (
           <li key={c.name} className="border-b border-line">
-            <LeadButton
-              source="online-courses"
-              title={`Ask about online ${c.name}`}
-              course={`${c.name} (online)`}
-              className="group flex w-full items-center gap-3 py-4 text-left sm:gap-4 sm:py-5"
-            >
+            {courseSlug(c.name) ? (
+              <Link
+                href={`/online/courses/${courseSlug(c.name)}`}
+                className="group flex w-full items-center gap-3 py-4 text-left sm:gap-4 sm:py-5"
+              >
+              <span className="w-6 shrink-0 font-display text-sm font-bold text-marigold-600">{String(i + 1).padStart(2, "0")}</span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-lg font-bold text-ink transition group-hover:text-brand sm:text-xl">Online {c.name}</span>
+                <span className="block text-sm text-muted">{c.full}</span>
+              </span>
+              <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-brand">
+                Explore <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden />
+              </span>
+              </Link>
+            ) : (
+              <LeadButton
+                source="online-courses"
+                title={`Ask about online ${c.name}`}
+                course={`${c.name} (online)`}
+                className="group flex w-full items-center gap-3 py-4 text-left sm:gap-4 sm:py-5"
+              >
               <span className="w-6 shrink-0 font-display text-sm font-bold text-marigold-600">{String(i + 1).padStart(2, "0")}</span>
               <span className="min-w-0 flex-1">
                 <span className="block text-lg font-bold text-ink transition group-hover:text-brand sm:text-xl">Online {c.name}</span>
@@ -187,7 +141,8 @@ function CourseList({ heading, note, items }: { heading: string; note: string; i
               <span className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-brand">
                 Enquire <ArrowRight className="size-4 transition group-hover:translate-x-1" aria-hidden />
               </span>
-            </LeadButton>
+              </LeadButton>
+            )}
           </li>
         ))}
       </ul>

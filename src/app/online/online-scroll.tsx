@@ -4,8 +4,9 @@ import { useEffect, useRef, type ReactNode } from "react";
 import Image from "next/image";
 import { motion, useMotionValue, useReducedMotion, useScroll, useTransform, type MotionValue } from "motion/react";
 import { ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
 import { LeadButton } from "@/components/lead-button";
-import { SLIDES, STYLE, type Slide } from "./online-card";
+import { SLIDES, STYLE, slideHref, type Slide } from "./online-card";
 
 const N = SLIDES.length;
 const PITCH = 42; // vw between the middles of two neighbouring cards on large screens
@@ -80,6 +81,7 @@ export function OnlineScroll({ intro }: { intro: ReactNode }) {
 
 function ScrollCard({ slide: s, i, progress, narrow, reduced }: { slide: Slide; i: number; progress: MotionValue<number>; narrow: MotionValue<number>; reduced: boolean }) {
   const st = STYLE[s.level];
+  const href = slideHref(s);
   const face = FACES[i % FACES.length];
   // d is how many cards away from the middle this one is: 0 in the middle, negative on the left, positive on the right.
   const d = useTransform(progress, (v) => i - clamp((v - 0.04) / 0.92, 0, 1) * (N - 1));
@@ -111,14 +113,23 @@ function ScrollCard({ slide: s, i, progress, narrow, reduced }: { slide: Slide; 
         <div className="flex min-w-0 flex-col max-lg:contents">
           <h3 className="font-display text-[1.875rem] max-lg:order-1 lg:text-[clamp(1.875rem,2.6vw,2.625rem)] leading-none font-extrabold tracking-tight text-white [text-shadow:0_2px_18px_rgb(0_0_0/0.25)]">{s.name}</h3>
           <p className="-mt-2 text-[0.9375rem] leading-snug text-white/80 max-lg:order-2 lg:mt-2">{s.full}</p>
-          <LeadButton
-            source="online-scroll-card"
-            title={`Ask about online ${s.name}`}
-            course={`${s.name} (online)`}
-            className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 max-lg:order-4 text-sm font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-sun"
-          >
-            Enquire now <ArrowRight className="size-4" aria-hidden />
-          </LeadButton>
+          {href ? (
+            <Link
+              href={href}
+              className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 max-lg:order-4 text-sm font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-sun"
+            >
+              Explore <ArrowRight className="size-4" aria-hidden />
+            </Link>
+          ) : (
+            <LeadButton
+              source="online-scroll-card"
+              title={`Ask about online ${s.name}`}
+              course={`${s.name} (online)`}
+              className="mt-auto inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 max-lg:order-4 text-sm font-semibold text-brand transition hover:-translate-y-0.5 hover:bg-sun"
+            >
+              Enquire now <ArrowRight className="size-4" aria-hidden />
+            </LeadButton>
+          )}
         </div>
 
         <div className="flex min-w-0 flex-col max-lg:contents">

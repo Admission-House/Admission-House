@@ -12,7 +12,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/", 1],
     ["/colleges", 0.9],
     ["/online", 0.8],
-    ["/online/universities", 0.8],
     ["/universities", 0.8],
     ["/courses", 0.8],
     ["/exams", 0.8],

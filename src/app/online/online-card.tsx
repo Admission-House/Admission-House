@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { ArrowRight, Award, BookOpen, Briefcase, Check, GraduationCap, Layers } from "lucide-react";
+import Link from "next/link";
 import { LeadButton } from "@/components/lead-button";
+import { courseSlug } from "@/lib/online";
 
 export type Level = "After 12th" | "After graduation" | "Diploma" | "Executive" | "Certificate";
 export type Slide = { name: string; full: string; level: Level; points: [string, string, string] };
@@ -20,7 +22,12 @@ export const SLIDES: Slide[] = [
   { name: "Digital Marketing", full: "Post graduate diploma", level: "Diploma", points: ["1 year diploma", "SEO, ads and social", "Real campaigns"] },
   { name: "BA", full: "Bachelor of Arts", level: "After 12th", points: ["3 year degree", "Many subjects to choose", "Good for civil services prep"] },
   { name: "Cyber Security", full: "Certificate programme", level: "Certificate", points: ["Short, focused course", "Hands-on practice", "Online labs"] },
+  { name: "M.Sc", full: "Master of Science", level: "After graduation", points: ["2 year degree", "Build on your bachelor's degree", "Study from anywhere"] },
+  { name: "MA", full: "Master of Arts", level: "After graduation", points: ["2 year degree", "Many subjects to choose", "Study from anywhere"] },
 ];
+
+/** Where a slide's course page lives, or null for programmes that have no page yet (they open the enquiry form instead). */
+export const slideHref = (s: Slide) => (courseSlug(s.name) ? `/online/courses/${courseSlug(s.name)}` : null);
 
 // One colour and icon per level.
 export const STYLE: Record<Level, { tag: string; bar: string; mark: string; Icon: typeof GraduationCap }> = {
@@ -75,6 +82,7 @@ export function OnlineCard() {
         {items.map((s, n) => {
           const st = STYLE[s.level];
           const i = n % total;
+          const href = slideHref(s);
           return (
             <div
               key={n}
@@ -109,14 +117,20 @@ export function OnlineCard() {
                     </li>
                   ))}
                 </ul>
-                <LeadButton
-                  source="online-hero-card"
-                  title={`Ask about online ${s.name}`}
-                  course={`${s.name} (online)`}
-                  className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 short:py-2.5 text-[0.9375rem] font-semibold text-white sm:max-lg:col-span-2 sm:max-lg:mt-6"
-                >
-                  Enquire now <ArrowRight className="size-4" aria-hidden />
-                </LeadButton>
+                {href ? (
+                  <Link href={href} tabIndex={n >= total ? -1 : undefined} className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 short:py-2.5 text-[0.9375rem] font-semibold text-white sm:max-lg:col-span-2 sm:max-lg:mt-6">
+                    Explore <ArrowRight className="size-4" aria-hidden />
+                  </Link>
+                ) : (
+                  <LeadButton
+                    source="online-hero-card"
+                    title={`Ask about online ${s.name}`}
+                    course={`${s.name} (online)`}
+                    className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3.5 short:py-2.5 text-[0.9375rem] font-semibold text-white sm:max-lg:col-span-2 sm:max-lg:mt-6"
+                  >
+                    Enquire now <ArrowRight className="size-4" aria-hidden />
+                  </LeadButton>
+                )}
               </div>
             </div>
           );
